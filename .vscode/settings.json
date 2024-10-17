@@ -1,0 +1,11 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "todohighlight.keywords": [
+    "Optimize:",
+    {
+      "text": "Optimize:",
+      "backgroundColor": "#33ff33"
+    }
+  ]
+}
