@@ -26,6 +26,7 @@ import { OrderModule } from './mall-service/mall-service-order/order/order.modul
 import { OrderItemsModule } from './mall-service/mall-service-order/order-items/order-items.module';
 import { CartModule } from './mall-service/mall-service-order/cart/cart.module';
 import { RedisModule } from '@nestjs-modules/ioredis';
+import { AlipayModule } from './mall-service/alipay/alipay.module';
 
 @Module({
   imports: [
@@ -108,6 +109,8 @@ import { RedisModule } from '@nestjs-modules/ioredis';
     OrderModule,
     OrderItemsModule,
     CartModule,
+    //   支付
+    AlipayModule,
   ],
   providers: [
     {

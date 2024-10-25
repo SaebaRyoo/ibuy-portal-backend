@@ -10,8 +10,6 @@ export class UsersController {
   @Public()
   @Post()
   async createUser(@Body() user: Users) {
-    const temp = await this.userService.create(user);
-    console.log('temp--->', temp);
-    return temp;
+    return this.userService.create(user);
   }
 }

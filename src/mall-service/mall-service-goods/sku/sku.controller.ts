@@ -18,8 +18,7 @@ export class SkuController {
 
   @Post('/list')
   async findList(@Body('pageParam') pageParam: any) {
-    const [data, total] = await this.skuService.findList(pageParam);
-    return { data, total };
+    return await this.skuService.findList(pageParam);
   }
 
   @Post('/add')
@@ -33,7 +32,7 @@ export class SkuController {
   }
 
   @Patch('/:id')
-  updateSku(@Param('id') id: number, @Body() sku: SkuEntity) {
+  updateSku(@Param('id') id: string, @Body() sku: SkuEntity) {
     return this.skuService.updateSku(id, sku);
   }
 }

@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { InjectRedis } from '@nestjs-modules/ioredis';
 import Redis from 'ioredis';
 import { OrderItemsEntity } from '../../mall-service-order/order-items/entities/order-items.entity';
+import Result from '../../../common/utils/Result';
 
 @Injectable()
 export class SkuService {
@@ -15,36 +16,48 @@ export class SkuService {
     @InjectRedis()
     private readonly redisService: Redis,
   ) {}
-  async findList(pageParma: any): Promise<[SkuEntity[], number]> {
+  async findList(
+    pageParma: any,
+  ): Promise<Result<{ data: SkuEntity[]; total: number }>> {
     const qb = this.skuRepository
       .createQueryBuilder('sku')
       .skip(pageParma.pageSize * (pageParma.current - 1))
       .limit(pageParma.pageSize);
-    return await qb.getManyAndCount();
+    const [data, total] = await qb.getManyAndCount();
+    return new Result({ data, total });
   }
 
   async findById(id: string) {
-    return this.skuRepository.findOneBy({ id });
+    const data = await this.skuRepository.findOneBy({ id });
+
+    return new Result(data);
   }
 
-  addSku(sku: SkuEntity) {
-    return this.skuRepository.insert(sku);
+  async addSku(sku: SkuEntity) {
+    const data = await this.skuRepository.insert(sku);
+    return new Result(data);
   }
 
-  async updateSku(id: number, sku: SkuEntity) {
-    return this.skuRepository
+  async updateSku(id: string, sku: SkuEntity) {
+    const data = await this.skuRepository
       .createQueryBuilder()
       .update(SkuEntity)
       .set(sku)
       .where('id = :id', { id })
       .execute();
+    return new Result(data);
   }
 
-  async remove(id: number): Promise<void> {
+  async remove(id: number) {
     await this.skuRepository.delete(id);
+    return new Result(null);
   }
 
-  async decrCount(username: string): Promise<void> {
+  /**
+   * 库存递减
+   * @param username
+   */
+  async decrCount(username: string) {
     // 获取Redis客户端
     const redisClient = await this.redisService;
 
@@ -66,5 +79,6 @@ export class SkuService {
         throw new HttpException('库存不足，递减失败！', HttpStatus.BAD_REQUEST);
       }
     }
+    return new Result(null);
   }
 }

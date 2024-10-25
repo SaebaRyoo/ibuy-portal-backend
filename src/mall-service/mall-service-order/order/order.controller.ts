@@ -36,7 +36,7 @@ export class OrderController {
   }
 
   @Patch('/:id')
-  updateSpec(@Param('id') id: number, @Body() spec: OrderEntity) {
-    return this.orderService.updateSpec(id, spec);
+  update(@Param('id') id: number, @Body() spec: OrderEntity) {
+    return this.orderService.update(id, spec);
   }
 }

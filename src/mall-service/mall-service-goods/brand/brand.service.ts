@@ -3,6 +3,7 @@ import { Repository, DataSource } from 'typeorm';
 import { BrandEntity } from './brand.entity';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { CategoryBrandEntity } from '../category-brand/category-brand.entity';
+import Result from '../../../common/utils/Result';
 
 @Injectable()
 export class BrandService {
@@ -20,7 +21,7 @@ export class BrandService {
   // 根据categoryId获取相关品牌列表
   async findBrandByCategoryId(
     categoryId: number,
-  ): Promise<[BrandEntity[], number]> {
+  ): Promise<Result<{ data: BrandEntity[]; total: number }>> {
     // const brands = await this.dataSource
     //   .createQueryBuilder()
     //   .select(['ib.id', 'ib.name', 'ib.image'])
@@ -29,39 +30,44 @@ export class BrandService {
     //   .where('icb.category_id = :categoryId', { categoryId })
     //   .getMany();
 
-    const brands = await this.dataSource
+    const [data, total] = await this.dataSource
       .query(`SELECT ib.id, name, image FROM ibuy_category_brand icb, ibuy_brand ib WHERE icb.category_id='${categoryId}' AND ib.id=icb.brand_id
 `);
-
-    return brands;
+    return new Result({ data, total });
   }
 
-  async findList(pageParma: any): Promise<[BrandEntity[], number]> {
+  async findList(pageParma: any) {
     const qb = this.brandRepository
       .createQueryBuilder('para')
       .skip(pageParma.pageSize * (pageParma.current - 1))
       .limit(pageParma.pageSize);
-    return await qb.getManyAndCount();
+    const [data, total] = await qb.getManyAndCount();
+    return new Result({ data, total });
   }
 
   async findById(id: number) {
-    return this.brandRepository.findBy({ id });
+    const data = await this.brandRepository.findOneBy({ id });
+    return new Result(data);
   }
 
-  addPara(para: BrandEntity) {
-    return this.brandRepository.insert(para);
+  async addPara(para: BrandEntity) {
+    const data = await this.brandRepository.insert(para);
+    return new Result(data);
   }
 
   async updatePara(id: number, para: BrandEntity) {
-    return this.brandRepository
+    const data = await this.brandRepository
       .createQueryBuilder()
       .update(BrandEntity)
       .set(para)
       .where('id = :id', { id })
       .execute();
+
+    return new Result(data);
   }
 
-  async remove(id: number): Promise<void> {
+  async remove(id: number) {
     await this.brandRepository.delete(id);
+    return new Result(null);
   }
 }

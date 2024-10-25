@@ -18,8 +18,7 @@ export class CategoryBrandController {
 
   @Post('/list')
   async findList(@Body('pageParam') pageParam: any) {
-    const [data, total] = await this.categoryBrandService.findList(pageParam);
-    return { data, total };
+    return this.categoryBrandService.findList(pageParam);
   }
 
   @Post('/add')

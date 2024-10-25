@@ -18,8 +18,7 @@ export class TemplateController {
 
   @Post('/list')
   async findList(@Body('pageParam') pageParam: any) {
-    const [data, total] = await this.templateService.findList(pageParam);
-    return { data, total };
+    return this.templateService.findList(pageParam);
   }
 
   @Post('/add')

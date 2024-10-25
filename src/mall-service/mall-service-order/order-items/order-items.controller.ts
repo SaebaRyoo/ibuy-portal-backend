@@ -18,8 +18,7 @@ export class OrderItemsController {
 
   @Post('/list')
   async findList(@Body('pageParam') pageParam: any) {
-    const [data, total] = await this.orderService.findList(pageParam);
-    return { data, total };
+    return this.orderService.findList(pageParam);
   }
 
   @Post('/add')

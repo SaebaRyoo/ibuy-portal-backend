@@ -18,8 +18,7 @@ export class ParaController {
 
   @Post('/list')
   async findList(@Body('pageParam') pageParam: any) {
-    const [data, total] = await this.paraService.findList(pageParam);
-    return { data, total };
+    return await this.paraService.findList(pageParam);
   }
 
   @Post('/add')

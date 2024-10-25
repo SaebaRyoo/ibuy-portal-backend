@@ -59,8 +59,7 @@ export class SpuController {
 
   @Post('/list')
   async findList(@Body('pageParam') pageParam: any) {
-    const [data, total] = await this.spuService.findList(pageParam);
-    return { data, total };
+    return this.spuService.findList(pageParam);
   }
 
   @Post('/add')

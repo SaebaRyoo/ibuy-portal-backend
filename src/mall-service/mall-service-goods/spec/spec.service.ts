@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { SpecEntity } from './spec.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import Result from '../../../common/utils/Result';
 
 @Injectable()
 export class SpecService {
@@ -10,32 +11,37 @@ export class SpecService {
     private specRepository: Repository<SpecEntity>,
   ) {}
 
-  async findList(pageParma: any): Promise<[SpecEntity[], number]> {
+  async findList(pageParma: any) {
     const qb = this.specRepository
       .createQueryBuilder('spec')
       .skip(pageParma.pageSize * (pageParma.current - 1))
       .limit(pageParma.pageSize);
-    return await qb.getManyAndCount();
+    const [data, total] = await qb.getManyAndCount();
+    return new Result({ data, total });
   }
 
   async findById(id: number) {
-    return this.specRepository.findBy({ id });
+    const data = await this.specRepository.findOneBy({ id });
+    return new Result(data);
   }
 
-  addSpec(spec: SpecEntity) {
-    return this.specRepository.insert(spec);
+  async addSpec(spec: SpecEntity) {
+    const data = await this.specRepository.insert(spec);
+    return new Result(data);
   }
 
   async updateSpec(id: number, spec: SpecEntity) {
-    return this.specRepository
+    const data = await this.specRepository
       .createQueryBuilder()
       .update(SpecEntity)
       .set(spec)
       .where('id = :id', { id })
       .execute();
+    return new Result(data);
   }
 
-  async remove(id: number): Promise<void> {
+  async remove(id: number) {
     await this.specRepository.delete(id);
+    return new Result(null);
   }
 }

@@ -24,12 +24,12 @@ export class TransformInterceptor<T>
   ): Observable<Response<T>> {
     return next.handle().pipe(
       map((data) => ({
-        data,
-        status: 200,
+        data: data?.data,
+        code: data?.code,
         extra: {
           path: context.switchToHttp().getRequest().url,
         },
-        message: 'success',
+        message: data?.message,
         success: true,
       })),
     );

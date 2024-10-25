@@ -18,8 +18,7 @@ export class SearchController {
   @Public()
   @Get('/query')
   async search(@Query() searchMap) {
-    const result = await this.searchService.search(searchMap);
-    return Object.fromEntries(result);
+    return this.searchService.search(searchMap);
   }
 
   @Get('/import')

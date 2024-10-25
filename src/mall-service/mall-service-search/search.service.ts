@@ -3,6 +3,7 @@ import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { SkuService } from '../mall-service-goods/sku/sku.service';
 import { SearchResponse } from '@elastic/elasticsearch/lib/api/types';
 import { SkuEntity } from '../mall-service-goods/sku/sku.entity';
+import Result from '../../common/utils/Result';
 
 @Injectable()
 export class SearchService {
@@ -21,7 +22,7 @@ export class SearchService {
   ) {}
 
   // 关键词搜索
-  async search(searchMap: Record<string, string>): Promise<Map<string, any>> {
+  async search(searchMap: Record<string, string>) {
     let keywords = searchMap['keywords'];
     if (!keywords) {
       keywords = ''; // 默认搜索关键字
@@ -187,7 +188,8 @@ export class SearchService {
       );
     }
 
-    return resultMap;
+    // return resultMap;
+    return new Result({ data: Object.fromEntries(resultMap) });
   }
 
   private pageConvert(searchMap: Record<string, string>): number {
@@ -252,11 +254,12 @@ export class SearchService {
 
   async importSku(): Promise<void> {
     // 从 sku 服务获取 SKU 列表
-    const [skuInfos, total] = await this.skuService.findList({
+    const result = await this.skuService.findList({
       current: 1,
       pageSize: 99999,
     });
-
+    const skuInfos = result.data.data;
+    const total = result.data.total;
     // 构建 Bulk 请求  将每个 SKU 信息的索引操作和文档内容展平为一个单一的数组
     const body = skuInfos.flatMap((skuInfo) => {
       return [

@@ -18,8 +18,7 @@ export class SpecController {
 
   @Post('/list')
   async findList(@Body('pageParam') pageParam: any) {
-    const [data, total] = await this.specService.findList(pageParam);
-    return { data, total };
+    return this.specService.findList(pageParam);
   }
 
   @Post('/add')

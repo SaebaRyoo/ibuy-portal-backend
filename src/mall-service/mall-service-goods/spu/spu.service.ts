@@ -7,6 +7,7 @@ import IDWorker from '../../../common/utils/IDWorker';
 import { SkuEntity } from '../sku/sku.entity';
 import { CategoryEntity } from '../category/category.entity';
 import { BrandEntity } from '../brand/brand.entity';
+import Result from '../../../common/utils/Result';
 
 @Injectable()
 export class SpuService {
@@ -32,7 +33,7 @@ export class SpuService {
   async putMany(ids: string[]) {
     // 1. 根据传入的ids数组批量修改spu的isMarketable='1'
     // 2. 并且要满足isMarketable='0' status='1' isDelete='0'
-    return this.spuRepository
+    const data = await this.spuRepository
       .createQueryBuilder()
       .update(SpuEntity)
       .set({ isMarketable: '1' })
@@ -41,6 +42,7 @@ export class SpuService {
       .andWhere('status = :status', { status: '1' })
       .andWhere('isDelete = :isDelete', { isDelete: '0' })
       .execute();
+    return new Result(data);
   }
 
   /***
@@ -49,7 +51,7 @@ export class SpuService {
    * @return
    */
   async pullMany(ids: string[]) {
-    return this.spuRepository
+    const data = await this.spuRepository
       .createQueryBuilder()
       .update(SpuEntity)
       .set({ isMarketable: '0' })
@@ -58,6 +60,7 @@ export class SpuService {
       .andWhere('status = :status', { status: '1' })
       .andWhere('isDelete = :isDelete', { isDelete: '0' })
       .execute();
+    return new Result(data);
   }
 
   /***
@@ -65,7 +68,7 @@ export class SpuService {
    * @param spuId
    */
   async put(spuId) {
-    return this.spuRepository
+    const data = await this.spuRepository
       .createQueryBuilder('spu')
       .update(SpuEntity)
       .set({ isMarketable: '1' })
@@ -74,6 +77,7 @@ export class SpuService {
       .andWhere('status = :status', { status: '1' })
       .andWhere('isDelete = :isDelete', { isDelete: '0' })
       .execute();
+    return new Result(data);
   }
 
   /***
@@ -81,7 +85,7 @@ export class SpuService {
    * @param spuId
    */
   async pull(spuId) {
-    return this.spuRepository
+    const data = await this.spuRepository
       .createQueryBuilder('spu')
       .update(SpuEntity)
       .set({ isMarketable: '0' })
@@ -90,6 +94,7 @@ export class SpuService {
       .andWhere('status = :status', { status: '1' })
       .andWhere('isDelete = :isDelete', { isDelete: '0' })
       .execute();
+    return new Result(data);
   }
 
   /**
@@ -97,13 +102,14 @@ export class SpuService {
    * @param spuId
    */
   async audit(spuId: string) {
-    return this.spuRepository
+    const data = await this.spuRepository
       .createQueryBuilder('spu')
       .update(SpuEntity)
       .set({ isMarketable: '1', status: '1' })
       .where('id = :spuId', { spuId })
       .andWhere('isDelete = :isDelete', { isDelete: '0' })
       .execute();
+    return new Result(data);
   }
 
   /**
@@ -111,13 +117,14 @@ export class SpuService {
    * @param spuId
    */
   async restore(spuId: string) {
-    return this.spuRepository
+    const data = await this.spuRepository
       .createQueryBuilder('spu')
       .update(SpuEntity)
       .set({ status: '0', isDelete: '0' })
       .where('id = :spuId', { spuId })
       .andWhere('isDelete = :isDelete', { isDelete: '1' })
       .execute();
+    return new Result(data);
   }
 
   /**
@@ -125,13 +132,14 @@ export class SpuService {
    * @param spuId
    */
   async logicDelete(spuId: string) {
-    return this.spuRepository
+    const data = await this.spuRepository
       .createQueryBuilder('spu')
       .update(SpuEntity)
       .set({ status: '0', isDelete: '1' })
       .where('id = :spuId', { spuId })
       .andWhere('isMarketable = :isMarketable', { isMarketable: '0' })
       .execute();
+    return new Result(data);
   }
 
   /**
@@ -197,35 +205,42 @@ export class SpuService {
       sku.brandName = brand.name;
       return sku;
     });
-    return this.skuRepository.insert(skuList);
+    const data = this.skuRepository.insert(skuList);
+
+    return new Result(data);
   }
 
-  async findList(pageParma: any): Promise<[SpuEntity[], number]> {
+  async findList(pageParma: any) {
     const qb = this.spuRepository
       .createQueryBuilder('spu')
       .skip(pageParma.pageSize * (pageParma.current - 1))
       .limit(pageParma.pageSize);
-    return await qb.getManyAndCount();
+    const [data, total] = await qb.getManyAndCount();
+    return new Result({ data, total });
   }
 
   async findById(id: string) {
-    return this.spuRepository.findOneBy({ id });
+    const data = await this.spuRepository.findOneBy({ id });
+    return new Result(data);
   }
 
-  addPara(spu: SpuEntity) {
-    return this.spuRepository.insert(spu);
+  async addPara(spu: SpuEntity) {
+    const data = await this.spuRepository.insert(spu);
+    return new Result(data);
   }
 
   async updatePara(id: number, spu: SpuEntity) {
-    return this.spuRepository
+    const data = await this.spuRepository
       .createQueryBuilder()
       .update(SpuEntity)
       .set(spu)
       .where('id = :id', { id })
       .execute();
+    return new Result(data);
   }
 
-  async remove(id: number): Promise<void> {
+  async remove(id: number) {
     await this.spuRepository.delete(id);
+    return new Result(null);
   }
 }
