@@ -12,7 +12,7 @@ export class OrderItemsService {
   ) {}
   async findList(pageParma: any) {
     const qb = this.orderItemsRepository
-      .createQueryBuilder('spec')
+      .createQueryBuilder('order-item')
       .skip(pageParma.pageSize * (pageParma.current - 1))
       .limit(pageParma.pageSize);
     const [data, total] = await qb.getManyAndCount();

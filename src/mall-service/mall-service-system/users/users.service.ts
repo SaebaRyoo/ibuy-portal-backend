@@ -1,19 +1,27 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Users } from './entitys/users.entity';
+import { InsertResult, Repository } from 'typeorm';
+import { MemberEntity } from './entitys/users.entity';
 import * as bcrypt from 'bcrypt';
 import Result from '../../../common/utils/Result';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(Users)
-    private usersRepository: Repository<Users>,
+    @InjectRepository(MemberEntity)
+    private usersRepository: Repository<MemberEntity>,
   ) {}
 
-  findAll(): Promise<Users[]> {
-    return this.usersRepository.find();
+  /**
+   * 列表 + 分页
+   * @param pageParma
+   */
+  async findList(pageParma: any): Promise<[MemberEntity[], number]> {
+    const qb = this.usersRepository
+      .createQueryBuilder('member')
+      .skip(pageParma.pageSize * (pageParma.current - 1))
+      .limit(pageParma.pageSize);
+    return await qb.getManyAndCount();
   }
 
   async findOne(login_name: string) {
@@ -21,15 +29,13 @@ export class UsersService {
     return new Result(data);
   }
 
-  async create(data: Users) {
+  async create(data: MemberEntity): Promise<Result<any>> {
     const _data = { ...data };
 
     const saltOrRounds = 10;
-    const hash = await bcrypt.hash(_data.password, saltOrRounds);
+    _data.password = await bcrypt.hash(_data.password, saltOrRounds);
 
-    _data.password = hash;
-
-    const result = await this.usersRepository.insert(_data);
+    const result: InsertResult = await this.usersRepository.insert(_data);
     return new Result(result);
   }
 

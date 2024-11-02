@@ -1,5 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { Users } from './entitys/users.entity';
+import { MemberEntity } from './entitys/users.entity';
 import { UsersService } from './users.service';
 import { Public } from '../../../common/decorators/metadata/public.decorator';
 
@@ -9,7 +9,7 @@ export class UsersController {
 
   @Public()
   @Post()
-  async createUser(@Body() user: Users) {
+  async createUser(@Body() user: MemberEntity) {
     return this.userService.create(user);
   }
 }

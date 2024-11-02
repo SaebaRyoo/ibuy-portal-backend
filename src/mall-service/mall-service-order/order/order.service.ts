@@ -35,12 +35,15 @@ export class OrderService {
     @Inject(forwardRef(() => AlipayService))
     private readonly alipayService: AlipayService,
   ) {}
-  async findList(pageParma: any): Promise<[OrderEntity[], number]> {
+  async findList(
+    pageParma: any,
+  ): Promise<Result<{ data: OrderEntity[]; total: number }>> {
     const qb = this.orderRepository
-      .createQueryBuilder('spec')
+      .createQueryBuilder('order')
       .skip(pageParma.pageSize * (pageParma.current - 1))
       .limit(pageParma.pageSize);
-    return await qb.getManyAndCount();
+    const [data, total] = await qb.getManyAndCount();
+    return new Result({ data, total });
   }
 
   async findById(id: string) {

@@ -10,12 +10,14 @@ import {
 } from '@nestjs/common';
 import { SkuService } from './sku.service';
 import { SkuEntity } from './sku.entity';
+import { Public } from '../../../common/decorators/metadata/public.decorator';
 
 @Controller('sku')
 export class SkuController {
   @Inject(SkuService)
   private skuService: SkuService;
 
+  @Public()
   @Post('/list')
   async findList(@Body('pageParam') pageParam: any) {
     return await this.skuService.findList(pageParam);
