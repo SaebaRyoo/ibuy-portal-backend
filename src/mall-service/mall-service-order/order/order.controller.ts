@@ -8,6 +8,7 @@ import {
   Delete,
   Inject,
   Query,
+  UseInterceptors,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { OrderEntity } from './entities/order.entity';

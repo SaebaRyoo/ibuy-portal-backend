@@ -8,19 +8,19 @@ export class CategoryEntity {
   @Column()
   name: string; //分类名称
 
-  @Column()
+  @Column({ name: 'goods_num' })
   goodsNum: number; //商品数量
 
-  @Column()
+  @Column({ name: 'is_show' })
   isShow: string; //是否显示 "0" "1"
 
-  @Column()
+  @Column({ name: 'is_menu' })
   isMenu: string; //是否导航
 
-  @Column()
+  @Column({ name: 'parent_id' })
   parentId: number; //上级ID
 
-  @Column()
+  @Column({ name: 'template_id' })
   templateId: number; //模板ID
 
   @Column({ nullable: true })

@@ -1,10 +1,9 @@
-import { forwardRef, Global, Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { AlipayService } from './alipay.service';
 import { AlipayController } from './alipay.controller';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RabbitMQConstants } from '../../common/constants/RabbitMQConstants';
-import { OrderModule } from '../mall-service-order/order/order.module';
 
 @Global()
 @Module({

@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { SkuEntity } from './sku.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { InjectRedis } from '@nestjs-modules/ioredis';
@@ -56,8 +56,15 @@ export class SkuService {
   /**
    * 库存递减
    * @param username
+   * @param manager // 这是用于内部个module之间调用时处理事务的，暂时没想到好的解决方法
    */
-  async decrCount(username: string) {
+  async decrCount(username: string, manager?: EntityManager) {
+    let _manager;
+    if (manager) {
+      _manager = manager;
+    } else {
+      _manager = await this.skuRepository;
+    }
     // 获取Redis客户端
     const redisClient = await this.redisService;
 
@@ -71,9 +78,10 @@ export class SkuService {
       const num = parsedOrderItem.num;
       const skuId = parsedOrderItem.skuId;
 
-      const { affectedRows } = await this.skuRepository.query(
+      const { affectedRows } = await _manager.query(
         `UPDATE ibuy_sku SET num=num-${num},sale_num=sale_num+${num} WHERE id='${skuId}' AND num>=${num}`,
       );
+      // const { affectedRows } = await this.skuCustomRepo.decrCount(num, skuId);
 
       if (affectedRows <= 0) {
         throw new HttpException('库存不足，递减失败！', HttpStatus.BAD_REQUEST);

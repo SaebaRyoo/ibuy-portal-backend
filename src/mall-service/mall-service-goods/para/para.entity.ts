@@ -14,6 +14,6 @@ export class ParaEntity {
   @Column({ nullable: true })
   seq: number; // 排序
 
-  @Column()
-  template_id: number;
+  @Column({ name: 'template_id' })
+  templateId: number;
 }

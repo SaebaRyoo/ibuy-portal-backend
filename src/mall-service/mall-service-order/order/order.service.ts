@@ -1,6 +1,6 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { OrderEntity } from './entities/order.entity';
 import { SkuService } from '../../mall-service-goods/sku/sku.service';
 import { CartService } from '../cart/cart.service';
@@ -28,6 +28,7 @@ export class OrderService {
     private readonly skuService: SkuService,
     private readonly cartService: CartService,
     private readonly orderItemsService: OrderItemsService,
+    private readonly dataSource: DataSource,
 
     // 因为在AlipayService中引用了OrderService的方法，
     // 然后再在OrderService中引用AlipayService的方法会导致循环依赖。
@@ -35,6 +36,7 @@ export class OrderService {
     @Inject(forwardRef(() => AlipayService))
     private readonly alipayService: AlipayService,
   ) {}
+
   async findList(
     pageParma: any,
   ): Promise<Result<{ data: OrderEntity[]; total: number }>> {
@@ -72,6 +74,12 @@ export class OrderService {
     const username = order.username;
     // 查询用户购物车
     const orderItems = await this.cartService.list(username);
+    // 创建一个新的查询运行器
+    const queryRunner = this.dataSource.createQueryRunner();
+    // 使用我们的新查询运行器建立真实的数据库连接
+    await queryRunner.connect();
+    // 现在让我们打开一个新的事务：
+    await queryRunner.startTransaction();
 
     // 统计计算
     let totalMoney = 0;
@@ -98,25 +106,59 @@ export class OrderService {
     order.shippingStatus = '0'; // 0:未发货, 1:已发货
     order.id = `NO.${idWorker.nextId()}`;
 
-    // 保存订单
-    await this.orderRepository.save(order);
+    // // 保存订单
+    // // await this.orderCustomRepo.createOrder(order);
+    // await this.orderRepository.save(order);
+    //
+    // // 添加订单明细
+    // for (const orderItem of orderItems.data) {
+    //   orderItem.id = `NO.${idWorker.nextId()}`;
+    //   orderItem.isReturn = '0';
+    //   orderItem.orderId = order.id;
+    //   await this.orderItemsService.add(orderItem);
+    // }
+    //
+    // // 修改库存
+    // await this.skuService.decrCount(username);
+    //
+    // // 清除Redis缓存中的购物车数据
+    // await this.redisService.del(`Cart_${username}`);
+    //
+    // // 发送延时队列
+    // await this.sendDelayMessage(order.id);
 
-    // 添加订单明细
-    for (const orderItem of orderItems.data) {
-      orderItem.id = `NO.${idWorker.nextId()}`;
-      orderItem.isReturn = '0';
-      orderItem.orderId = order.id;
-      await this.orderItemsService.add(orderItem);
+    try {
+      // 保存订单
+      // await this.orderRepository.save(order);
+      await queryRunner.manager.save(OrderEntity, order);
+
+      // 添加订单明细
+      for (const orderItem of orderItems.data) {
+        orderItem.id = `NO.${idWorker.nextId()}`;
+        orderItem.isReturn = '0';
+        orderItem.orderId = order.id;
+        // 将事务运行器传给其他服务
+        await this.orderItemsService.add(orderItem, queryRunner.manager);
+      }
+
+      // 修改库存
+      await this.skuService.decrCount(username, queryRunner.manager);
+
+      // 清除Redis缓存中的购物车数据
+      await this.redisService.del(`Cart_${username}`);
+
+      // 发送延时队列
+      await this.sendDelayMessage(order.id);
+      // 提交事务：
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      // 发生错误，回滚所做的更改
+      await queryRunner.rollbackTransaction();
+      return new Result(0, err); // 插入失败，返回原因
+    } finally {
+      // 释放手动创建的查询运行器：
+      await queryRunner.release();
     }
-
-    // 修改库存
-    await this.skuService.decrCount(username);
-
-    // 清除Redis缓存中的购物车数据
-    await this.redisService.del(`Cart_${username}`);
-
-    // 发送延时队列
-    await this.sendDelayMessage(order.id);
 
     return new Result(1); // 表示插入成功的数量
   }

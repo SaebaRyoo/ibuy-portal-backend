@@ -24,8 +24,8 @@ export class UsersService {
     return await qb.getManyAndCount();
   }
 
-  async findOne(login_name: string) {
-    const data = await this.usersRepository.findOneBy({ login_name });
+  async findOne(loginName: string) {
+    const data = await this.usersRepository.findOneBy({ loginName });
     return new Result(data);
   }
 

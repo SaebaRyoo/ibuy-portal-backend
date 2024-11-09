@@ -14,6 +14,6 @@ export class SpecEntity {
   @Column({ nullable: true })
   seq: number;
 
-  @Column()
-  template_id: number;
+  @Column({ name: 'template_id' })
+  templateId: number;
 }

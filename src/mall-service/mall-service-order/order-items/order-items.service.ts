@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { OrderItemsEntity } from './entities/order-items.entity';
 import Result from '../../../common/utils/Result';
 
@@ -33,16 +33,24 @@ export class OrderItemsService {
     return new Result(data);
   }
 
-  async add(spec: OrderItemsEntity) {
-    const data = await this.orderItemsRepository.insert(spec);
+  async add(orderItem: OrderItemsEntity, manager?: EntityManager) {
+    // const data = await this.orderItemCustomRepo.add(orderItem);
+    // const data = await this.orderItemsRepository.insert(orderItem);
+    // return new Result(data);
+    let data;
+    if (manager) {
+      data = manager.insert(OrderItemsEntity, orderItem);
+    } else {
+      data = await this.orderItemsRepository.insert(orderItem);
+    }
     return new Result(data);
   }
 
-  async update(id: number, spec: OrderItemsEntity) {
+  async update(id: number, orderItem: OrderItemsEntity) {
     const data = await this.orderItemsRepository
       .createQueryBuilder()
       .update(OrderItemsEntity)
-      .set(spec)
+      .set(orderItem)
       .where('id = :id', { id })
       .execute();
     return new Result(data);

@@ -8,9 +8,9 @@ export class TemplateEntity {
   @Column()
   name: string;
 
-  @Column()
-  spec_num: number;
+  @Column({ name: 'spec_num' })
+  specNum: number;
 
-  @Column()
-  para_num: number;
+  @Column({ name: 'para_num' })
+  paraNum: number;
 }
