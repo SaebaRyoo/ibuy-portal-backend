@@ -26,18 +26,18 @@ export class BrandController {
     return this.brandService.findList(pageParam);
   }
 
-  @Post('/add')
-  createPara(@Body() body: any) {
-    return this.brandService.addPara(body);
+  @Post()
+  create(@Body() body: any) {
+    return this.brandService.create(body);
   }
 
   @Get('/:id')
-  async getParaById(@Param('id') id: number) {
+  async findById(@Param('id') id: number) {
     return this.brandService.findById(id);
   }
 
   @Patch('/:id')
-  updatePara(@Param('id') id: number, @Body() para: BrandEntity) {
-    return this.brandService.updatePara(id, para);
+  updateById(@Param('id') id: number, @Body() para: BrandEntity) {
+    return this.brandService.updateById(id, para);
   }
 }

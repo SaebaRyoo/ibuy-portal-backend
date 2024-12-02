@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { UsersModule } from '../users/users.module';
+import { MemberModule } from '../member/member.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
@@ -16,7 +16,7 @@ const jwtModule = JwtModule.registerAsync({
   }),
 });
 @Module({
-  imports: [UsersModule, jwtModule],
+  imports: [MemberModule, jwtModule],
   providers: [AuthService],
   controllers: [AuthController],
   exports: [jwtModule],

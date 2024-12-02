@@ -11,7 +11,7 @@ import {
 import { AuthGuard } from './common/guards/auth.guard';
 
 import { AuthModule } from './mall-service/mall-service-system/auth/auth.module';
-import { UsersModule } from './mall-service/mall-service-system/users/users.module';
+import { MemberModule } from './mall-service/mall-service-system/member/member.module';
 import { FileModule } from './mall-service/mall-service-file/file.module';
 import { TemplateModule } from './mall-service/mall-service-goods/template/template.module';
 import { SpecModule } from './mall-service/mall-service-goods/spec/spec.module';
@@ -33,7 +33,7 @@ import { AlipayModule } from './mall-service/alipay/alipay.module';
     // RoleModule,
     // UsersRoleModule,
     AuthModule,
-    UsersModule,
+    MemberModule,
     ConfigModule.forRoot({
       envFilePath: ['.env'],
       isGlobal: true, // You will not need to import ConfigModule in other modules once it's been loaded in the root module

@@ -21,7 +21,7 @@ export class SpecController {
     return this.specService.findList(pageParam);
   }
 
-  @Post('/add')
+  @Post()
   createSpec(@Body() body: any) {
     return this.specService.addSpec(body);
   }

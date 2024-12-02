@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Query,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { SearchService } from './search.service';
 import { Public } from '../../common/decorators/metadata/public.decorator';
 

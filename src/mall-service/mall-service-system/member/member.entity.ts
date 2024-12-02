@@ -11,10 +11,10 @@ export class MemberEntity {
   @Column()
   password: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, unique: true })
   phone: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, unique: true })
   email: string;
 
   @Column({ name: 'source_type', nullable: true })

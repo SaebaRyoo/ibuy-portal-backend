@@ -21,7 +21,7 @@ export class TemplateController {
     return this.templateService.findList(pageParam);
   }
 
-  @Post('/add')
+  @Post()
   async createTemplate(@Body() body: any) {
     return this.templateService.addTemplate(body);
   }

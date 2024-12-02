@@ -21,7 +21,7 @@ export class CategoryBrandController {
     return this.categoryBrandService.findList(pageParam);
   }
 
-  @Post('/add')
+  @Post()
   async createTemplate(@Body() body: any) {
     return this.categoryBrandService.addTemplate(body);
   }

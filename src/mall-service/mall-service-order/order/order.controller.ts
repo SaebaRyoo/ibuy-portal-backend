@@ -23,7 +23,7 @@ export class OrderController {
     return this.orderService.findList(pageParam);
   }
 
-  @Post('/add')
+  @Post()
   createSpec(@Body() order: OrderEntity, @Query('username') username: string) {
     //设置购买用户
     order.username = username;

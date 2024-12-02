@@ -8,7 +8,7 @@ export class CategoryEntity {
   @Column()
   name: string; //分类名称
 
-  @Column({ name: 'goods_num' })
+  @Column({ name: 'goods_num', nullable: true })
   goodsNum: number; //商品数量
 
   @Column({ name: 'is_show' })

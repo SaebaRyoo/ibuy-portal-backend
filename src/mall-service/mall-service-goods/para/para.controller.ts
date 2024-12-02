@@ -21,18 +21,18 @@ export class ParaController {
     return await this.paraService.findList(pageParam);
   }
 
-  @Post('/add')
-  createPara(@Body() body: any) {
-    return this.paraService.addPara(body);
+  @Post()
+  create(@Body() body: any) {
+    return this.paraService.create(body);
   }
 
   @Get('/:id')
-  async getParaById(@Param('id') id: number) {
+  async findById(@Param('id') id: number) {
     return this.paraService.findById(id);
   }
 
   @Patch('/:id')
-  updatePara(@Param('id') id: number, @Body() para: ParaEntity) {
-    return this.paraService.updatePara(id, para);
+  updateById(@Param('id') id: number, @Body() para: ParaEntity) {
+    return this.paraService.updateById(id, para);
   }
 }

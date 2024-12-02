@@ -21,7 +21,7 @@ export class OrderItemsController {
     return this.orderService.findList(pageParam);
   }
 
-  @Post('/add')
+  @Post()
   add(@Body() body: any) {
     return this.orderService.add(body);
   }

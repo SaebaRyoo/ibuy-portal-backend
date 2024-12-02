@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { EntityManager, Repository } from 'typeorm';
+import { EntityManager, IsNull, Not, Repository } from 'typeorm';
 import { SkuEntity } from './sku.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { InjectRedis } from '@nestjs-modules/ioredis';
@@ -33,8 +33,17 @@ export class SkuService {
     return new Result(data);
   }
 
-  async addSku(sku: SkuEntity) {
-    const data = await this.skuRepository.insert(sku);
+  async findBySpuId(spuId: string) {
+    const data = await this.skuRepository.findBy({ spuId });
+
+    return new Result(data);
+  }
+  async findTopBySaleNum(limit: number) {
+    const data = await this.skuRepository.find({
+      where: { saleNum: Not(IsNull()) }, // 过滤掉 saleNum 为空的记录
+      order: { saleNum: 'DESC' }, // 根据 sale_num 降序排序
+      take: limit, // 获取指定数量的数据
+    });
     return new Result(data);
   }
 
@@ -46,11 +55,6 @@ export class SkuService {
       .where('id = :id', { id })
       .execute();
     return new Result(data);
-  }
-
-  async remove(id: number) {
-    await this.skuRepository.delete(id);
-    return new Result(null);
   }
 
   /**

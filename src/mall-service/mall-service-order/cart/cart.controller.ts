@@ -6,7 +6,7 @@ export class CartController {
   @Inject(CartService)
   private cartService: CartService;
 
-  @Post('/add')
+  @Post()
   createSpec(
     @Query('id') id: string,
     @Query('num') num: number,

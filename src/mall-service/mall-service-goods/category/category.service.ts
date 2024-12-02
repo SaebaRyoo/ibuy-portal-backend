@@ -27,12 +27,20 @@ export class CategoryService {
     return new Result(data);
   }
 
-  async addPara(para: CategoryEntity) {
+  /**
+   * 获取全部数据
+   */
+  async findAll() {
+    const data = await this.categoryRepository.find();
+    return new Result(data);
+  }
+
+  async create(para: CategoryEntity) {
     const data = await this.categoryRepository.insert(para);
     return new Result(data);
   }
 
-  async updatePara(id: number, para: CategoryEntity) {
+  async updateById(id: number, para: CategoryEntity) {
     const data = await this.categoryRepository
       .createQueryBuilder()
       .update(CategoryEntity)

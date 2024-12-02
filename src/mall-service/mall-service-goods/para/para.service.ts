@@ -25,12 +25,12 @@ export class ParaService {
     return new Result(data);
   }
 
-  async addPara(para: ParaEntity) {
+  async create(para: ParaEntity) {
     const data = await this.paraRepository.insert(para);
     return new Result(data);
   }
 
-  async updatePara(id: number, para: ParaEntity) {
+  async updateById(id: number, para: ParaEntity) {
     const data = await this.paraRepository
       .createQueryBuilder()
       .update(ParaEntity)

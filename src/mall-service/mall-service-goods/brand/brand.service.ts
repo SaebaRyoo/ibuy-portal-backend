@@ -50,12 +50,12 @@ export class BrandService {
     return new Result(data);
   }
 
-  async addPara(para: BrandEntity) {
+  async create(para: BrandEntity) {
     const data = await this.brandRepository.insert(para);
     return new Result(data);
   }
 
-  async updatePara(id: number, para: BrandEntity) {
+  async updateById(id: number, para: BrandEntity) {
     const data = await this.brandRepository
       .createQueryBuilder()
       .update(BrandEntity)
