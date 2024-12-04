@@ -24,15 +24,12 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post('login')
   signIn(@Body() signInDto: Record<string, any>) {
-    return this.authService.signIn(signInDto.login_name, signInDto.password);
+    return this.authService.signIn(signInDto.loginName, signInDto.password);
   }
 
   @Get('profile')
   getProfile(@Request() req) {
     this.logger.log('info', 'Calling getProfile()', AuthController.name);
-    // this.logger.debug('Calling getProfile()', AuthController.name);
-    // this.logger.verbose('Calling getProfile()', AuthController.name);
-    // this.logger.error('Calling getProfile()', AuthController.name);
-    return req.user;
+    return this.authService.getProfile(req);
   }
 }

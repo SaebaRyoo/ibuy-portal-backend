@@ -29,6 +29,11 @@ export class MemberService {
     return new Result(data);
   }
 
+  async findOneById(id: number) {
+    const data = await this.usersRepository.findOneBy({ id });
+    return new Result(data);
+  }
+
   async create(data: MemberEntity): Promise<Result<any>> {
     const _data: MemberEntity = { ...data };
 

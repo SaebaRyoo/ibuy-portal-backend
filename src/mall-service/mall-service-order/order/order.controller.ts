@@ -5,10 +5,8 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
   Inject,
   Query,
-  UseInterceptors,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { OrderEntity } from './entities/order.entity';
@@ -23,8 +21,16 @@ export class OrderController {
     return this.orderService.findList(pageParam);
   }
 
-  @Post()
-  createSpec(@Body() order: OrderEntity, @Query('username') username: string) {
+  /**
+   * 购物车下单
+   * @param order
+   * @param username
+   */
+  @Post('/cart/add')
+  addOrderFormCart(
+    @Body() order: OrderEntity,
+    @Query('username') username: string,
+  ) {
     //设置购买用户
     order.username = username;
     return this.orderService.addOrder(order);

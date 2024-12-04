@@ -5,22 +5,26 @@ import { InjectRedis } from '@nestjs-modules/ioredis';
 import Redis from 'ioredis';
 import { OrderItemsEntity } from '../order-items/entities/order-items.entity';
 import Result from '../../../common/utils/Result';
+import { AuthService } from '../../mall-service-system/auth/auth.service';
 
 @Injectable()
 export class CartService {
   constructor(
     private readonly skuService: SkuService,
     private readonly spuService: SpuService,
+    private readonly authService: AuthService,
     @InjectRedis() private readonly redisService: Redis,
   ) {}
 
   // 添加商品到购物车
-  async add(id: string, num: number, username: string): Promise<any> {
+  async add(id: string, num: number, username: string, req): Promise<any> {
+    const decoded = await this.authService.getDecodedToken(req);
+    const _username = decoded.login_name || username; // 获取登录用户的用户名
     const redisClient = this.redisService;
 
     if (num <= 0) {
       // 删除掉原来的商品
-      await redisClient.hdel(`Cart_${username}`, id);
+      await redisClient.hdel(`Cart_${_username}`, id);
       return new Result(null);
     }
 
@@ -48,17 +52,37 @@ export class CartService {
       orderItem.image = sku.image; // 商品的图片地址
 
       // 4. 数据添加到 Redis 中 key:用户名 field:sku 的 ID value: 购物车数据 (OrderItem)
-      await redisClient.hset(`Cart_${username}`, id, JSON.stringify(orderItem));
+      await redisClient.hset(
+        `Cart_${_username}`,
+        id,
+        JSON.stringify(orderItem),
+      );
       return new Result(null, '购物车添加成功');
     }
     return new Result(null);
   }
 
   // 获取购物车列表
-  async list(username: string): Promise<Result<OrderItemsEntity[]>> {
-    const values = await this.redisService.hvals(`Cart_${username}`);
+  async list(username: string, req?: any) {
+    let decoded = null;
+    let _username = username || '';
+    if (req) {
+      decoded = await this.authService.getDecodedToken(req);
+      _username = decoded.login_name; // 获取登录用户的用户名
+    }
+    const values = await this.redisService.hvals(`Cart_${_username}`);
     const data = values.map((value) => JSON.parse(value));
 
-    return new Result(data);
+    // 计算总价格
+    let totalPrice = 0;
+    // 计算总数量
+    let totalItems = 0;
+    // 计算总折扣
+    const totalDiscount = 0;
+    for (const item of data) {
+      totalPrice += item.money * item.num;
+      totalItems += parseInt(item.num);
+    }
+    return new Result({ data, totalPrice, totalItems, totalDiscount });
   }
 }

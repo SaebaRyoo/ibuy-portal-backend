@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Inject, Query, Get } from '@nestjs/common';
+import { Controller, Post, Request, Inject, Query, Get } from '@nestjs/common';
 import { CartService } from './cart.service';
 
 @Controller('cart')
@@ -6,17 +6,25 @@ export class CartController {
   @Inject(CartService)
   private cartService: CartService;
 
-  @Post()
-  createSpec(
+  /**
+   * 添加到购物车
+   * @param id
+   * @param num
+   * @param username
+   * @param req
+   */
+  @Post('/add')
+  addToCart(
     @Query('id') id: string,
     @Query('num') num: number,
     @Query('username') username: string,
+    @Request() req,
   ) {
-    return this.cartService.add(id, num, username);
+    return this.cartService.add(id, num, username, req);
   }
 
   @Get('/list')
-  async findList(@Query('username') username: string) {
-    return this.cartService.list(username);
+  async findList(@Query('username') username: string, @Request() req) {
+    return this.cartService.list(username, req);
   }
 }

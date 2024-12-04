@@ -73,7 +73,8 @@ export class OrderService {
   async addOrder(order: OrderEntity): Promise<Result<any>> {
     const username = order.username;
     // 查询用户购物车
-    const orderItems = await this.cartService.list(username);
+    const orderItemsResult = await this.cartService.list(username);
+    const orderItems = orderItemsResult.data.data;
     // 创建一个新的查询运行器
     const queryRunner = this.dataSource.createQueryRunner();
     // 使用我们的新查询运行器建立真实的数据库连接
@@ -85,7 +86,7 @@ export class OrderService {
     let totalMoney = 0;
     let totalPayMoney = 0;
     let num = 0;
-    for (const orderItem of orderItems.data) {
+    for (const orderItem of orderItems) {
       totalMoney += orderItem.money;
       totalPayMoney += orderItem.payMoney;
       num += Number(orderItem.num);
@@ -111,7 +112,7 @@ export class OrderService {
     // await this.orderRepository.save(order);
     //
     // // 添加订单明细
-    // for (const orderItem of orderItems.data) {
+    // for (const orderItem of orderItems) {
     //   orderItem.id = `NO.${idWorker.nextId()}`;
     //   orderItem.isReturn = '0';
     //   orderItem.orderId = order.id;
@@ -133,7 +134,7 @@ export class OrderService {
       await queryRunner.manager.save(OrderEntity, order);
 
       // 添加订单明细
-      for (const orderItem of orderItems.data) {
+      for (const orderItem of orderItems) {
         orderItem.id = `NO.${idWorker.nextId()}`;
         orderItem.isReturn = '0';
         orderItem.orderId = order.id;

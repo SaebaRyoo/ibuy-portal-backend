@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Request } from '@nestjs/common';
 import { MemberEntity } from './member.entity';
 import { MemberService } from './member.service';
 import { Public } from '../../../common/decorators/metadata/public.decorator';

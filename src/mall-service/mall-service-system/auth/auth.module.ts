@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { MemberModule } from '../member/member.module';
@@ -15,10 +15,12 @@ const jwtModule = JwtModule.registerAsync({
     },
   }),
 });
+
+@Global()
 @Module({
   imports: [MemberModule, jwtModule],
   providers: [AuthService],
   controllers: [AuthController],
-  exports: [jwtModule],
+  exports: [AuthService, jwtModule],
 })
 export class AuthModule {}
