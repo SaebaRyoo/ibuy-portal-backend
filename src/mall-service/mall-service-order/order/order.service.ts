@@ -13,6 +13,7 @@ import { RabbitMQConstants } from '../../../common/constants/RabbitMQConstants';
 import Result from '../../../common/utils/Result';
 import { AlipayService } from '../../alipay/alipay.service';
 import { SkuEntity } from '../../mall-service-goods/sku/sku.entity';
+import { AuthService } from '../../mall-service-system/auth/auth.service';
 
 @Injectable()
 export class OrderService {
@@ -30,6 +31,8 @@ export class OrderService {
     private readonly orderItemsService: OrderItemsService,
     private readonly dataSource: DataSource,
 
+    private readonly authService: AuthService,
+
     // 因为在AlipayService中引用了OrderService的方法，
     // 然后再在OrderService中引用AlipayService的方法会导致循环依赖。
     // 所以需要使用forwardRef来解决
@@ -39,11 +42,21 @@ export class OrderService {
 
   async findList(
     pageParma: any,
+    req: any,
   ): Promise<Result<{ data: OrderEntity[]; total: number }>> {
+    const decoded = await this.authService.getDecodedToken(req);
+    const _username = decoded.login_name;
     const qb = this.orderRepository
       .createQueryBuilder('order')
       .skip(pageParma.pageSize * (pageParma.current - 1))
-      .limit(pageParma.pageSize);
+      .limit(pageParma.pageSize)
+      .where('username = :username', { username: _username });
+    // 筛选条件
+    if (pageParma.orderStatus) {
+      qb.andWhere('order.orderStatus = :orderStatus', {
+        orderStatus: pageParma.orderStatus,
+      });
+    }
     const [data, total] = await qb.getManyAndCount();
     return new Result({ data, total });
   }

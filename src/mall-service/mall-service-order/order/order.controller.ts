@@ -7,6 +7,7 @@ import {
   Param,
   Inject,
   Query,
+  Request,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { OrderEntity } from './entities/order.entity';
@@ -16,9 +17,14 @@ export class OrderController {
   @Inject(OrderService)
   private orderService: OrderService;
 
-  @Post('/list')
-  async findList(@Body('pageParam') pageParam: any) {
-    return this.orderService.findList(pageParam);
+  @Get('/list/:current/:pageSize')
+  async findList(
+    @Param('current') current: number,
+    @Param('pageSize') pageSize: number,
+    @Query('orderStatus') orderStatus: string,
+    @Request() req: any,
+  ) {
+    return this.orderService.findList({ current, pageSize, orderStatus }, req);
   }
 
   /**
