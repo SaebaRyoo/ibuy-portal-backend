@@ -28,18 +28,13 @@ export class OrderController {
   }
 
   /**
-   * 购物车下单
+   * 购物车下单, 清空购物车
    * @param order
-   * @param username
+   * @param req
    */
   @Post('/cart/add')
-  addOrderFormCart(
-    @Body() order: OrderEntity,
-    @Query('username') username: string,
-  ) {
-    //设置购买用户
-    order.username = username;
-    return this.orderService.addOrder(order);
+  addOrderFormCart(@Body() order: OrderEntity, @Request() req: any) {
+    return this.orderService.addOrder(order, req);
   }
 
   @Get('/:id')

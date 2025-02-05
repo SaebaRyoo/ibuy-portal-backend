@@ -82,9 +82,11 @@ export class OrderService {
    * 购物车下单
    *
    * @param order
+   * @param req
    */
-  async addOrder(order: OrderEntity): Promise<Result<any>> {
-    const username = order.username;
+  async addOrder(order: OrderEntity, req): Promise<Result<any>> {
+    const decoded = await this.authService.getDecodedToken(req);
+    const username = decoded.login_name;
     // 查询用户购物车
     const orderItemsResult = await this.cartService.list(username);
     const orderItems = orderItemsResult.data.data;
@@ -107,6 +109,7 @@ export class OrderService {
 
     const idWorker = new IDWorker(1n, 1n);
     // 设置订单信息
+    order.username = username;
     order.totalNum = num;
     order.totalMoney = totalMoney;
     order.payMoney = totalPayMoney;
@@ -168,13 +171,13 @@ export class OrderService {
     } catch (err) {
       // 发生错误，回滚所做的更改
       await queryRunner.rollbackTransaction();
-      return new Result(0, err); // 插入失败，返回原因
+      return new Result(null, err); // 插入失败，返回原因
     } finally {
       // 释放手动创建的查询运行器：
       await queryRunner.release();
     }
 
-    return new Result(1); // 表示插入成功的数量
+    return new Result(order); // 返回创建的订单信息
   }
 
   /**

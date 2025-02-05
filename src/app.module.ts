@@ -27,15 +27,21 @@ import { OrderItemsModule } from './mall-service/mall-service-order/order-items/
 import { CartModule } from './mall-service/mall-service-order/cart/cart.module';
 import { RedisModule } from '@nestjs-modules/ioredis';
 import { AlipayModule } from './mall-service/alipay/alipay.module';
+import { AddressModule } from './mall-service/mall-service-system/address/address.module';
 
 @Module({
   imports: [
     // RoleModule,
     // UsersRoleModule,
+    // 用户相关模块
     AuthModule,
     MemberModule,
+    AddressModule,
+
     ConfigModule.forRoot({
-      envFilePath: ['.env'],
+      // envFilePath: ['.env'],
+      envFilePath:
+        process.env.NODE_ENV === 'development' ? ['.env.dev'] : ['.env'],
       isGlobal: true, // You will not need to import ConfigModule in other modules once it's been loaded in the root module
     }),
 
@@ -61,12 +67,15 @@ import { AlipayModule } from './mall-service/alipay/alipay.module';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
+        const host = configService.get('REDIS_HOST');
+        const port = configService.get('REDIS_PORT');
+        const pw = configService.get('REDIS_PASSWORD');
         return {
           type: 'single',
-          url: 'redis://localhost:6379',
+          url: `redis://${host}:${port}`,
           options: {
             // username: configService.get('POSTGRES_PASSWORD'),
-            // password: configService.get('POSTGRES_PASSWORD'),
+            password: pw,
             db: 0,
           },
         };

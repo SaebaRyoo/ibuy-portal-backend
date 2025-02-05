@@ -12,8 +12,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       useFactory: async (configService: ConfigService) => ({
         node: configService.get('ES_NODE'),
         auth: {
-          username: configService.get('ES_USERNAME'),
-          password: configService.get('ES_PASSWORD'),
+          username: configService.get('ELASTIC_USERNAME'),
+          password: configService.get('ELASTIC_PASSWORD'),
         },
       }),
       inject: [ConfigService],

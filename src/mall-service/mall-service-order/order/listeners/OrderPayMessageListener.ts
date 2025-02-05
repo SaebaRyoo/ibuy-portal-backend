@@ -49,7 +49,8 @@ export class OrderPayMessageListener {
 
       const order = new OrderEntity();
       // order.id = out_trade_no;
-      order.payStatus = '1';
+      order.payStatus = '1'; // 支付状态变为已支付
+      order.orderStatus = '1'; // 订单状态变为待发货
       order.payTime = new Date();
       order.transactionId = trade_no;
       await this.orderService.update(out_trade_no, order);

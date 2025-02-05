@@ -20,6 +20,7 @@ async function bootstrap() {
     type: VersioningType.URI,
   });
 
-  await app.listen(8000);
+  // 监听所有的网络接口，从而允许外部访问。比如用docker部署时
+  await app.listen(8000, '0.0.0.0');
 }
 bootstrap();

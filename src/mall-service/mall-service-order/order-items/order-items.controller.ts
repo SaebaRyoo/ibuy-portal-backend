@@ -21,6 +21,15 @@ export class OrderItemsController {
     return this.orderService.findList(pageParam);
   }
 
+  /**
+   * 根据orderId获取订单详情信息
+   * @param orderId
+   */
+  @Get('/item/:orderId')
+  async findItemsByOrderId(@Param('orderId') orderId: string) {
+    return this.orderService.findItemsByOrderId(orderId);
+  }
+
   @Post()
   add(@Body() body: any) {
     return this.orderService.add(body);

@@ -21,7 +21,7 @@ export class OrderEntity {
   payMoney: number; // 实付金额
 
   @Column({ name: 'pay_type' })
-  payType: string; // 支付类型，1、在线支付、0 货到付款
+  payType: string; // 支付类型 0: 支付宝支付、1: 微信支付  2: 银联支付 3: 货到付款
 
   @Column({ name: 'create_time', type: 'timestamp' })
   createTime: Date; // 订单创建时间
@@ -78,7 +78,7 @@ export class OrderEntity {
   transactionId: string; // 交易流水号
 
   @Column({ name: 'order_status' })
-  orderStatus: string; // 订单状态, 0: 未完成, 1: 已完成, 2: 已退货
+  orderStatus: string; // 订单状态, 0: 待付款, 1: 待发货, 2: 待收货, 3: 待评价, 4: 退款/售后, 5: 交易完成, 6: 交易关闭
 
   @Column({ name: 'pay_status' })
   payStatus: string; // 支付状态, 0: 未支付, 1: 已支付, 2: 支付失败

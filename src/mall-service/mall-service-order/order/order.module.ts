@@ -30,6 +30,7 @@ import { OrderPayMessageListener } from './listeners/OrderPayMessageListener';
         uri: `amqp://${configService.get('RMQ_USERNAME')}:${configService.get('RMQ_PASSWORD')}@${configService.get('RMQ_HOST')}:${configService.get('RMQ_PORT')}/${configService.get('RMQ_VIRTUAL_HOST')}`,
         connectionInitOptions: {
           wait: false,
+          timeout: 100 * 1000,
         },
       }),
       inject: [ConfigService],
