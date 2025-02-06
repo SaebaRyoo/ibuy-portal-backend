@@ -176,7 +176,7 @@ services:
       - /usr/local/minio/config:/root/.minio # Persistent storage for MinIO config
     restart: always # Automatically restart if the container stops
     healthcheck:
-      test: ["CMD-SHELL", "curl -s http://127.0.0.1:9090/minio/health/ready | grep -q 'OK'"] # Check MinIO health
+      test: ["CMD-SHELL", "curl -f http://127.0.0.1:9000/minio/health/live || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -195,6 +195,12 @@ services:
       - RABBITMQ_DEFAULT_USER=${RMQ_USERNAME} # Default username
       - RABBITMQ_DEFAULT_PASS=${RMQ_PASSWORD} # Default password
       - RABBITMQ_DEFAULT_VHOST=${RMQ_VIRTUAL_HOST} # Default virtual host
+    # 启用流式队列和webui和命令行管理工具
+    command: >
+      bash -c "
+        rabbitmq-plugins enable rabbitmq_stream rabbitmq_stream_management &&
+        rabbitmq-server
+      "
     volumes:
       - /usr/local/docker-volumes/rabbitmq:/var/lib/rabbitmq # Persistent storage for RabbitMQ data
     restart: always # Automatically restart the container on failure

@@ -117,7 +117,7 @@ services:
 
   # PostgreSQL service
   postgres:
-    image: postgres
+    image: postgres:17-alpine
     container_name: ibuy-service-postgres
     ports:
       - "${POSTGRES_PORT}:5432"
@@ -167,7 +167,7 @@ services:
       - /usr/local/minio/config:/root/.minio
     restart: always
     healthcheck:
-      test: ["CMD-SHELL", "curl -s http://127.0.0.1:9090/minio/health/ready | grep -q 'OK'"]
+      test: ["CMD-SHELL", "curl -f http://127.0.0.1:9000/minio/health/live || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -183,6 +183,13 @@ services:
       - RABBITMQ_DEFAULT_USER=${RMQ_USERNAME}
       - RABBITMQ_DEFAULT_PASS=${RMQ_PASSWORD}
       - RABBITMQ_DEFAULT_VHOST=${RMQ_VIRTUAL_HOST}
+
+    # 启用流式队列和webui和命令行管理工具
+    command: >
+      bash -c "
+        rabbitmq-plugins enable rabbitmq_stream rabbitmq_stream_management &&
+        rabbitmq-server
+      "
     volumes:
       - /usr/local/docker-volumes/rabbitmq:/var/lib/rabbitmq
     restart: always
@@ -191,11 +198,6 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-#    command: >
-#      sh -c "
-#        rabbitmq-plugins enable rabbitmq_stream rabbitmq_stream_management &&
-#        rabbitmq-server
-#      "
 
   # NestJS service
   nestjs:
@@ -235,11 +237,22 @@ services:
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
     # 注意depends_on是服务名，而不是容器名
     depends_on:
-      - postgres
-      - redis
-      - minio
-      - rabbitmq
-      - es01
+#      - postgres
+#      - redis
+#      - minio
+#      - rabbitmq
+#      - es01
+      rabbitmq:
+        condition: service_healthy  # 确保在 rabbitmq 健康后启动
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+      es01:
+        condition: service_healthy
+    restart: always
 
 volumes:
   certs:
