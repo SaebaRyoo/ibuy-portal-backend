@@ -15,7 +15,7 @@ import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
  */
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
-  @Inject(WINSTON_MODULE_PROVIDER) private logger: Logger;
+  constructor(@Inject(WINSTON_MODULE_PROVIDER) private logger: Logger) {}
 
   catch(exception: Error, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
@@ -23,7 +23,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const request = ctx.getRequest<Request>();
 
     // request.log.error(exception);
-    // this.logger.error(exception);
+    this.logger.error(exception);
 
     console.log(exception);
     // 非 HTTP 标准异常的处理。

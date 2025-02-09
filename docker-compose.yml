@@ -54,6 +54,7 @@ services:
     volumes:
       - certs:/usr/share/elasticsearch/config/certs
       - esdata01:/usr/share/elasticsearch/data
+#      - /usr/local/docker-volumes/es01/config:/usr/share/elasticsearch/config
     ports:
       - ${ES_PORT}:9200
     environment:
@@ -96,6 +97,8 @@ services:
     volumes:
       - certs:/usr/share/kibana/config/certs
       - kibanadata:/usr/share/kibana/data
+      # FATAL CLI ERROR Error: ENOENT: no such file or directory, open '/usr/share/kibana/config/kibana.yml'
+#      - /usr/local/docker-volumes/kibana/config:/usr/share/kibana/config
     ports:
       - ${KIBANA_PORT}:5601
     environment:
@@ -126,7 +129,7 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DATABASE}
     volumes:
-      - /usr/local/docker-volumns/postgre:/var/lib/postgresql/data
+      - /usr/local/docker-volumes/postgre:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
       interval: 10s
@@ -143,7 +146,7 @@ services:
       - REDIS_PASSWORD=${REDIS_PASSWORD}
     command: redis-server --requirepass "${REDIS_PASSWORD}" --appendonly yes
     volumes:
-      - /usr/local/docker-volumns/redis:/data
+      - /usr/local/docker-volumes/redis:/data
     restart: always
     healthcheck:
       test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
@@ -163,8 +166,8 @@ services:
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
     command: server /data --console-address ":9090" --address ":9000"
     volumes:
-      - /usr/local/minio/data:/data
-      - /usr/local/minio/config:/root/.minio
+      - /usr/local/docker-volumes/minio/data:/data
+      - /usr/local/docker-volumes/minio/config:/root/.minio
     restart: always
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://127.0.0.1:9000/minio/health/live || exit 1"]
@@ -207,6 +210,8 @@ services:
     container_name: ibuy-service-nestjs
     ports:
       - "8000:8000"
+    volumes:
+      - /usr/local/docker-volumes/app/logs:/app/logs
     environment:
       - NODE_ENV=production
       - POSTGRES_HOST=ibuy-service-postgres
