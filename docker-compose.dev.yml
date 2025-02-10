@@ -165,8 +165,6 @@ services:
     environment:
       - MINIO_ROOT_USER=${MINIO_ROOT_USER} # Root user for MinIO
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD} # Root password for MinIO
-      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY} # Access key for MinIO
-      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY} # Secret key for MinIO
 
     # Start MinIO with specified ports and paths
     command: >

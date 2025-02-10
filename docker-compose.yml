@@ -224,6 +224,8 @@ services:
       - REDIS_PASSWORD=${REDIS_PASSWORD}
       - MINIO_HOST=ibuy-service-minio
       - MINIO_PORT=${MINIO_PORT}
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY} # Access key for MinIO
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY} # Secret key for MinIO
       - RMQ_HOST=ibuy-service-rabbitmq
       - RMQ_PORT=${RMQ_PORT}
       - RMQ_USERNAME=${RMQ_USERNAME}
