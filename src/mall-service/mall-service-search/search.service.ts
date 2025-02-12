@@ -252,7 +252,7 @@ export class SearchService {
     return specMap;
   }
 
-  async importSku(): Promise<void> {
+  async importSku() {
     // 从 sku 服务获取 SKU 列表
     const result = await this.skuService.findList({
       current: 1,
@@ -270,8 +270,12 @@ export class SearchService {
 
     // 执行 Bulk 导入
     if (body.length) {
-      await this.elasticsearchService.bulk({
+      const result = await this.elasticsearchService.bulk({
         operations: body,
+      });
+      return new Result({
+        errors: result.errors,
+        total,
       });
     }
   }

@@ -3,6 +3,7 @@ import { SearchService } from './search.service';
 import { SearchController } from './search.controller';
 import { ElasticsearchModule } from '@nestjs/elasticsearch';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import * as fs from 'fs';
 
 @Module({
   imports: [
@@ -14,6 +15,14 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         auth: {
           username: configService.get('ELASTIC_USERNAME'),
           password: configService.get('ELASTIC_PASSWORD'),
+        },
+        tls: {
+          // 读取ca
+          // https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html
+          ca: fs.readFileSync('./ca.crt'),
+          // 该选项在于开发初期，不使用启用tls时设置，在生产环境部署时，需要使用ca认证
+          // https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/client-connecting.html#auth-tls
+          // rejectUnauthorized: false,
         },
       }),
       inject: [ConfigService],
