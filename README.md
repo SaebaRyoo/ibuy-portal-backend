@@ -22,8 +22,8 @@
 
 根据.env.example文件配置.env.dev文件
 
-不过需要注意的是所有的`host`都要改成`docker-compose.yml`中服务的容器名
-比如`POSTGRES_HOST=ibuy-service-postgres`
+不过需要注意的是所有的`host`都要改成`docker-compose.yml`中的服务名
+比如`POSTGRES_HOST=postgres` , `REDIS_HOST=redis`, `ELASTICSEARCH_HOST=es01`
 
 ### 2. 启动容器
 `docker-compose -f ./docker-compose.yml --env-file .env up -d`

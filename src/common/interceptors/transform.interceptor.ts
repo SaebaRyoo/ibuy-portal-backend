@@ -32,7 +32,7 @@ export class TransformInterceptor<T>
     const req = ctx.getRequest<Request>();
     return next.handle().pipe(
       map((data) => {
-        this.logger.log('response', {
+        this.logger.log('info', {
           responseData: data,
           req: getReqMainInfo(req),
         });

@@ -1,0 +1,41 @@
+name: Docker Image CI/CD
+
+on:
+  push:
+    branches:
+      - main  # 当 main 分支有推送时触发
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 切换分支
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 部署到服务器
+      - name: Deploy to server
+        uses: easingthemes/ssh-deploy@v5.1.0
+        with:
+          # 服务器的主机地址
+          REMOTE_HOST: ${{ secrets.SERVER_HOST }}
+          # 服务器用户名
+          REMOTE_USER: ${{ secrets.SERVER_USERNAME }}
+          # 服务器私钥
+          SSH_PRIVATE_KEY: ${{ secrets.SERVER_PRIVATE_KEY }}
+          # 本地源目录
+          SOURCE: "."
+          # 部署前执行的脚本
+          SCRIPT_BEFORE: |
+            # 创建工作目录
+            mkdir -p ~/work/ibuy-portal-backend
+            # 删除构建目录
+            rm -rf ~/work/ibuy-portal-backend/dist
+          # 目标目录（将github上已经提交的内容全部上传到服务器对应为止）
+          TARGET: '~/work/ibuy-portal-backend'
+          # 部署后执行的脚本
+          SCRIPT_AFTER: |
+            # 进入工作目录
+            cd ~/work/ibuy-portal-backend
+            docker-compose up --build -d
