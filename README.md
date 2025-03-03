@@ -1,4 +1,4 @@
-# 如何启动
+# 快速启动
 
 ## 安装包
 
@@ -12,8 +12,12 @@
 ### 2. 使用docker-compose启动容器
 `docker-compose -f ./docker-compose.dev.yml --env-file .env.dev up -d`
 
-### 3. 本地运行后台服务
+### 3. 相关服务配置
+请移步[这篇文章](https://juejin.cn/post/7477407090895060992)
+
+### 4. 本地运行后台服务
 `yarn run start:dev`
+
 
 
 ## 服务器运行
@@ -28,6 +32,9 @@
 ### 2. 启动容器
 `docker-compose -f ./docker-compose.yml --env-file .env up -d`
 
-### 3. 访问地址测试
+### 3. 相关服务配置
+请移步[这篇文章](https://juejin.cn/post/7477407090895060992)
+
+### 4. 访问地址测试
 使用如下命令在命令行测试一下，如果能正确返回，则表示部署成功
 `curl -X GET http://localhost:8000/v1/category/all`
