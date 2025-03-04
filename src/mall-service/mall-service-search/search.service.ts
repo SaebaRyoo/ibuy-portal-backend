@@ -110,6 +110,7 @@ export class SearchService {
       query: boolQuery,
       sort: [],
       aggregations: {},
+      track_total_hits: true, // 获取精确总数
     };
 
     // 二. 排序
@@ -135,7 +136,7 @@ export class SearchService {
       },
       // 商品规格聚合
       [this.ES_SPEC_MAP_AGR]: {
-        terms: { field: 'spec.keyword', size: 10000 },
+        terms: { field: `spec.keyword`, size: 10000 },
       },
     };
 
