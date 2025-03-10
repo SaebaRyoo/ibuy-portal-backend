@@ -45,7 +45,7 @@ export class OrderService {
     req: any,
   ): Promise<Result<{ data: OrderEntity[]; total: number }>> {
     const decoded = await this.authService.getDecodedToken(req);
-    const _username = decoded.login_name;
+    const _username = decoded.loginName;
     const qb = this.orderRepository
       .createQueryBuilder('order')
       .skip(pageParma.pageSize * (pageParma.current - 1))

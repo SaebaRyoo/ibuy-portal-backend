@@ -8,9 +8,11 @@ import { TransformInterceptor } from './common/interceptors/transform.intercepto
 import { Logger, VersioningType } from '@nestjs/common';
 import { AllExceptionsFilter } from './common/filters/base.exception.filter';
 import { HttpExceptionFilter } from './common/filters/http.excepition.filter';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.use(cookieParser()); // 使用 cookie-parser 中间件
 
   await app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
   // 设置统一响应体格式的拦截器

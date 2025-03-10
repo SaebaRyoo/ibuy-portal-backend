@@ -58,4 +58,7 @@ export class MemberEntity {
 
   @Column({ name: 'update_time', nullable: true })
   updateTime: Date; // 更新时间
+
+  @Column({ default: 0 })
+  tokenVersion: number; // 新增token版本号
 }

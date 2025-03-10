@@ -29,13 +29,6 @@ import { AddressModule } from './mall-service/mall-service-system/address/addres
 
 @Module({
   imports: [
-    // RoleModule,
-    // UsersRoleModule,
-    // 用户相关模块
-    AuthModule,
-    MemberModule,
-    AddressModule,
-
     ConfigModule.forRoot({
       // envFilePath: ['.env'],
       envFilePath:
@@ -74,7 +67,7 @@ import { AddressModule } from './mall-service/mall-service-system/address/addres
           options: {
             // username: configService.get('POSTGRES_PASSWORD'),
             password: pw,
-            db: 0,
+            db: 1,
           },
         };
       },
@@ -99,6 +92,14 @@ import { AddressModule } from './mall-service/mall-service-system/address/addres
         }),
       ],
     }),
+
+    // RoleModule,
+    // UsersRoleModule,
+    // 用户相关模块
+    AuthModule,
+    MemberModule,
+    AddressModule,
+
     FileModule,
     // 商品相关模块
     TemplateModule,

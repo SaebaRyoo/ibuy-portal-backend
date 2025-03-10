@@ -48,4 +48,19 @@ export class MemberService {
     await this.usersRepository.delete(id);
     return new Result(null);
   }
+
+  /**
+   * 增加token版本号
+   * @param userId
+   */
+  async incrementTokenVersion(userId: number): Promise<void> {
+    await this.usersRepository
+      .createQueryBuilder()
+      .update(MemberEntity)
+      .set({
+        tokenVersion: () => 'tokenVersion + 1',
+      })
+      .where('id = :id', { id: userId })
+      .execute();
+  }
 }
