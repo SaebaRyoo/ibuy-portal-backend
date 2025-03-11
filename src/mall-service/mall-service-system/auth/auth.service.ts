@@ -74,11 +74,11 @@ export class AuthService {
   }
 
   async signIn(
-    login_name: string,
+    loginName: string,
     pass: string,
     res: Response,
   ): Promise<Result<{ access_token: string }>> {
-    const result = await this.usersService.findOne(login_name);
+    const result = await this.usersService.findOne(loginName);
     const user = result.data;
 
     const isMatch = await bcrypt.compare(pass, user?.password);

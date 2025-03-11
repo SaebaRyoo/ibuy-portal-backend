@@ -86,7 +86,8 @@ export class OrderService {
    */
   async addOrder(order: OrderEntity, req): Promise<Result<any>> {
     const decoded = await this.authService.getDecodedToken(req);
-    const username = decoded.login_name;
+    const username = decoded.loginName;
+    console.log('username', username);
     // 查询用户购物车
     const orderItemsResult = await this.cartService.list(username);
     const orderItems = orderItemsResult.data.data;

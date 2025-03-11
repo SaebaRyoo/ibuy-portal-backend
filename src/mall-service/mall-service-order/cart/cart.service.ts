@@ -19,7 +19,7 @@ export class CartService {
   // 添加商品到购物车
   async add(id: string, num: number, username: string, req): Promise<any> {
     const decoded = await this.authService.getDecodedToken(req);
-    const _username = decoded.login_name || username; // 获取登录用户的用户名
+    const _username = decoded.loginName || username; // 获取登录用户的用户名
     const redisClient = this.redisService;
 
     if (num <= 0) {
@@ -68,7 +68,7 @@ export class CartService {
     let _username = username || '';
     if (req) {
       decoded = await this.authService.getDecodedToken(req);
-      _username = decoded.login_name; // 获取登录用户的用户名
+      _username = decoded.loginName; // 获取登录用户的用户名
     }
     const values = await this.redisService.hvals(`Cart_${_username}`);
     const data = values.map((value) => JSON.parse(value));

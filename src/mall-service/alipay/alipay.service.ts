@@ -47,8 +47,8 @@ export class AlipayService {
     const orderItems = result.data;
     const subject =
       orderItems.length > 1
-        ? orderItems[0].name + '等商品'
-        : orderItems[0].name;
+        ? orderItems[0]?.name + '等商品'
+        : orderItems[0]?.name;
 
     const goodsDetails: any = [];
 
