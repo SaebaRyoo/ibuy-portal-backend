@@ -253,31 +253,4 @@ export class SearchService {
     return specMap;
   }
 
-  async importSku() {
-    // 从 sku 服务获取 SKU 列表
-    const result = await this.skuService.findList({
-      current: 1,
-      pageSize: 99999,
-    });
-    const skuInfos = result.data.data;
-    const total = result.data.total;
-    // 构建 Bulk 请求  将每个 SKU 信息的索引操作和文档内容展平为一个单一的数组
-    const body = skuInfos.flatMap((skuInfo) => {
-      return [
-        { index: { _index: 'skuinfo', _id: skuInfo.id } }, // 创建索引操作
-        skuInfo, // 文档内容
-      ];
-    });
-
-    // 执行 Bulk 导入
-    if (body.length) {
-      const result = await this.elasticsearchService.bulk({
-        operations: body,
-      });
-      return new Result({
-        errors: result.errors,
-        total,
-      });
-    }
-  }
 }

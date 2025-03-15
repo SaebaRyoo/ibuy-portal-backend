@@ -14,6 +14,10 @@ import Result from '../../../common/utils/Result';
 import { AlipayService } from '../../alipay/alipay.service';
 import { SkuEntity } from '../../mall-service-goods/sku/sku.entity';
 import { AuthService } from '../../mall-service-system/auth/auth.service';
+import { OrderItemsEntity } from '../order-items/entities/order-items.entity';
+import { SpuService } from 'src/mall-service/mall-service-goods/spu/spu.service';
+import { DirectOrderSkuDto } from './dto/direct-order-sku.dto';
+import { DirectOrderInfoDto } from './dto/direct-order-info.dto';
 
 @Injectable()
 export class OrderService {
@@ -27,6 +31,7 @@ export class OrderService {
     private readonly amqpConnection: AmqpConnection,
 
     private readonly skuService: SkuService,
+    private readonly spuService: SpuService,
     private readonly cartService: CartService,
     private readonly orderItemsService: OrderItemsService,
     private readonly dataSource: DataSource,
@@ -76,6 +81,97 @@ export class OrderService {
 
   async remove(id: number): Promise<void> {
     await this.orderRepository.delete(id);
+  }
+
+  /**
+   * 直接下单
+   * @param skuInfo 
+   * @param orderInfo 
+   * @param req 
+   * @returns 
+   */
+  async directOrder(skuInfo: DirectOrderSkuDto, orderInfo: DirectOrderInfoDto, req: any): Promise<Result<any>> {
+    const decoded = await this.authService.getDecodedToken(req);
+    const username = decoded.loginName;
+
+    // 获取商品SKU信息
+    const skuResult = await this.skuService.findById(skuInfo.skuId);
+    const sku = skuResult.data;
+
+    if (!sku) {
+      return new Result(null, '商品不存在');
+    }
+
+    // 创建一个新的查询运行器
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      // 创建订单明细
+      const orderItem = new OrderItemsEntity();
+      const spuResult = await this.spuService.findById(sku.spuId);
+      const spu = spuResult.data;
+
+      orderItem.categoryId1 = spu.category1Id;
+      orderItem.categoryId2 = spu.category2Id;
+      orderItem.categoryId3 = spu.category3Id;
+      orderItem.spuId = spu.id;
+      orderItem.skuId = sku.id;
+      orderItem.name = sku.name;
+      orderItem.price = sku.price;
+      orderItem.num = skuInfo.num;
+      orderItem.money = orderItem.num * orderItem.price;
+      orderItem.payMoney = orderItem.money;
+      orderItem.image = sku.image;
+
+      // 创建订单
+      const order = new OrderEntity();
+      const idWorker = new IDWorker(1n, 1n);
+
+      order.username = username;
+      order.totalNum = skuInfo.num;
+      order.totalMoney = orderItem.money;
+      order.payMoney = orderItem.payMoney;
+      order.preMoney = 0; // 直接下单暂不考虑优惠
+      order.createTime = new Date();
+      order.updateTime = order.createTime;
+      order.buyerRate = '0';
+      order.sourceType = '1';
+      order.orderStatus = '0';
+      order.payStatus = '0';
+      order.shippingStatus = '0';
+      order.id = `NO.${idWorker.nextId()}`;
+      order.receiverContact = orderInfo.receiverContact;
+      order.receiverMobile = orderInfo.receiverMobile;
+      order.receiverAddress = orderInfo.receiverAddress;
+      order.buyerMessage = orderInfo.buyerMessage;
+      order.payType = orderInfo.payType;
+
+      // 保存订单
+      await queryRunner.manager.save(OrderEntity, order);
+
+      // 保存订单明细
+      orderItem.id = `NO.${idWorker.nextId()}`;
+      orderItem.isReturn = '0';
+      orderItem.orderId = order.id;
+      await this.orderItemsService.add(orderItem, queryRunner.manager);
+
+      // 修改库存
+      await this.skuService.decrCount(username, queryRunner.manager);
+
+      // 发送延时队列
+      await this.sendDelayMessage(order.id);
+
+      // 提交事务
+      await queryRunner.commitTransaction();
+      return new Result(order);
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+      return new Result(null, err);
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   /**

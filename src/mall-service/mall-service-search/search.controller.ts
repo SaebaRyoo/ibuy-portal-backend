@@ -11,9 +11,4 @@ export class SearchController {
   async search(@Query() searchMap) {
     return this.searchService.search(searchMap);
   }
-
-  @Get('/import')
-  async importData() {
-    return this.searchService.importSku();
-  }
 }
