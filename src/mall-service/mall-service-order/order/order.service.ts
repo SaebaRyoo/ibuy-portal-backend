@@ -85,12 +85,16 @@ export class OrderService {
 
   /**
    * 直接下单
-   * @param skuInfo 
-   * @param orderInfo 
-   * @param req 
-   * @returns 
+   * @param skuInfo
+   * @param orderInfo
+   * @param req
+   * @returns
    */
-  async directOrder(skuInfo: DirectOrderSkuDto, orderInfo: DirectOrderInfoDto, req: any): Promise<Result<any>> {
+  async directOrder(
+    skuInfo: DirectOrderSkuDto,
+    orderInfo: DirectOrderInfoDto,
+    req: any,
+  ): Promise<Result<any>> {
     const decoded = await this.authService.getDecodedToken(req);
     const username = decoded.loginName;
 
@@ -291,7 +295,7 @@ export class OrderService {
       RabbitMQConstants.QUEUE_ORDER_DELAY,
       Buffer.from(JSON.stringify(data)),
       {
-        expiration: 1000 * 5,
+        expiration: 1000 * 60 * 35,
       },
     );
   }

@@ -31,6 +31,12 @@ export class AuthService {
     );
   }
 
+  /**
+   * Stores a refresh token in Redis with an expiration time.
+   *
+   * @param userId - The ID of the user the token belongs to.
+   * @param refreshToken - The refresh token string to store.
+   */
   private async storeRefreshToken(
     userId: number,
     refreshToken: string,
@@ -44,11 +50,23 @@ export class AuthService {
     );
   }
 
+  /**
+   * Removes the refresh token from Redis, effectively revoking it.
+   *
+   * @param userId - The ID of the user whose token should be invalidated.
+   */
   private async invalidateRefreshToken(userId: number): Promise<void> {
     const key = `refresh_token:${userId}`;
     await this.redis.del(key);
   }
 
+  /**
+   * Checks whether the provided refresh token matches the one stored in Redis.
+   *
+   * @param userId - The ID of the user to validate against.
+   * @param refreshToken - The refresh token to validate.
+   * @returns `true` if the token matches the stored value, otherwise `false`.
+   */
   private async isRefreshTokenValid(
     userId: number,
     refreshToken: string,
@@ -57,6 +75,15 @@ export class AuthService {
     return storedToken === refreshToken;
   }
 
+  /**
+   * Sets the refresh token as an httpOnly cookie on the response.
+   *
+   * Configures security options including `httpOnly`, `secure` (HTTPS in production),
+   * `sameSite`, and `maxAge` based on the configured refresh token expiration.
+   *
+   * @param res - The Express response object used to set the cookie.
+   * @param refreshToken - The refresh token string to store in the cookie.
+   */
   private setCookies(res: Response, refreshToken: string): void {
     res.cookie('refresh_token', refreshToken, {
       // 禁用js访问cookie, 防止XSS攻击
@@ -73,6 +100,18 @@ export class AuthService {
     });
   }
 
+  /**
+   * Authenticates a user by login name and password, then issues JWT access and refresh tokens.
+   *
+   * Verifies the password with bcrypt, signs a new access token and refresh token,
+   * persists the refresh token in Redis, and sets it as a cookie on the response.
+   *
+   * @param loginName - The user's login name.
+   * @param pass - The user's plaintext password.
+   * @param res - The Express response object used to set the refresh token cookie.
+   * @returns A `Result` containing the access token and user profile data.
+   * @throws {UnauthorizedException} If the password does not match.
+   */
   async signIn(
     loginName: string,
     pass: string,
@@ -126,6 +165,19 @@ export class AuthService {
     return new Result(data, '登录成功');
   }
 
+  /**
+   * Refreshes authentication tokens using a valid refresh token.
+   *
+   * Verifies the refresh token against the Redis whitelist and checks the user's
+   * token version. If valid, issues new access and refresh tokens, rotates the
+   * stored refresh token in Redis, and updates the cookie.
+   *
+   * @param refreshToken - The refresh token string (typically from a cookie).
+   * @param res - The Express response object used to update the refresh token cookie.
+   * @returns A `Result` containing the new access token.
+   * @throws {UnauthorizedException} If the token is missing, expired, not in the whitelist,
+   *   the user status is abnormal, or the token version has been invalidated.
+   */
   async refreshToken(refreshToken: string, res: Response) {
     if (!refreshToken) {
       throw new UnauthorizedException('No refresh token provided');
@@ -179,12 +231,26 @@ export class AuthService {
     }
   }
 
+  /**
+   * Decodes the JWT from the Authorization header without verification.
+   *
+   * @param req - The incoming HTTP request containing the `Authorization` header.
+   * @returns The decoded JWT payload.
+   */
   async getDecodedToken(req) {
     const token = req.headers.authorization?.split(' ')[1]; // 从请求头中获取 token
     // 验证并解码 token
     return this.jwtService.verify(token);
   }
 
+  /**
+   * Retrieves the authenticated user's profile information by decoding the JWT
+   * from the request header and looking up the user by ID.
+   *
+   * @param req - The incoming HTTP request containing the `Authorization` header.
+   * @returns A `Result` containing the user's profile data.
+   * @throws {NotFoundException} If the user is not found.
+   */
   /** 获取用户信息 */
   async getProfile(req) {
     const token = req.headers.authorization?.split(' ')[1]; // 从请求头中获取 token
@@ -212,6 +278,12 @@ export class AuthService {
     });
   }
 
+  /**
+   * Logs out a user by invalidating their refresh token in Redis and
+   * incrementing the token version to invalidate all existing JWTs.
+   *
+   * @param userId - The ID of the user to log out.
+   */
   async logout(userId: number) {
     await this.invalidateRefreshToken(userId);
     // 增加token版本号，使所有现有token失效
