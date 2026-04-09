@@ -1,11 +1,18 @@
+import path from 'node:path';
+import dotenv from 'dotenv';
 import { defineConfig } from 'prisma/config';
 
+const envFile = process.env.NODE_ENV === 'development' ? '.env.dev' : '.env';
+dotenv.config({ path: path.resolve(process.cwd(), envFile) });
+
+console.log(`Loading env from: ${envFile}`);
 export default defineConfig({
   schema: 'prisma/schema.prisma',
-  migrations: { path: 'prisma/migrations' },
+  migrations: {
+    path: 'prisma/migrations',
+    seed: 'ts-node prisma/seed.ts',
+  },
   datasource: {
-    url:
-      process.env['DATABASE_URL'] ??
-      `postgresql://${process.env['POSTGRES_USER']}:${process.env['POSTGRES_PASSWORD']}@${process.env['POSTGRES_HOST']}:${process.env['POSTGRES_PORT']}/${process.env['POSTGRES_DATABASE']}`,
+    url: process.env.DATABASE_URL,
   },
 });
