@@ -9,7 +9,6 @@ import {
   Query,
 } from '@nestjs/common';
 import { CategoryService } from './category.service';
-import { CategoryEntity } from './category.entity';
 import { Public } from '../../../common/decorators/metadata/public.decorator';
 
 @Controller('category')
@@ -39,7 +38,7 @@ export class CategoryController {
   }
 
   @Patch('/:id')
-  updateById(@Param('id') id: number, @Body() para: CategoryEntity) {
+  updateById(@Param('id') id: number, @Body() para: any) {
     return this.categoryService.updateById(id, para);
   }
 }

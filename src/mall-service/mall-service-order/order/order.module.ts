@@ -1,8 +1,6 @@
 import { Global, Module } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { OrderController } from './order.controller';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { OrderEntity } from './entities/order.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { OrderTimerMessageListener } from './listeners/OrderTimerMessageListener';
@@ -12,9 +10,8 @@ import { OrderPayMessageListener } from './listeners/OrderPayMessageListener';
 @Global()
 @Module({
   imports: [
-    TypeOrmModule.forFeature([OrderEntity]),
     ConfigModule,
-    RabbitMQModule.forRootAsync(RabbitMQModule, {
+    RabbitMQModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         exchanges: [

@@ -3,7 +3,6 @@ import { SkuService } from '../../mall-service-goods/sku/sku.service';
 import { SpuService } from '../../mall-service-goods/spu/spu.service';
 import { InjectRedis } from '@nestjs-modules/ioredis';
 import Redis from 'ioredis';
-import { OrderItemsEntity } from '../order-items/entities/order-items.entity';
 import Result from '../../../common/utils/Result';
 import { AuthService } from '../../mall-service-system/auth/auth.service';
 
@@ -38,7 +37,7 @@ export class CartService {
       const spu = result.data;
 
       // 3. 将数据存储到购物车对象中 (OrderItem)
-      const orderItem = new OrderItemsEntity();
+      const orderItem: any = {};
       orderItem.categoryId1 = spu.category1Id;
       orderItem.categoryId2 = spu.category2Id;
       orderItem.categoryId3 = spu.category3Id;

@@ -20,9 +20,10 @@ interface Response<T> {
  * 统一响应体拦截器
  */
 @Injectable()
-export class TransformInterceptor<T>
-  implements NestInterceptor<T, Response<T>>
-{
+export class TransformInterceptor<T> implements NestInterceptor<
+  T,
+  Response<T>
+> {
   constructor(@Inject(WINSTON_MODULE_PROVIDER) private logger: Logger) {}
   intercept(
     context: ExecutionContext,
@@ -32,10 +33,10 @@ export class TransformInterceptor<T>
     const req = ctx.getRequest<Request>();
     return next.handle().pipe(
       map((data) => {
-        this.logger.log('info', {
-          responseData: data,
-          req: getReqMainInfo(req),
-        });
+        // this.logger.log('info', {
+        //   responseData: data,
+        //   req: getReqMainInfo(req),
+        // });
         return {
           data: data?.data,
           code: data?.code,

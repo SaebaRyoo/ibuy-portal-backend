@@ -9,7 +9,6 @@ import {
   Query,
 } from '@nestjs/common';
 import { ParaService } from './para.service';
-import { ParaEntity } from './para.entity';
 
 @Controller('para')
 export class ParaController {
@@ -32,7 +31,7 @@ export class ParaController {
   }
 
   @Patch('/:id')
-  updateById(@Param('id') id: number, @Body() para: ParaEntity) {
+  updateById(@Param('id') id: number, @Body() para: any) {
     return this.paraService.updateById(id, para);
   }
 }

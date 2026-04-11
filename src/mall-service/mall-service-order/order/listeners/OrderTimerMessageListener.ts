@@ -1,12 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
 import { RabbitMQConstants } from '../../../../common/constants/RabbitMQConstants';
 import { Public } from '../../../../common/decorators/metadata/public.decorator';
 import { OrderService } from '../order.service';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 
 @Injectable()
 export class OrderTimerMessageListener {
-  constructor(private readonly orderService: OrderService) {}
+  constructor(
+    private readonly orderService: OrderService,
+    @Inject(WINSTON_MODULE_PROVIDER) private logger: Logger,
+  ) {}
 
   @Public()
   @RabbitSubscribe({
@@ -15,7 +19,7 @@ export class OrderTimerMessageListener {
     queue: RabbitMQConstants.QUEUE_ORDER_CHECK,
   })
   public async handleOrderDelayMessage(msg: any) {
-    console.log(`Order delayed: ${msg.out_trade_no}`);
+    this.logger.log('info', `Order delayed: ${msg.out_trade_no}`);
     // 支付宝交易号
     const out_trade_no = msg.out_trade_no;
 

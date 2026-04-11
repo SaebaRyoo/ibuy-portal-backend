@@ -1,39 +1,23 @@
 import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { SpuEntity } from './spu.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { SkuEntity } from '../sku/sku.entity';
-import { CategoryEntity } from '../category/category.entity';
-import { BrandEntity } from '../brand/brand.entity';
+import { PrismaService } from 'src/common/prisma/prisma.service';
 import Result from '../../../common/utils/Result';
 
 @Injectable()
 export class SpuService {
-  constructor(
-    @InjectRepository(SpuEntity)
-    private spuRepository: Repository<SpuEntity>,
-
-    @InjectRepository(SkuEntity)
-    private skuRepository: Repository<SkuEntity>,
-
-    @InjectRepository(CategoryEntity)
-    private categoryRepository: Repository<CategoryEntity>,
-
-    @InjectRepository(BrandEntity)
-    private brandRepository: Repository<BrandEntity>,
-  ) {}
+  constructor(private prisma: PrismaService) {}
 
   async findList(pageParma: any) {
-    const qb = this.spuRepository
-      .createQueryBuilder('spu')
-      .skip(pageParma.pageSize * (pageParma.current - 1))
-      .limit(pageParma.pageSize);
-    const [data, total] = await qb.getManyAndCount();
+    const skip = pageParma.pageSize * (pageParma.current - 1);
+    const take = pageParma.pageSize;
+    const [data, total] = await Promise.all([
+      this.prisma.ibuySpu.findMany({ skip, take }),
+      this.prisma.ibuySpu.count(),
+    ]);
     return new Result({ data, total });
   }
 
   async findById(id: string) {
-    const data = await this.spuRepository.findOneBy({ id });
+    const data = await this.prisma.ibuySpu.findUnique({ where: { id } });
     return new Result(data);
   }
 }

@@ -43,7 +43,6 @@ export class AuthController {
 
   @Get('profile')
   getProfile(@Request() req) {
-    this.logger.log('info', 'Calling getProfile()', AuthController.name);
     return this.authService.getProfile(req);
   }
 

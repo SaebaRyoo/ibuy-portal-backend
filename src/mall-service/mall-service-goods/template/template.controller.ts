@@ -9,7 +9,6 @@ import {
   Query,
 } from '@nestjs/common';
 import { TemplateService } from './template.service';
-import { TemplateEntity } from './template.entity';
 
 @Controller('template')
 export class TemplateController {
@@ -32,7 +31,7 @@ export class TemplateController {
   }
 
   @Patch('/:id')
-  updateTemplate(@Param('id') id: number, @Body() template: TemplateEntity) {
+  updateTemplate(@Param('id') id: number, @Body() template: any) {
     return this.templateService.updateTemplate(id, template);
   }
 }

@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { SkuService } from '../mall-service-goods/sku/sku.service';
 import { SearchResponse } from '@elastic/elasticsearch/lib/api/types';
-import { SkuEntity } from '../mall-service-goods/sku/sku.entity';
 import Result from '../../common/utils/Result';
 
 @Injectable()
@@ -140,8 +139,7 @@ export class SearchService {
       },
     };
 
-    const response =
-      await this.elasticsearchService.search<SkuEntity>(searchRequest);
+    const response = await this.elasticsearchService.search<any>(searchRequest);
 
     // 解析结果
     const resultMap = new Map();
@@ -214,7 +212,7 @@ export class SearchService {
    * @return
    */
   private getAggregationData(
-    response: SearchResponse<SkuEntity>,
+    response: SearchResponse<any>,
     agrName: string,
   ): string[] {
     const data = [];
@@ -232,7 +230,7 @@ export class SearchService {
    * @return
    */
   private getStringSetMap(
-    response: SearchResponse<SkuEntity>,
+    response: SearchResponse<any>,
     agrName: string,
     searchMap: Record<string, string>,
   ): Record<string, Set<string>> {
@@ -252,5 +250,4 @@ export class SearchService {
     });
     return specMap;
   }
-
 }

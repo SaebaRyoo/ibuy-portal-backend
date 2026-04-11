@@ -9,7 +9,7 @@ import { RabbitMQConstants } from '../../common/constants/RabbitMQConstants';
 @Module({
   imports: [
     ConfigModule,
-    RabbitMQModule.forRootAsync(RabbitMQModule, {
+    RabbitMQModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         exchanges: [

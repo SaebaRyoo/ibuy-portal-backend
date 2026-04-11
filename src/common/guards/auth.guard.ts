@@ -3,12 +3,15 @@ import {
   ExecutionContext,
   HttpException,
   HttpStatus,
+  Inject,
   Injectable,
+  Logger,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { IS_PUBLIC_KEY } from 'src/common/decorators/metadata/public.decorator';
 
 @Injectable()
@@ -17,6 +20,7 @@ export class AuthGuard implements CanActivate {
     private configService: ConfigService,
     private jwtService: JwtService,
     private reflector: Reflector,
+    @Inject(WINSTON_MODULE_PROVIDER) private logger: Logger,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -25,7 +29,7 @@ export class AuthGuard implements CanActivate {
       context.getClass(),
     ]);
 
-    console.log('isPublic--->', isPublic);
+    this.logger.log('info', `isPublic---> ${isPublic}`);
     if (isPublic) {
       // AuthGuard return true when the "isPublic" metadata is found
       return true;
