@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { AlipaySdk } from 'alipay-sdk';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { OrderService } from '../mall-service-order/order/order.service';
@@ -6,6 +6,7 @@ import { OrderItemsService } from '../mall-service-order/order-items/order-items
 import { ConfigService } from '@nestjs/config';
 import { RabbitMQConstants } from '../../common/constants/RabbitMQConstants';
 import Result from '../../common/utils/Result';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 
 @Injectable()
 export class AlipayService {
@@ -17,6 +18,8 @@ export class AlipayService {
     private readonly orderService: OrderService,
     private readonly orderItemService: OrderItemsService,
     private readonly configService: ConfigService,
+
+    @Inject(WINSTON_MODULE_PROVIDER) private logger: Logger,
   ) {
     this.alipaySdk = new AlipaySdk({
       // 应用id
@@ -107,11 +110,17 @@ export class AlipayService {
    * @param params
    */
   async alipayReturnNotice(params) {
-    console.log('支付成功，进入同步通知接口...', params);
+    this.logger.log(
+      'info',
+      `支付成功，进入同步通知接口... ${JSON.stringify(params)}`,
+    );
   }
 
   async alipayNotifyNotice(params) {
-    console.log('支付成功，进入异步通知接口...', params);
+    this.logger.log(
+      'info',
+      `支付成功，进入异步通知接口... ${JSON.stringify(params)}`,
+    );
 
     // const postData = {
     //   sign_type: this.configService.get('ALIPAY_SIGN_TYPE'),

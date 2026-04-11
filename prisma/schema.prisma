@@ -1,0 +1,223 @@
+generator client {
+  provider = "prisma-client"
+  output   = "./generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── 品牌 ───
+model IbuyBrand {
+  id     Int     @id @default(autoincrement())
+  name   String
+  image  String?
+  letter String
+  seq    Int?
+
+  @@map("ibuy_brand")
+}
+
+// ─── 分类-品牌关联 ───
+model IbuyCategoryBrand {
+  id         Int @id @default(autoincrement())
+  categoryId Int @map("category_id")
+  brandId    Int @map("brand_id")
+
+  @@map("ibuy_category_brand")
+}
+
+// ─── 分类 ───
+model IbuyCategory {
+  id       Int     @id @default(autoincrement())
+  name     String
+  parentId Int?    @map("parent_id")
+  isShow   String? @map("is_show")
+  isMenu   String? @map("is_menu")
+  seq      Int?
+
+  @@map("ibuy_category")
+}
+
+// ─── 模板 ───
+model IbuyTemplate {
+  id      Int    @id @default(autoincrement())
+  name    String
+  specNum Int?   @map("spec_num")
+  paraNum Int?   @map("para_num")
+
+  @@map("ibuy_template")
+}
+
+// ─── 规格 ───
+model IbuySpec {
+  id         Int    @id @default(autoincrement())
+  name       String
+  options    String
+  seq        Int?
+  templateId Int    @map("template_id")
+
+  @@map("ibuy_spec")
+}
+
+// ─── 参数 ───
+model IbuyPara {
+  id         Int    @id @default(autoincrement())
+  name       String
+  options    String
+  seq        Int?
+  templateId Int    @map("template_id")
+
+  @@map("ibuy_para")
+}
+
+// ─── SPU ───
+model IbuySpu {
+  id           String  @id
+  sn           String
+  name         String
+  caption      String
+  brandId      Int     @map("brand_id")
+  category1Id  Int     @map("category1_id")
+  category2Id  Int?    @map("category2_id")
+  category3Id  Int?    @map("category3_id")
+  templateId   Int?    @map("template_id")
+  freightId    Int?    @map("freight_id")
+  image        String?
+  images       String?
+  saleService  String? @map("sale_service")
+  introduction String?
+  specItems    Json?   @map("spec_items")
+  paraItems    Json?   @map("para_items")
+  saleNum      Int?    @map("sale_num")
+  commentNum   Int?    @map("comment_num")
+  isMarketable String? @map("is_marketable")
+  isEnableSpec String? @map("is_enable_spec")
+  isDelete     String? @map("is_delete")
+  status       String?
+
+  @@map("ibuy_spu")
+}
+
+// ─── SKU ───
+model IbuySku {
+  id           String   @id
+  sn           String
+  name         String
+  price        Int
+  num          Int
+  alertNum     Int      @map("alert_num")
+  image        String?
+  images       String?
+  weight       Int?
+  createTime   DateTime @map("create_time")
+  updateTime   DateTime @map("update_time")
+  spuId        String   @map("spu_id")
+  categoryId   Int      @map("category_id")
+  categoryName String   @map("category_name")
+  brandName    String   @map("brand_name")
+  spec         Json
+  saleNum      Int?     @map("sale_num")
+  commentNum   Int?     @map("comment_num")
+  status       String?
+
+  @@map("ibuy_sku")
+}
+
+// ─── 订单 ───
+model IbuyOrder {
+  id             String    @id
+  totalNum       Int       @map("total_num")
+  totalMoney     Int       @map("total_money")
+  preMoney       Int       @map("pre_money")
+  postFee        Int?      @map("post_fee")
+  payMoney       Int       @map("pay_money")
+  payType        String    @map("pay_type")
+  createTime     DateTime  @map("create_time")
+  updateTime     DateTime  @map("update_time")
+  payTime        DateTime? @map("pay_time")
+  consignTime    DateTime? @map("consign_time")
+  endTime        DateTime? @map("end_time")
+  closeTime      DateTime? @map("close_time")
+  shippingName   String?   @map("shipping_name")
+  shippingCode   String?   @map("shipping_code")
+  shippingTaskId String?   @map("shipping_task_id")
+  shippingStatus String    @map("shipping_status")
+  username       String
+  buyerMessage   String?   @map("buyer_message")
+  buyerRate      String?   @map("buyer_rate")
+  receiverContact String   @map("receiver_contact")
+  receiverMobile  String   @map("receiver_mobile")
+  receiverAddress String?  @map("receiver_address")
+  sourceType     String?   @map("source_type")
+  transactionId  String?   @map("transaction_id")
+  orderStatus    String    @map("order_status")
+  payStatus      String    @map("pay_status")
+  isDelete       String?   @map("is_delete")
+
+  @@map("ibuy_order")
+}
+
+// ─── 订单明细 ───
+model IbuyOrderItem {
+  id          String  @id
+  categoryId1 Int     @map("category_id1")
+  categoryId2 Int     @map("category_id2")
+  categoryId3 Int     @map("category_id3")
+  spuId       String  @map("spu_id")
+  skuId       String  @map("sku_id")
+  orderId     String  @map("order_id")
+  name        String
+  price       Int
+  num         Int
+  money       Int
+  payMoney    Int     @map("pay_money")
+  image       String
+  weight      Int?
+  postFee     Int?    @map("post_fee")
+  isReturn    String? @map("is_return")
+
+  @@map("ibuy_order_item")
+}
+
+// ─── 会员 ───
+model IbuyMember {
+  id              Int       @id @default(autoincrement())
+  loginName       String    @unique @map("login_name")
+  password        String
+  phone           String?   @unique
+  email           String?   @unique
+  sourceType      String?   @map("source_type")
+  nickName        String?   @map("nick_name")
+  status          String?
+  headPic         String?   @map("head_pic")
+  isMobileCheck   String?   @map("is_mobile_check")
+  isEmailCheck    String?   @map("is_email_check")
+  sex             String?
+  memberLevel     Int?      @map("member_level")
+  experienceValue Int?      @map("experience_value")
+  birthday        DateTime?
+  lastLoginTime   DateTime? @map("last_login_time")
+  points          Int?
+  createTime      DateTime? @map("create_time")
+  updateTime      DateTime? @map("update_time")
+  tokenVersion    Int       @default(0) @map("tokenVersion")
+
+  @@map("ibuy_member")
+}
+
+// ─── 地址 ───
+model IbuyAddress {
+  id        Int     @id @default(autoincrement())
+  username  String?
+  provinceId String? @map("province_id")
+  cityId    String? @map("city_id")
+  areaId    String? @map("area_id")
+  phone     String
+  address   String
+  contact   String
+  isDefault Int     @map("is_default")
+  alias     String?
+
+  @@map("ibuy_address")
+}

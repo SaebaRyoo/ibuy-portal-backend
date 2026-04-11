@@ -9,7 +9,6 @@ import {
   Query,
 } from '@nestjs/common';
 import { SpecService } from './spec.service';
-import { SpecEntity } from './spec.entity';
 
 @Controller('spec')
 export class SpecController {
@@ -32,7 +31,7 @@ export class SpecController {
   }
 
   @Patch('/:id')
-  updateSpec(@Param('id') id: number, @Body() spec: SpecEntity) {
+  updateSpec(@Param('id') id: number, @Body() spec: any) {
     return this.specService.updateSpec(id, spec);
   }
 }

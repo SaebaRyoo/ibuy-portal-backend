@@ -5,7 +5,7 @@ import {
   WINSTON_MODULE_PROVIDER,
 } from 'nest-winston';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
-import { Logger, VersioningType } from '@nestjs/common';
+import { Logger, ValidationPipe, VersioningType } from '@nestjs/common';
 import { AllExceptionsFilter } from './common/filters/base.exception.filter';
 import { HttpExceptionFilter } from './common/filters/http.excepition.filter';
 import * as cookieParser from 'cookie-parser';
@@ -15,6 +15,13 @@ async function bootstrap() {
   app.use(cookieParser()); // 使用 cookie-parser 中间件
 
   await app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
+  // 全局管道：自动将参数转换为 TS 声明的类型（如 string -> number）
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      transformOptions: { enableImplicitConversion: true },
+    }),
+  );
   // 设置统一响应体格式的拦截器
   app.useGlobalInterceptors(
     new TransformInterceptor(app.get(WINSTON_MODULE_PROVIDER) as Logger),

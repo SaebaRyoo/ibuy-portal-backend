@@ -9,7 +9,6 @@ import {
   Query,
 } from '@nestjs/common';
 import { BrandService } from './brand.service';
-import { BrandEntity } from './brand.entity';
 
 @Controller('brand')
 export class BrandController {
@@ -37,7 +36,7 @@ export class BrandController {
   }
 
   @Patch('/:id')
-  updateById(@Param('id') id: number, @Body() para: BrandEntity) {
+  updateById(@Param('id') id: number, @Body() para: any) {
     return this.brandService.updateById(id, para);
   }
 }

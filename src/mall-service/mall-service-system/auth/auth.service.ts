@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { MemberService } from '../member/member.service';
 import { JwtService, TokenExpiredError } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import Result from '../../../common/utils/Result';
 import Redis from 'ioredis';
 import { InjectRedis } from '@nestjs-modules/ioredis';

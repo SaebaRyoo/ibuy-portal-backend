@@ -10,7 +10,6 @@ import {
   Request,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
-import { OrderEntity } from './entities/order.entity';
 import { DirectOrderSkuDto } from './dto/direct-order-sku.dto';
 import { DirectOrderInfoDto } from './dto/direct-order-info.dto';
 
@@ -50,7 +49,7 @@ export class OrderController {
    * @param req
    */
   @Post('/cart/add')
-  addOrderFormCart(@Body() order: OrderEntity, @Request() req: any) {
+  addOrderFormCart(@Body() order: any, @Request() req: any) {
     return this.orderService.addOrder(order, req);
   }
 
@@ -60,7 +59,7 @@ export class OrderController {
   }
 
   @Patch('/:id')
-  update(@Param('id') id: number, @Body() spec: OrderEntity) {
+  update(@Param('id') id: number, @Body() spec: any) {
     return this.orderService.update(id, spec);
   }
 }

@@ -9,7 +9,6 @@ import {
   Post,
 } from '@nestjs/common';
 import { AddressService } from './address.service';
-import { AddressEntity } from './address.entity';
 
 @Controller('address')
 export class AddressController {
@@ -34,7 +33,7 @@ export class AddressController {
    * @param body
    */
   @Post()
-  add(@Body() body: AddressEntity) {
+  add(@Body() body: any) {
     return this.addressService.add(body);
   }
 
@@ -53,7 +52,7 @@ export class AddressController {
    * @param member
    */
   @Patch('/:id')
-  update(@Param('id') id: string, @Body() member: AddressEntity) {
+  update(@Param('id') id: string, @Body() member: any) {
     return this.addressService.update(id, member);
   }
 

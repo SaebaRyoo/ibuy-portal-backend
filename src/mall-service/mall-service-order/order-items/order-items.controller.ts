@@ -9,7 +9,6 @@ import {
   Inject,
 } from '@nestjs/common';
 import { OrderItemsService } from './order-items.service';
-import { OrderItemsEntity } from './entities/order-items.entity';
 
 @Controller('order-items')
 export class OrderItemsController {
@@ -41,7 +40,7 @@ export class OrderItemsController {
   }
 
   @Patch('/:id')
-  update(@Param('id') id: number, @Body() spec: OrderItemsEntity) {
+  update(@Param('id') id: number, @Body() spec: any) {
     return this.orderService.update(id, spec);
   }
 }

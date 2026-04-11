@@ -1,57 +1,46 @@
 import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { CategoryEntity } from './category.entity';
-import { InjectRepository } from '@nestjs/typeorm';
+import { PrismaService } from '../../../common/prisma/prisma.service';
 import Result from '../../../common/utils/Result';
 
 @Injectable()
 export class CategoryService {
-  constructor(
-    @InjectRepository(CategoryEntity)
-    private categoryRepository: Repository<CategoryEntity>,
-  ) {}
+  constructor(private readonly prisma: PrismaService) {}
 
-  async findList(
-    pageParma: any,
-  ): Promise<Result<{ data: CategoryEntity[]; total: number }>> {
-    const qb = this.categoryRepository
-      .createQueryBuilder('para')
-      .skip(pageParma.pageSize * (pageParma.current - 1))
-      .limit(pageParma.pageSize);
-    const [data, total] = await qb.getManyAndCount();
+  async findList(pageParma: any): Promise<Result<any>> {
+    const skip = pageParma.pageSize * (pageParma.current - 1);
+    const take = Number(pageParma.pageSize);
+    const [data, total] = await Promise.all([
+      this.prisma.ibuyCategory.findMany({ skip, take }),
+      this.prisma.ibuyCategory.count(),
+    ]);
     return new Result({ data, total });
   }
 
   async findById(id: number) {
-    const data = await this.categoryRepository.findOneBy({ id });
+    const data = await this.prisma.ibuyCategory.findUnique({ where: { id } });
     return new Result(data);
   }
 
-  /**
-   * 获取全部数据
-   */
   async findAll() {
-    const data = await this.categoryRepository.find();
+    const data = await this.prisma.ibuyCategory.findMany();
     return new Result(data);
   }
 
-  async create(para: CategoryEntity) {
-    const data = await this.categoryRepository.insert(para);
+  async create(para: any) {
+    const data = await this.prisma.ibuyCategory.create({ data: para });
     return new Result(data);
   }
 
-  async updateById(id: number, para: CategoryEntity) {
-    const data = await this.categoryRepository
-      .createQueryBuilder()
-      .update(CategoryEntity)
-      .set(para)
-      .where('id = :id', { id })
-      .execute();
+  async updateById(id: number, para: any) {
+    const data = await this.prisma.ibuyCategory.update({
+      where: { id },
+      data: para,
+    });
     return new Result(data);
   }
 
   async remove(id: number) {
-    await this.categoryRepository.delete(id);
+    await this.prisma.ibuyCategory.delete({ where: { id } });
     return new Result(null);
   }
 }
