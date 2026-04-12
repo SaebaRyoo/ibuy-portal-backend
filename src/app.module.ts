@@ -13,6 +13,7 @@ import { LoggerModule } from './common/logger/logger.module';
 import { MallSystemModule } from './mall-service/mall-service-system/mall-system.module';
 import { MallGoodsModule } from './mall-service/mall-service-goods/mall-goods.module';
 import { MallOrderModule } from './mall-service/mall-service-order/mall-order.module';
+import { MallSeckillModule } from './mall-service/mall-service-seckill/mall-seckill.module';
 import { FileModule } from './mall-service/mall-service-file/file.module';
 import { SearchModule } from './mall-service/mall-service-search/search.module';
 
@@ -29,6 +30,7 @@ import { SearchModule } from './mall-service/mall-service-search/search.module';
     MallSystemModule,
     MallGoodsModule,
     MallOrderModule,
+    MallSeckillModule,
     FileModule,
     SearchModule,
   ],

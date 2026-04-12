@@ -221,3 +221,53 @@ model IbuyAddress {
 
   @@map("ibuy_address")
 }
+
+// ─── 秒杀活动 ───
+model IbuySeckillActivity {
+  id         String   @id
+  name       String
+  startTime  DateTime @map("start_time")
+  endTime    DateTime @map("end_time")
+  intro      String?
+  status     Int      @default(0) // 0=未审核 1=已审核 2=已驳回 3=已上架 4=已下架
+  createTime DateTime @default(now()) @map("create_time")
+  updateTime DateTime @updatedAt @map("update_time")
+
+  @@map("ibuy_seckill_activity")
+}
+
+// ─── 秒杀商品 ───
+model IbuySeckillGoods {
+  id           String   @id
+  activityId   String   @map("activity_id")
+  skuId        String   @map("sku_id")
+  skuName      String   @map("sku_name")
+  skuImage     String?  @map("sku_image")
+  skuPrice     Int      @map("sku_price")     // 原价（分）
+  seckillPrice Int      @map("seckill_price") // 秒杀价（分）
+  stockCount   Int      @map("stock_count")   // 秒杀库存
+  createTime   DateTime @default(now()) @map("create_time")
+
+  @@unique([activityId, skuId])
+  @@map("ibuy_seckill_goods")
+}
+
+// ─── 秒杀订单 ───
+model IbuySeckillOrder {
+  id              String    @id
+  activityId      String    @map("activity_id")
+  seckillGoodsId  String    @map("seckill_goods_id")
+  skuId           String    @map("sku_id")
+  username        String
+  seckillPrice    Int       @map("seckill_price") // 秒杀价（分）
+  money           Int                              // 实付金额（分）
+  orderStatus     String    @default("0") @map("order_status")  // 0=待支付 1=已支付 2=已关闭
+  payStatus       String    @default("0") @map("pay_status")    // 0=未支付 1=已支付
+  payTime         DateTime? @map("pay_time")
+  transactionId   String?   @map("transaction_id")
+  receiverAddress String?   @map("receiver_address")
+  createTime      DateTime  @default(now()) @map("create_time")
+  updateTime      DateTime  @updatedAt @map("update_time")
+
+  @@map("ibuy_seckill_order")
+}

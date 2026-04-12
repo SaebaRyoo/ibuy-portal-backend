@@ -173,6 +173,16 @@ export class AlipayService {
         {},
       );
     }
+
+    /* 秒杀订单支付队列 */
+    if (queueName === 'SEC_KILL_ORDER_PAY') {
+      await this.amqpConnection.publish(
+        RabbitMQConstants.EXCHANGE_SEC_KILL_ORDER_PAY,
+        RabbitMQConstants.QUEUE_SEC_KILL_ORDER_PAY,
+        Buffer.from(JSON.stringify(data)),
+        {},
+      );
+    }
   }
 
   async tradeQuery(orderId: string) {

@@ -62,7 +62,10 @@ export const ModelName = {
   IbuyOrder: 'IbuyOrder',
   IbuyOrderItem: 'IbuyOrderItem',
   IbuyMember: 'IbuyMember',
-  IbuyAddress: 'IbuyAddress'
+  IbuyAddress: 'IbuyAddress',
+  IbuySeckillActivity: 'IbuySeckillActivity',
+  IbuySeckillGoods: 'IbuySeckillGoods',
+  IbuySeckillOrder: 'IbuySeckillOrder'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -294,6 +297,55 @@ export const IbuyAddressScalarFieldEnum = {
 } as const
 
 export type IbuyAddressScalarFieldEnum = (typeof IbuyAddressScalarFieldEnum)[keyof typeof IbuyAddressScalarFieldEnum]
+
+
+export const IbuySeckillActivityScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  intro: 'intro',
+  status: 'status',
+  createTime: 'createTime',
+  updateTime: 'updateTime'
+} as const
+
+export type IbuySeckillActivityScalarFieldEnum = (typeof IbuySeckillActivityScalarFieldEnum)[keyof typeof IbuySeckillActivityScalarFieldEnum]
+
+
+export const IbuySeckillGoodsScalarFieldEnum = {
+  id: 'id',
+  activityId: 'activityId',
+  skuId: 'skuId',
+  skuName: 'skuName',
+  skuImage: 'skuImage',
+  skuPrice: 'skuPrice',
+  seckillPrice: 'seckillPrice',
+  stockCount: 'stockCount',
+  createTime: 'createTime'
+} as const
+
+export type IbuySeckillGoodsScalarFieldEnum = (typeof IbuySeckillGoodsScalarFieldEnum)[keyof typeof IbuySeckillGoodsScalarFieldEnum]
+
+
+export const IbuySeckillOrderScalarFieldEnum = {
+  id: 'id',
+  activityId: 'activityId',
+  seckillGoodsId: 'seckillGoodsId',
+  skuId: 'skuId',
+  username: 'username',
+  seckillPrice: 'seckillPrice',
+  money: 'money',
+  orderStatus: 'orderStatus',
+  payStatus: 'payStatus',
+  payTime: 'payTime',
+  transactionId: 'transactionId',
+  receiverAddress: 'receiverAddress',
+  createTime: 'createTime',
+  updateTime: 'updateTime'
+} as const
+
+export type IbuySeckillOrderScalarFieldEnum = (typeof IbuySeckillOrderScalarFieldEnum)[keyof typeof IbuySeckillOrderScalarFieldEnum]
 
 
 export const SortOrder = {

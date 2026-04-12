@@ -395,7 +395,10 @@ export const ModelName = {
   IbuyOrder: 'IbuyOrder',
   IbuyOrderItem: 'IbuyOrderItem',
   IbuyMember: 'IbuyMember',
-  IbuyAddress: 'IbuyAddress'
+  IbuyAddress: 'IbuyAddress',
+  IbuySeckillActivity: 'IbuySeckillActivity',
+  IbuySeckillGoods: 'IbuySeckillGoods',
+  IbuySeckillOrder: 'IbuySeckillOrder'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -411,7 +414,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "ibuyBrand" | "ibuyCategoryBrand" | "ibuyCategory" | "ibuyTemplate" | "ibuySpec" | "ibuyPara" | "ibuySpu" | "ibuySku" | "ibuyOrder" | "ibuyOrderItem" | "ibuyMember" | "ibuyAddress"
+    modelProps: "ibuyBrand" | "ibuyCategoryBrand" | "ibuyCategory" | "ibuyTemplate" | "ibuySpec" | "ibuyPara" | "ibuySpu" | "ibuySku" | "ibuyOrder" | "ibuyOrderItem" | "ibuyMember" | "ibuyAddress" | "ibuySeckillActivity" | "ibuySeckillGoods" | "ibuySeckillOrder"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1303,6 +1306,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    IbuySeckillActivity: {
+      payload: Prisma.$IbuySeckillActivityPayload<ExtArgs>
+      fields: Prisma.IbuySeckillActivityFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.IbuySeckillActivityFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuySeckillActivityPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.IbuySeckillActivityFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuySeckillActivityPayload>
+        }
+        findFirst: {
+          args: Prisma.IbuySeckillActivityFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuySeckillActivityPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.IbuySeckillActivityFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuySeckillActivityPayload>
+        }
+        findMany: {
+          args: Prisma.IbuySeckillActivityFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuySeckillActivityPayload>[]
+        }
+        create: {
+          args: Prisma.IbuySeckillActivityCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuySeckillActivityPayload>
+        }
+        createMany: {
+          args: Prisma.IbuySeckillActivityCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.IbuySeckillActivityCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuySeckillActivityPayload>[]
+        }
+        delete: {
+          args: Prisma.IbuySeckillActivityDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuySeckillActivityPayload>
+        }
+        update: {
+          args: Prisma.IbuySeckillActivityUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuySeckillActivityPayload>
+        }
+        deleteMany: {
+          args: Prisma.IbuySeckillActivityDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.IbuySeckillActivityUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.IbuySeckillActivityUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuySeckillActivityPayload>[]
+        }
+        upsert: {
+          args: Prisma.IbuySeckillActivityUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuySeckillActivityPayload>
+        }
+        aggregate: {
+          args: Prisma.IbuySeckillActivityAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateIbuySeckillActivity>
+        }
+        groupBy: {
+          args: Prisma.IbuySeckillActivityGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IbuySeckillActivityGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.IbuySeckillActivityCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IbuySeckillActivityCountAggregateOutputType> | number
+        }
+      }
+    }
+    IbuySeckillGoods: {
+      payload: Prisma.$IbuySeckillGoodsPayload<ExtArgs>
+      fields: Prisma.IbuySeckillGoodsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.IbuySeckillGoodsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuySeckillGoodsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.IbuySeckillGoodsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuySeckillGoodsPayload>
+        }
+        findFirst: {
+          args: Prisma.IbuySeckillGoodsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuySeckillGoodsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.IbuySeckillGoodsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuySeckillGoodsPayload>
+        }
+        findMany: {
+          args: Prisma.IbuySeckillGoodsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuySeckillGoodsPayload>[]
+        }
+        create: {
+          args: Prisma.IbuySeckillGoodsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuySeckillGoodsPayload>
+        }
+        createMany: {
+          args: Prisma.IbuySeckillGoodsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.IbuySeckillGoodsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuySeckillGoodsPayload>[]
+        }
+        delete: {
+          args: Prisma.IbuySeckillGoodsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuySeckillGoodsPayload>
+        }
+        update: {
+          args: Prisma.IbuySeckillGoodsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuySeckillGoodsPayload>
+        }
+        deleteMany: {
+          args: Prisma.IbuySeckillGoodsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.IbuySeckillGoodsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.IbuySeckillGoodsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuySeckillGoodsPayload>[]
+        }
+        upsert: {
+          args: Prisma.IbuySeckillGoodsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuySeckillGoodsPayload>
+        }
+        aggregate: {
+          args: Prisma.IbuySeckillGoodsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateIbuySeckillGoods>
+        }
+        groupBy: {
+          args: Prisma.IbuySeckillGoodsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IbuySeckillGoodsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.IbuySeckillGoodsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IbuySeckillGoodsCountAggregateOutputType> | number
+        }
+      }
+    }
+    IbuySeckillOrder: {
+      payload: Prisma.$IbuySeckillOrderPayload<ExtArgs>
+      fields: Prisma.IbuySeckillOrderFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.IbuySeckillOrderFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuySeckillOrderPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.IbuySeckillOrderFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuySeckillOrderPayload>
+        }
+        findFirst: {
+          args: Prisma.IbuySeckillOrderFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuySeckillOrderPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.IbuySeckillOrderFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuySeckillOrderPayload>
+        }
+        findMany: {
+          args: Prisma.IbuySeckillOrderFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuySeckillOrderPayload>[]
+        }
+        create: {
+          args: Prisma.IbuySeckillOrderCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuySeckillOrderPayload>
+        }
+        createMany: {
+          args: Prisma.IbuySeckillOrderCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.IbuySeckillOrderCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuySeckillOrderPayload>[]
+        }
+        delete: {
+          args: Prisma.IbuySeckillOrderDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuySeckillOrderPayload>
+        }
+        update: {
+          args: Prisma.IbuySeckillOrderUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuySeckillOrderPayload>
+        }
+        deleteMany: {
+          args: Prisma.IbuySeckillOrderDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.IbuySeckillOrderUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.IbuySeckillOrderUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuySeckillOrderPayload>[]
+        }
+        upsert: {
+          args: Prisma.IbuySeckillOrderUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuySeckillOrderPayload>
+        }
+        aggregate: {
+          args: Prisma.IbuySeckillOrderAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateIbuySeckillOrder>
+        }
+        groupBy: {
+          args: Prisma.IbuySeckillOrderGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IbuySeckillOrderGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.IbuySeckillOrderCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IbuySeckillOrderCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1557,6 +1782,55 @@ export const IbuyAddressScalarFieldEnum = {
 export type IbuyAddressScalarFieldEnum = (typeof IbuyAddressScalarFieldEnum)[keyof typeof IbuyAddressScalarFieldEnum]
 
 
+export const IbuySeckillActivityScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  intro: 'intro',
+  status: 'status',
+  createTime: 'createTime',
+  updateTime: 'updateTime'
+} as const
+
+export type IbuySeckillActivityScalarFieldEnum = (typeof IbuySeckillActivityScalarFieldEnum)[keyof typeof IbuySeckillActivityScalarFieldEnum]
+
+
+export const IbuySeckillGoodsScalarFieldEnum = {
+  id: 'id',
+  activityId: 'activityId',
+  skuId: 'skuId',
+  skuName: 'skuName',
+  skuImage: 'skuImage',
+  skuPrice: 'skuPrice',
+  seckillPrice: 'seckillPrice',
+  stockCount: 'stockCount',
+  createTime: 'createTime'
+} as const
+
+export type IbuySeckillGoodsScalarFieldEnum = (typeof IbuySeckillGoodsScalarFieldEnum)[keyof typeof IbuySeckillGoodsScalarFieldEnum]
+
+
+export const IbuySeckillOrderScalarFieldEnum = {
+  id: 'id',
+  activityId: 'activityId',
+  seckillGoodsId: 'seckillGoodsId',
+  skuId: 'skuId',
+  username: 'username',
+  seckillPrice: 'seckillPrice',
+  money: 'money',
+  orderStatus: 'orderStatus',
+  payStatus: 'payStatus',
+  payTime: 'payTime',
+  transactionId: 'transactionId',
+  receiverAddress: 'receiverAddress',
+  createTime: 'createTime',
+  updateTime: 'updateTime'
+} as const
+
+export type IbuySeckillOrderScalarFieldEnum = (typeof IbuySeckillOrderScalarFieldEnum)[keyof typeof IbuySeckillOrderScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1787,6 +2061,9 @@ export type GlobalOmitConfig = {
   ibuyOrderItem?: Prisma.IbuyOrderItemOmit
   ibuyMember?: Prisma.IbuyMemberOmit
   ibuyAddress?: Prisma.IbuyAddressOmit
+  ibuySeckillActivity?: Prisma.IbuySeckillActivityOmit
+  ibuySeckillGoods?: Prisma.IbuySeckillGoodsOmit
+  ibuySeckillOrder?: Prisma.IbuySeckillOrderOmit
 }
 
 /* Types for Logging */

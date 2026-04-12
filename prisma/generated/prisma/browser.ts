@@ -77,3 +77,18 @@ export type IbuyMember = Prisma.IbuyMemberModel
  * 
  */
 export type IbuyAddress = Prisma.IbuyAddressModel
+/**
+ * Model IbuySeckillActivity
+ * 
+ */
+export type IbuySeckillActivity = Prisma.IbuySeckillActivityModel
+/**
+ * Model IbuySeckillGoods
+ * 
+ */
+export type IbuySeckillGoods = Prisma.IbuySeckillGoodsModel
+/**
+ * Model IbuySeckillOrder
+ * 
+ */
+export type IbuySeckillOrder = Prisma.IbuySeckillOrderModel
