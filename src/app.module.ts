@@ -1,7 +1,10 @@
 import { Module } from '@nestjs/common';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 
 import { AuthGuard } from './common/guards/auth.guard';
+import { AllExceptionsFilter } from './common/filters/base.exception.filter';
+import { HttpExceptionFilter } from './common/filters/http.excepition.filter';
+import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 import { AppConfigModule } from './common/config/config.module';
 import { PrismaModule } from './common/prisma/prisma.module';
 import { RedisModule } from './common/redis/redis.module';
@@ -17,6 +20,7 @@ import { SearchModule } from './mall-service/mall-service-search/search.module';
   imports: [
     AppConfigModule,
 
+    // Core Modules
     PrismaModule,
     RedisModule,
     LoggerModule,
@@ -28,10 +32,24 @@ import { SearchModule } from './mall-service/mall-service-search/search.module';
     FileModule,
     SearchModule,
   ],
+
+  // 先执行 Guard 进行权限验证，如果通过则执行 Interceptor 进行数据转换，最后由 Filter 处理异常
   providers: [
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: TransformInterceptor,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
     },
   ],
 })

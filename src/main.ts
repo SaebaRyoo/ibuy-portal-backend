@@ -1,13 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import {
-  WINSTON_MODULE_NEST_PROVIDER,
-  WINSTON_MODULE_PROVIDER,
-} from 'nest-winston';
-import { TransformInterceptor } from './common/interceptors/transform.interceptor';
-import { Logger, ValidationPipe, VersioningType } from '@nestjs/common';
-import { AllExceptionsFilter } from './common/filters/base.exception.filter';
-import { HttpExceptionFilter } from './common/filters/http.excepition.filter';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import { ValidationPipe, VersioningType } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
@@ -21,15 +15,6 @@ async function bootstrap() {
       transform: true,
       transformOptions: { enableImplicitConversion: true },
     }),
-  );
-  // 设置统一响应体格式的拦截器
-  app.useGlobalInterceptors(
-    new TransformInterceptor(app.get(WINSTON_MODULE_PROVIDER) as Logger),
-  );
-  // 异常过滤器
-  app.useGlobalFilters(
-    new AllExceptionsFilter(app.get(WINSTON_MODULE_PROVIDER) as Logger),
-    new HttpExceptionFilter(app.get(WINSTON_MODULE_PROVIDER) as Logger),
   );
   // 接口版本化处理
   app.enableVersioning({
