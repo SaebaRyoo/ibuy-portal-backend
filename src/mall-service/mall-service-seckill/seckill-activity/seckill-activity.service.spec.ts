@@ -7,7 +7,6 @@ import {
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { SeckillGoodsService } from '../seckill-goods/seckill-goods.service';
 import { BusinessException } from '../../../common/filters/business.exception.filter';
-import Result from '../../../common/utils/Result';
 
 // ---------------------------------------------------------------------------
 // Mocks
@@ -86,15 +85,14 @@ describe('SeckillActivityService', () => {
       intro: '全场五折',
     };
 
-    it('should create an activity and return a Result wrapping the new record', async () => {
+    it('should create an activity and return the new record', async () => {
       const created = buildActivity({ name: validData.name });
       mockPrisma.ibuySeckillActivity.create.mockResolvedValue(created);
 
       const result = await service.create(validData);
 
-      expect(result).toBeInstanceOf(Result);
-      expect(result.data).toEqual(created);
-      expect(result.success).toBe(true);
+      expect(result).toBeDefined();
+      expect(result).toEqual(created);
       expect(mockPrisma.ibuySeckillActivity.create).toHaveBeenCalledTimes(1);
 
       // 确认写入时 status 为 PENDING
@@ -128,7 +126,7 @@ describe('SeckillActivityService', () => {
 
       const result = await service.create(dataWithoutIntro);
 
-      expect(result).toBeInstanceOf(Result);
+      expect(result).toBeDefined();
       expect(mockPrisma.ibuySeckillActivity.create).toHaveBeenCalledTimes(1);
     });
 
@@ -190,8 +188,8 @@ describe('SeckillActivityService', () => {
 
       const result = await service.update(activityId, updateData);
 
-      expect(result).toBeInstanceOf(Result);
-      expect(result.data).toEqual(updated);
+      expect(result).toBeDefined();
+      expect(result).toEqual(updated);
       expect(mockPrisma.ibuySeckillActivity.update).toHaveBeenCalledWith({
         where: { id: activityId },
         data: updateData,
@@ -209,7 +207,7 @@ describe('SeckillActivityService', () => {
 
       const result = await service.update(activityId, updateData);
 
-      expect(result).toBeInstanceOf(Result);
+      expect(result).toBeDefined();
       expect(mockPrisma.ibuySeckillActivity.update).toHaveBeenCalledTimes(1);
     });
 
@@ -285,7 +283,7 @@ describe('SeckillActivityService', () => {
         startTime: new Date('2026-11-11T08:00:00.000Z'),
       });
 
-      expect(result).toBeInstanceOf(Result);
+      expect(result).toBeDefined();
     });
   });
 
@@ -304,8 +302,8 @@ describe('SeckillActivityService', () => {
 
       const result = await service.audit(activityId, true);
 
-      expect(result).toBeInstanceOf(Result);
-      expect(result.data.status).toBe(ActivityStatus.APPROVED);
+      expect(result).toBeDefined();
+      expect(result.status).toBe(ActivityStatus.APPROVED);
       expect(mockPrisma.ibuySeckillActivity.update).toHaveBeenCalledWith({
         where: { id: activityId },
         data: { status: ActivityStatus.APPROVED },
@@ -320,8 +318,8 @@ describe('SeckillActivityService', () => {
 
       const result = await service.audit(activityId, false);
 
-      expect(result).toBeInstanceOf(Result);
-      expect(result.data.status).toBe(ActivityStatus.REJECTED);
+      expect(result).toBeDefined();
+      expect(result.status).toBe(ActivityStatus.REJECTED);
       expect(mockPrisma.ibuySeckillActivity.update).toHaveBeenCalledWith({
         where: { id: activityId },
         data: { status: ActivityStatus.REJECTED },
@@ -398,8 +396,8 @@ describe('SeckillActivityService', () => {
 
       const result = await service.publish(activityId);
 
-      expect(result).toBeInstanceOf(Result);
-      expect(result.data.status).toBe(ActivityStatus.PUBLISHED);
+      expect(result).toBeDefined();
+      expect(result.status).toBe(ActivityStatus.PUBLISHED);
       expect(mockPrisma.ibuySeckillActivity.update).toHaveBeenCalledWith({
         where: { id: activityId },
         data: { status: ActivityStatus.PUBLISHED },
@@ -488,8 +486,8 @@ describe('SeckillActivityService', () => {
 
       const result = await service.unpublish(activityId);
 
-      expect(result).toBeInstanceOf(Result);
-      expect(result.data.status).toBe(ActivityStatus.UNPUBLISHED);
+      expect(result).toBeDefined();
+      expect(result.status).toBe(ActivityStatus.UNPUBLISHED);
       expect(mockPrisma.ibuySeckillActivity.update).toHaveBeenCalledWith({
         where: { id: activityId },
         data: { status: ActivityStatus.UNPUBLISHED },
@@ -573,10 +571,9 @@ describe('SeckillActivityService', () => {
 
       const result = await service.findAll({ current: 1, pageSize: 10 });
 
-      expect(result).toBeInstanceOf(Result);
-      expect(result.data.data).toEqual(activities);
-      expect(result.data.total).toBe(2);
-      expect(result.success).toBe(true);
+      expect(result).toBeDefined();
+      expect(result.items).toEqual(activities);
+      expect(result.total).toBe(2);
 
       // 验证 skip/take 计算正确：(current-1) * pageSize
       expect(mockPrisma.ibuySeckillActivity.findMany).toHaveBeenCalledWith(
@@ -595,8 +592,8 @@ describe('SeckillActivityService', () => {
         status: ActivityStatus.PUBLISHED,
       });
 
-      expect(result.data.data).toEqual(published);
-      expect(result.data.total).toBe(1);
+      expect(result.items).toEqual(published);
+      expect(result.total).toBe(1);
 
       // where 中必须有 status 过滤
       expect(mockPrisma.ibuySeckillActivity.findMany).toHaveBeenCalledWith(
@@ -656,7 +653,7 @@ describe('SeckillActivityService', () => {
       );
     });
 
-    it('should return empty data array when no activities match', async () => {
+    it('should return empty items array when no activities match', async () => {
       mockPrisma.ibuySeckillActivity.findMany.mockResolvedValue([]);
       mockPrisma.ibuySeckillActivity.count.mockResolvedValue(0);
 
@@ -666,8 +663,8 @@ describe('SeckillActivityService', () => {
         status: 99,
       });
 
-      expect(result.data.data).toEqual([]);
-      expect(result.data.total).toBe(0);
+      expect(result.items).toEqual([]);
+      expect(result.total).toBe(0);
     });
   });
 
@@ -687,9 +684,8 @@ describe('SeckillActivityService', () => {
 
       const result = await service.findActive();
 
-      expect(result).toBeInstanceOf(Result);
-      expect(result.data).toEqual(activeActivities);
-      expect(result.success).toBe(true);
+      expect(result).toBeDefined();
+      expect(result).toEqual(activeActivities);
 
       const callArg = mockPrisma.ibuySeckillActivity.findMany.mock.calls[0][0];
       // 必须过滤 status = PUBLISHED
@@ -733,8 +729,7 @@ describe('SeckillActivityService', () => {
 
       const result = await service.findActive();
 
-      expect(result.data).toEqual([]);
-      expect(result.success).toBe(true);
+      expect(result).toEqual([]);
     });
   });
 
@@ -745,27 +740,25 @@ describe('SeckillActivityService', () => {
   describe('findById()', () => {
     const activityId = 'NO.1001';
 
-    it('should return the activity wrapped in Result when found', async () => {
+    it('should return the activity when found', async () => {
       const activity = buildActivity();
       mockPrisma.ibuySeckillActivity.findUnique.mockResolvedValue(activity);
 
       const result = await service.findById(activityId);
 
-      expect(result).toBeInstanceOf(Result);
-      expect(result.data).toEqual(activity);
-      expect(result.success).toBe(true);
+      expect(result).toBeDefined();
+      expect(result).toEqual(activity);
       expect(mockPrisma.ibuySeckillActivity.findUnique).toHaveBeenCalledWith({
         where: { id: activityId },
       });
     });
 
-    it('should return Result wrapping null when activity does not exist', async () => {
+    it('should return null when activity does not exist', async () => {
       mockPrisma.ibuySeckillActivity.findUnique.mockResolvedValue(null);
 
       const result = await service.findById('NON_EXISTENT_ID');
 
-      expect(result).toBeInstanceOf(Result);
-      expect(result.data).toBeNull();
+      expect(result).toBeNull();
     });
   });
 });

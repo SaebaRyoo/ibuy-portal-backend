@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/common/prisma/prisma.service';
-import Result from '../../../common/utils/Result';
 
 @Injectable()
 export class SpuService {
@@ -9,15 +8,14 @@ export class SpuService {
   async findList(pageParma: any) {
     const skip = pageParma.pageSize * (pageParma.current - 1);
     const take = pageParma.pageSize;
-    const [data, total] = await Promise.all([
+    const [items, total] = await Promise.all([
       this.prisma.ibuySpu.findMany({ skip, take }),
       this.prisma.ibuySpu.count(),
     ]);
-    return new Result({ data, total });
+    return { items, total };
   }
 
   async findById(id: string) {
-    const data = await this.prisma.ibuySpu.findUnique({ where: { id } });
-    return new Result(data);
+    return this.prisma.ibuySpu.findUnique({ where: { id } });
   }
 }

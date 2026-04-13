@@ -4,7 +4,6 @@ import { InjectRedis } from '@nestjs-modules/ioredis';
 import Redis from 'ioredis';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import Result from '../../../common/utils/Result';
 import IDWorker from '../../../common/utils/IDWorker';
 import { BusinessException } from '../../../common/filters/business.exception.filter';
 import { RabbitMQConstants } from '../../../common/constants/RabbitMQConstants';
@@ -39,7 +38,7 @@ export class SeckillOrderService {
     activityId: string,
     receiverAddress: string,
     req: any,
-  ): Promise<Result<any>> {
+  ): Promise<{ orderId: string; status: string }> {
     const decoded = await this.authService.getDecodedToken(req);
     const username = decoded.loginName;
 
@@ -107,7 +106,7 @@ export class SeckillOrderService {
       Buffer.from(JSON.stringify(orderMsg)),
     );
 
-    return new Result({ orderId, status: 'queued' });
+    return { orderId, status: 'queued' };
   }
 
   /**
@@ -238,7 +237,7 @@ export class SeckillOrderService {
     });
   }
 
-  async findById(id: string, req: any): Promise<Result<any>> {
+  async findById(id: string, req: any): Promise<any> {
     const decoded = await this.authService.getDecodedToken(req);
     const username = decoded.loginName;
 
@@ -250,13 +249,13 @@ export class SeckillOrderService {
       throw new BusinessException('订单不存在');
     }
 
-    return new Result(order);
+    return order;
   }
 
   async findByUser(
     pageParam: { current: number; pageSize: number },
     req: any,
-  ): Promise<Result<{ data: any[]; total: number }>> {
+  ): Promise<{ items: any[]; total: number }> {
     const decoded = await this.authService.getDecodedToken(req);
     const username = decoded.loginName;
 
@@ -264,7 +263,7 @@ export class SeckillOrderService {
     const skip = pageParam.pageSize * (pageParam.current - 1);
     const take = pageParam.pageSize;
 
-    const [data, total] = await Promise.all([
+    const [items, total] = await Promise.all([
       this.prisma.ibuySeckillOrder.findMany({
         where,
         skip,
@@ -273,6 +272,6 @@ export class SeckillOrderService {
       }),
       this.prisma.ibuySeckillOrder.count({ where }),
     ]);
-    return new Result({ data, total });
+    return { items, total };
   }
 }

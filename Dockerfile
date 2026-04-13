@@ -13,11 +13,14 @@ RUN yarn install
 # 复制项目的其他文件
 COPY . .
 
+# 生成 Prisma Client
+RUN npx prisma generate
+
 # 使用 yarn 进行构建
 RUN yarn build
 
 # 暴露应用的端口
 EXPOSE 8000
 
-# 设置启动命令
-CMD ["node", "dist/main.js"]
+# 启动时先执行数据库迁移，再启动应用
+CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main.js"]

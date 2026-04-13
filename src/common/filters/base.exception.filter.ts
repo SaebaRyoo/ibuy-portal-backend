@@ -3,7 +3,6 @@ import {
   Catch,
   ArgumentsHost,
   HttpStatus,
-  ServiceUnavailableException,
   Inject,
   Logger,
 } from '@nestjs/common';
@@ -26,10 +25,14 @@ export class AllExceptionsFilter implements ExceptionFilter {
     this.logger.error(exception);
     // 非 HTTP 标准异常的处理。
     response.status(HttpStatus.SERVICE_UNAVAILABLE).send({
-      statusCode: HttpStatus.SERVICE_UNAVAILABLE,
-      timestamp: new Date().toISOString(),
-      path: request.url,
-      message: new ServiceUnavailableException().getResponse(),
+      success: false,
+      code: 503,
+      message: 'Service Unavailable',
+      data: null,
+      extra: {
+        path: request.url,
+        timestamp: new Date().toISOString(),
+      },
     });
   }
 }

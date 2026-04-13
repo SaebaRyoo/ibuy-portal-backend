@@ -3,8 +3,8 @@ import { SkuService } from '../../mall-service-goods/sku/sku.service';
 import { SpuService } from '../../mall-service-goods/spu/spu.service';
 import { InjectRedis } from '@nestjs-modules/ioredis';
 import Redis from 'ioredis';
-import Result from '../../../common/utils/Result';
 import { AuthService } from '../../mall-service-system/auth/auth.service';
+import { ResponseMessage } from '../../../common/utils/ResponseMessage';
 
 export interface CartItem {
   categoryId1: number;
@@ -80,20 +80,19 @@ export class CartService {
 
     if (num <= 0) {
       await this.removeCartItem(resolvedUsername, id);
-      return new Result(null);
+      return;
     }
 
-    const skuResult = await this.skuService.findById(id);
-    const sku = skuResult.data;
+    const sku = await this.skuService.findById(id);
     if (!sku) {
-      return new Result(null);
+      return;
     }
 
-    const spuResult = await this.spuService.findById(sku.spuId);
-    const cartItem = this.buildCartItem(sku, spuResult.data, num);
+    const spu = await this.spuService.findById(sku.spuId);
+    const cartItem = this.buildCartItem(sku, spu, num);
 
     await this.saveCartItem(resolvedUsername, id, cartItem);
-    return new Result(null, '购物车添加成功');
+    return new ResponseMessage(null, '购物车添加成功');
   }
 
   // 获取购物车列表
@@ -102,15 +101,15 @@ export class CartService {
     const values = await this.redisService.hvals(
       this.cartKey(resolvedUsername),
     );
-    const data: CartItem[] = values.map((value) => JSON.parse(value));
+    const items: CartItem[] = values.map((value) => JSON.parse(value));
 
     let totalPrice = 0;
     let totalItems = 0;
     const totalDiscount = 0;
-    for (const item of data) {
+    for (const item of items) {
       totalPrice += item.money * item.num;
       totalItems += item.num;
     }
-    return new Result({ data, totalPrice, totalItems, totalDiscount });
+    return { items, totalPrice, totalItems, totalDiscount };
   }
 }

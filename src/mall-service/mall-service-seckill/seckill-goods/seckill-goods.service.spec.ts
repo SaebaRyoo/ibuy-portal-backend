@@ -3,7 +3,6 @@ import { SeckillGoodsService } from './seckill-goods.service';
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { BusinessException } from '../../../common/filters/business.exception.filter';
 import { getRedisConnectionToken } from '@nestjs-modules/ioredis';
-import Result from '../../../common/utils/Result';
 
 // ---------------------------------------------------------------------------
 // Shared mock factories
@@ -127,10 +126,9 @@ describe('SeckillGoodsService', () => {
 
       const result = await service.add(dto);
 
-      // Should return a Result wrapping the created goods
-      expect(result).toBeInstanceOf(Result);
-      expect(result.success).toBe(true);
-      expect(result.data).toEqual(createdGoods);
+      // Should return the created goods directly
+      expect(result).toBeDefined();
+      expect(result).toEqual(createdGoods);
 
       // Prisma create should have been called with the correct shape
       expect(mockPrisma.ibuySeckillGoods.create).toHaveBeenCalledTimes(1);
@@ -224,7 +222,7 @@ describe('SeckillGoodsService', () => {
   // =========================================================================
 
   describe('remove()', () => {
-    it('should delete goods and return Result(null) when activity is not published', async () => {
+    it('should delete goods and return void when activity is not published', async () => {
       const goods = buildGoods({ id: 'goods-001' });
       const activity = buildActivity({ status: 1 }); // status 1 = not published
 
@@ -234,9 +232,7 @@ describe('SeckillGoodsService', () => {
 
       const result = await service.remove('goods-001');
 
-      expect(result).toBeInstanceOf(Result);
-      expect(result.success).toBe(true);
-      expect(result.data).toBeNull();
+      expect(result).toBeUndefined();
       expect(mockPrisma.ibuySeckillGoods.delete).toHaveBeenCalledWith({
         where: { id: 'goods-001' },
       });
@@ -250,9 +246,8 @@ describe('SeckillGoodsService', () => {
       mockPrisma.ibuySeckillActivity.findUnique.mockResolvedValueOnce(activity);
       mockPrisma.ibuySeckillGoods.delete.mockResolvedValueOnce(goods);
 
-      const result = await service.remove('goods-002');
+      await service.remove('goods-002');
 
-      expect(result.success).toBe(true);
       expect(mockPrisma.ibuySeckillGoods.delete).toHaveBeenCalledTimes(1);
     });
 
@@ -290,9 +285,8 @@ describe('SeckillGoodsService', () => {
       mockPrisma.ibuySeckillActivity.findUnique.mockResolvedValueOnce(null);
       mockPrisma.ibuySeckillGoods.delete.mockResolvedValueOnce(goods);
 
-      const result = await service.remove('goods-004');
+      await service.remove('goods-004');
 
-      expect(result.success).toBe(true);
       expect(mockPrisma.ibuySeckillGoods.delete).toHaveBeenCalledTimes(1);
     });
   });
@@ -302,7 +296,7 @@ describe('SeckillGoodsService', () => {
   // =========================================================================
 
   describe('findByActivityId()', () => {
-    it('should return a Result wrapping the goods list for a given activityId', async () => {
+    it('should return the goods list for a given activityId', async () => {
       const goodsList = [
         buildGoods({ id: 'goods-001', skuId: 'sku-001' }),
         buildGoods({ id: 'goods-002', skuId: 'sku-002' }),
@@ -311,21 +305,19 @@ describe('SeckillGoodsService', () => {
 
       const result = await service.findByActivityId('act-001');
 
-      expect(result).toBeInstanceOf(Result);
-      expect(result.success).toBe(true);
-      expect(result.data).toEqual(goodsList);
+      expect(result).toBeDefined();
+      expect(result).toEqual(goodsList);
       expect(mockPrisma.ibuySeckillGoods.findMany).toHaveBeenCalledWith({
         where: { activityId: 'act-001' },
       });
     });
 
-    it('should return a Result with an empty array when no goods exist for the activity', async () => {
+    it('should return an empty array when no goods exist for the activity', async () => {
       mockPrisma.ibuySeckillGoods.findMany.mockResolvedValueOnce([]);
 
       const result = await service.findByActivityId('act-empty');
 
-      expect(result).toBeInstanceOf(Result);
-      expect(result.data).toEqual([]);
+      expect(result).toEqual([]);
     });
   });
 

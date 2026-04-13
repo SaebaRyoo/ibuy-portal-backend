@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as Minio from 'minio';
-import Result from '../../common/utils/Result';
+import { ResponseMessage } from '../../common/utils/ResponseMessage';
 
 @Injectable()
 export class FileService {
@@ -32,30 +32,30 @@ export class FileService {
     path: string = '/',
   ) {
     await this.minioClient.putObject(bucketName, `${path}/${objectName}`, data);
-    return new Result({
+    return {
       bucketName,
       path,
       objectName,
-    });
+    };
   }
 
   async downloadFile(
     bucketName: string,
     objectName: string,
     path: string = '/',
-  ): Promise<Result<any>> {
+  ): Promise<ResponseMessage<null>> {
     await this.minioClient.getObject(bucketName, `${path}/${objectName}`);
-    return new Result(null, '下载成功');
+    return new ResponseMessage(null, '下载成功');
   }
 
   async deleteFile(
     bucketName: string,
     objectName: string,
     path: string = '/',
-  ): Promise<Result<null>> {
+  ): Promise<ResponseMessage<null>> {
     await this.minioClient.removeObject(bucketName, `${path}/${objectName}`);
 
-    return new Result(null, '删除成功');
+    return new ResponseMessage(null, '删除成功');
   }
 
   /**
@@ -65,11 +65,11 @@ export class FileService {
    */
   async getDirectoryStructure(
     bucketName: string,
-  ): Promise<Result<{ data: string[] }>> {
-    const result = await this.listObjects(bucketName);
+  ): Promise<{ items: string[] }> {
+    const objects = await this.listObjects(bucketName);
     const directories = new Set<string>();
 
-    result.data.forEach((object) => {
+    objects.forEach((object) => {
       const pathSegments = object.name.split('/');
       if (pathSegments.length > 1) {
         const directory = pathSegments.slice(0, -1).join('/');
@@ -77,14 +77,12 @@ export class FileService {
       }
     });
 
-    const data = Array.from(directories);
-    return new Result({ data });
+    const items = Array.from(directories);
+    return { items };
   }
 
-  private async listObjects(
-    bucketName: string,
-  ): Promise<Result<Minio.BucketItem[]>> {
-    const data = await new Promise<Minio.BucketItem[]>((resolve, reject) => {
+  private async listObjects(bucketName: string): Promise<Minio.BucketItem[]> {
+    return new Promise<Minio.BucketItem[]>((resolve, reject) => {
       const objects: Minio.BucketItem[] = [];
       const stream = this.minioClient.listObjects(bucketName, '', true);
 
@@ -98,6 +96,5 @@ export class FileService {
         resolve(objects);
       });
     });
-    return new Result(data);
   }
 }

@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { InjectRedis } from '@nestjs-modules/ioredis';
 import Redis from 'ioredis';
-import Result from '../../../common/utils/Result';
 import IDWorker from '../../../common/utils/IDWorker';
 import { BusinessException } from '../../../common/filters/business.exception.filter';
 import { SeckillGoodsService } from '../seckill-goods/seckill-goods.service';
@@ -29,7 +28,7 @@ export class SeckillActivityService {
     startTime: Date;
     endTime: Date;
     intro?: string;
-  }): Promise<Result<any>> {
+  }): Promise<any> {
     if (data.startTime >= data.endTime) {
       throw new BusinessException('开始时间必须早于结束时间');
     }
@@ -47,13 +46,13 @@ export class SeckillActivityService {
         status: ActivityStatus.PENDING,
       },
     });
-    return new Result(activity);
+    return activity;
   }
 
   async update(
     id: string,
     data: { name?: string; startTime?: Date; endTime?: Date; intro?: string },
-  ): Promise<Result<any>> {
+  ): Promise<any> {
     const activity = await this.prisma.ibuySeckillActivity.findUnique({
       where: { id },
     });
@@ -76,10 +75,10 @@ export class SeckillActivityService {
       where: { id },
       data,
     });
-    return new Result(updated);
+    return updated;
   }
 
-  async audit(id: string, approved: boolean): Promise<Result<any>> {
+  async audit(id: string, approved: boolean): Promise<any> {
     const activity = await this.prisma.ibuySeckillActivity.findUnique({
       where: { id },
     });
@@ -97,10 +96,10 @@ export class SeckillActivityService {
         status: approved ? ActivityStatus.APPROVED : ActivityStatus.REJECTED,
       },
     });
-    return new Result(updated);
+    return updated;
   }
 
-  async publish(id: string): Promise<Result<any>> {
+  async publish(id: string): Promise<any> {
     const activity = await this.prisma.ibuySeckillActivity.findUnique({
       where: { id },
     });
@@ -120,10 +119,10 @@ export class SeckillActivityService {
     // 触发库存预热
     await this.seckillGoodsService.warmUp(id, activity.endTime);
 
-    return new Result(updated);
+    return updated;
   }
 
-  async unpublish(id: string): Promise<Result<any>> {
+  async unpublish(id: string): Promise<any> {
     const activity = await this.prisma.ibuySeckillActivity.findUnique({
       where: { id },
     });
@@ -143,14 +142,14 @@ export class SeckillActivityService {
     // 清理 Redis 库存
     await this.seckillGoodsService.clearStock(id);
 
-    return new Result(updated);
+    return updated;
   }
 
   async findAll(pageParam: {
     current: number;
     pageSize: number;
     status?: number;
-  }): Promise<Result<{ data: any[]; total: number }>> {
+  }): Promise<{ items: any[]; total: number }> {
     const where: any = {};
     if (pageParam.status !== undefined && pageParam.status !== null) {
       where.status = pageParam.status;
@@ -159,7 +158,7 @@ export class SeckillActivityService {
     const skip = pageParam.pageSize * (pageParam.current - 1);
     const take = pageParam.pageSize;
 
-    const [data, total] = await Promise.all([
+    const [items, total] = await Promise.all([
       this.prisma.ibuySeckillActivity.findMany({
         where,
         skip,
@@ -168,10 +167,10 @@ export class SeckillActivityService {
       }),
       this.prisma.ibuySeckillActivity.count({ where }),
     ]);
-    return new Result({ data, total });
+    return { items, total };
   }
 
-  async findActive(): Promise<Result<any[]>> {
+  async findActive(): Promise<any[]> {
     const now = new Date();
     const activities = await this.prisma.ibuySeckillActivity.findMany({
       where: {
@@ -181,13 +180,13 @@ export class SeckillActivityService {
       },
       orderBy: { startTime: 'desc' },
     });
-    return new Result(activities);
+    return activities;
   }
 
-  async findById(id: string): Promise<Result<any>> {
+  async findById(id: string): Promise<any> {
     const activity = await this.prisma.ibuySeckillActivity.findUnique({
       where: { id },
     });
-    return new Result(activity);
+    return activity;
   }
 }

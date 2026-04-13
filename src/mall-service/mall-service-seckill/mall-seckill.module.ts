@@ -6,7 +6,7 @@ import { RabbitMQConstants } from '../../common/constants/RabbitMQConstants';
 import { SeckillActivityModule } from './seckill-activity/seckill-activity.module';
 import { SeckillGoodsModule } from './seckill-goods/seckill-goods.module';
 import { SeckillOrderModule } from './seckill-order/seckill-order.module';
-import { SeckillStockService } from './seckill-stock/seckill-stock.service';
+import { SeckillStockModule } from './seckill-stock/seckill-stock.module';
 import { SeckillOrderCreateListener } from './listeners/seckill-order-create.listener';
 import { SeckillTimerMessageListener } from './listeners/seckill-timer-message.listener';
 import { SeckillPayMessageListener } from './listeners/seckill-pay-message.listener';
@@ -39,13 +39,13 @@ import { SeckillPayMessageListener } from './listeners/seckill-pay-message.liste
     SeckillActivityModule,
     SeckillGoodsModule,
     SeckillOrderModule,
+    SeckillStockModule,
   ],
   providers: [
-    SeckillStockService,
     SeckillOrderCreateListener,
     SeckillTimerMessageListener,
     SeckillPayMessageListener,
   ],
-  exports: [SeckillStockService],
+  exports: [SeckillStockModule, RabbitMQModule],
 })
 export class MallSeckillModule {}

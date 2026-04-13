@@ -23,7 +23,6 @@ import {
 import { AuthService } from '../../mall-service-system/auth/auth.service';
 import { BusinessException } from '../../../common/filters/business.exception.filter';
 import { RabbitMQConstants } from '../../../common/constants/RabbitMQConstants';
-import Result from '../../../common/utils/Result';
 
 // ─── Shared mock factories ─────────────────────────────────────────────────────
 
@@ -176,11 +175,10 @@ describe('SeckillOrderService', () => {
       });
       expect(published.orderId).toBeTruthy();
 
-      // Verifies the returned Result shape
-      expect(result).toBeInstanceOf(Result);
-      expect(result.data).toMatchObject({ status: 'queued' });
-      expect(result.data.orderId).toBeTruthy();
-      expect(result.success).toBe(true);
+      // Verifies the returned shape (raw object, no Result wrapper)
+      expect(result).toBeDefined();
+      expect(result).toMatchObject({ status: 'queued' });
+      expect(result.orderId).toBeTruthy();
     });
 
     it('should throw BusinessException "活动未开始" when activity has not started', async () => {
@@ -440,14 +438,13 @@ describe('SeckillOrderService', () => {
   // ═══════════════════════════════════════════════════════════════════════════
 
   describe('findById', () => {
-    it('should return a Result containing the order for the correct user', async () => {
+    it('should return the order for the correct user', async () => {
       mockPrisma.ibuySeckillOrder.findUnique.mockResolvedValue(mockOrder);
 
       const result = await service.findById('NO.123456789', mockReq);
 
-      expect(result).toBeInstanceOf(Result);
-      expect(result.data).toEqual(mockOrder);
-      expect(result.success).toBe(true);
+      expect(result).toBeDefined();
+      expect(result).toEqual(mockOrder);
     });
 
     it('should throw BusinessException "订单不存在" when order belongs to another user', async () => {
@@ -495,9 +492,8 @@ describe('SeckillOrderService', () => {
       const pageParam = { current: 1, pageSize: 10 };
       const result = await service.findByUser(pageParam, mockReq);
 
-      expect(result).toBeInstanceOf(Result);
-      expect(result.data).toEqual({ data: orders, total: 2 });
-      expect(result.success).toBe(true);
+      expect(result).toBeDefined();
+      expect(result).toEqual({ items: orders, total: 2 });
     });
 
     it('should pass correct skip/take values derived from pageParam', async () => {

@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { InjectRedis } from '@nestjs-modules/ioredis';
 import Redis from 'ioredis';
-import Result from '../../../common/utils/Result';
 import IDWorker from '../../../common/utils/IDWorker';
 import { BusinessException } from '../../../common/filters/business.exception.filter';
 
@@ -21,7 +20,7 @@ export class SeckillGoodsService {
     skuPrice: number;
     seckillPrice: number;
     stockCount: number;
-  }): Promise<Result<any>> {
+  }): Promise<any> {
     // 校验秒杀价
     if (data.seckillPrice >= data.skuPrice) {
       throw new BusinessException('秒杀价必须低于原价');
@@ -57,10 +56,10 @@ export class SeckillGoodsService {
         ...data,
       },
     });
-    return new Result(goods);
+    return goods;
   }
 
-  async remove(id: string): Promise<Result<any>> {
+  async remove(id: string): Promise<void> {
     const goods = await this.prisma.ibuySeckillGoods.findUnique({
       where: { id },
     });
@@ -78,14 +77,13 @@ export class SeckillGoodsService {
     }
 
     await this.prisma.ibuySeckillGoods.delete({ where: { id } });
-    return new Result(null);
   }
 
-  async findByActivityId(activityId: string): Promise<Result<any[]>> {
+  async findByActivityId(activityId: string): Promise<any[]> {
     const data = await this.prisma.ibuySeckillGoods.findMany({
       where: { activityId },
     });
-    return new Result(data);
+    return data;
   }
 
   /**
