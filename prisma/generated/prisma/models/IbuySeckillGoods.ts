@@ -30,12 +30,14 @@ export type IbuySeckillGoodsAvgAggregateOutputType = {
   skuPrice: number | null
   seckillPrice: number | null
   stockCount: number | null
+  totalStock: number | null
 }
 
 export type IbuySeckillGoodsSumAggregateOutputType = {
   skuPrice: number | null
   seckillPrice: number | null
   stockCount: number | null
+  totalStock: number | null
 }
 
 export type IbuySeckillGoodsMinAggregateOutputType = {
@@ -47,6 +49,7 @@ export type IbuySeckillGoodsMinAggregateOutputType = {
   skuPrice: number | null
   seckillPrice: number | null
   stockCount: number | null
+  totalStock: number | null
   createTime: Date | null
 }
 
@@ -59,6 +62,7 @@ export type IbuySeckillGoodsMaxAggregateOutputType = {
   skuPrice: number | null
   seckillPrice: number | null
   stockCount: number | null
+  totalStock: number | null
   createTime: Date | null
 }
 
@@ -71,6 +75,7 @@ export type IbuySeckillGoodsCountAggregateOutputType = {
   skuPrice: number
   seckillPrice: number
   stockCount: number
+  totalStock: number
   createTime: number
   _all: number
 }
@@ -80,12 +85,14 @@ export type IbuySeckillGoodsAvgAggregateInputType = {
   skuPrice?: true
   seckillPrice?: true
   stockCount?: true
+  totalStock?: true
 }
 
 export type IbuySeckillGoodsSumAggregateInputType = {
   skuPrice?: true
   seckillPrice?: true
   stockCount?: true
+  totalStock?: true
 }
 
 export type IbuySeckillGoodsMinAggregateInputType = {
@@ -97,6 +104,7 @@ export type IbuySeckillGoodsMinAggregateInputType = {
   skuPrice?: true
   seckillPrice?: true
   stockCount?: true
+  totalStock?: true
   createTime?: true
 }
 
@@ -109,6 +117,7 @@ export type IbuySeckillGoodsMaxAggregateInputType = {
   skuPrice?: true
   seckillPrice?: true
   stockCount?: true
+  totalStock?: true
   createTime?: true
 }
 
@@ -121,6 +130,7 @@ export type IbuySeckillGoodsCountAggregateInputType = {
   skuPrice?: true
   seckillPrice?: true
   stockCount?: true
+  totalStock?: true
   createTime?: true
   _all?: true
 }
@@ -220,6 +230,7 @@ export type IbuySeckillGoodsGroupByOutputType = {
   skuPrice: number
   seckillPrice: number
   stockCount: number
+  totalStock: number
   createTime: Date
   _count: IbuySeckillGoodsCountAggregateOutputType | null
   _avg: IbuySeckillGoodsAvgAggregateOutputType | null
@@ -255,6 +266,7 @@ export type IbuySeckillGoodsWhereInput = {
   skuPrice?: Prisma.IntFilter<"IbuySeckillGoods"> | number
   seckillPrice?: Prisma.IntFilter<"IbuySeckillGoods"> | number
   stockCount?: Prisma.IntFilter<"IbuySeckillGoods"> | number
+  totalStock?: Prisma.IntFilter<"IbuySeckillGoods"> | number
   createTime?: Prisma.DateTimeFilter<"IbuySeckillGoods"> | Date | string
 }
 
@@ -267,6 +279,7 @@ export type IbuySeckillGoodsOrderByWithRelationInput = {
   skuPrice?: Prisma.SortOrder
   seckillPrice?: Prisma.SortOrder
   stockCount?: Prisma.SortOrder
+  totalStock?: Prisma.SortOrder
   createTime?: Prisma.SortOrder
 }
 
@@ -283,6 +296,7 @@ export type IbuySeckillGoodsWhereUniqueInput = Prisma.AtLeast<{
   skuPrice?: Prisma.IntFilter<"IbuySeckillGoods"> | number
   seckillPrice?: Prisma.IntFilter<"IbuySeckillGoods"> | number
   stockCount?: Prisma.IntFilter<"IbuySeckillGoods"> | number
+  totalStock?: Prisma.IntFilter<"IbuySeckillGoods"> | number
   createTime?: Prisma.DateTimeFilter<"IbuySeckillGoods"> | Date | string
 }, "id" | "activityId_skuId">
 
@@ -295,6 +309,7 @@ export type IbuySeckillGoodsOrderByWithAggregationInput = {
   skuPrice?: Prisma.SortOrder
   seckillPrice?: Prisma.SortOrder
   stockCount?: Prisma.SortOrder
+  totalStock?: Prisma.SortOrder
   createTime?: Prisma.SortOrder
   _count?: Prisma.IbuySeckillGoodsCountOrderByAggregateInput
   _avg?: Prisma.IbuySeckillGoodsAvgOrderByAggregateInput
@@ -315,6 +330,7 @@ export type IbuySeckillGoodsScalarWhereWithAggregatesInput = {
   skuPrice?: Prisma.IntWithAggregatesFilter<"IbuySeckillGoods"> | number
   seckillPrice?: Prisma.IntWithAggregatesFilter<"IbuySeckillGoods"> | number
   stockCount?: Prisma.IntWithAggregatesFilter<"IbuySeckillGoods"> | number
+  totalStock?: Prisma.IntWithAggregatesFilter<"IbuySeckillGoods"> | number
   createTime?: Prisma.DateTimeWithAggregatesFilter<"IbuySeckillGoods"> | Date | string
 }
 
@@ -327,6 +343,7 @@ export type IbuySeckillGoodsCreateInput = {
   skuPrice: number
   seckillPrice: number
   stockCount: number
+  totalStock: number
   createTime?: Date | string
 }
 
@@ -339,6 +356,7 @@ export type IbuySeckillGoodsUncheckedCreateInput = {
   skuPrice: number
   seckillPrice: number
   stockCount: number
+  totalStock: number
   createTime?: Date | string
 }
 
@@ -351,6 +369,7 @@ export type IbuySeckillGoodsUpdateInput = {
   skuPrice?: Prisma.IntFieldUpdateOperationsInput | number
   seckillPrice?: Prisma.IntFieldUpdateOperationsInput | number
   stockCount?: Prisma.IntFieldUpdateOperationsInput | number
+  totalStock?: Prisma.IntFieldUpdateOperationsInput | number
   createTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -363,6 +382,7 @@ export type IbuySeckillGoodsUncheckedUpdateInput = {
   skuPrice?: Prisma.IntFieldUpdateOperationsInput | number
   seckillPrice?: Prisma.IntFieldUpdateOperationsInput | number
   stockCount?: Prisma.IntFieldUpdateOperationsInput | number
+  totalStock?: Prisma.IntFieldUpdateOperationsInput | number
   createTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -375,6 +395,7 @@ export type IbuySeckillGoodsCreateManyInput = {
   skuPrice: number
   seckillPrice: number
   stockCount: number
+  totalStock: number
   createTime?: Date | string
 }
 
@@ -387,6 +408,7 @@ export type IbuySeckillGoodsUpdateManyMutationInput = {
   skuPrice?: Prisma.IntFieldUpdateOperationsInput | number
   seckillPrice?: Prisma.IntFieldUpdateOperationsInput | number
   stockCount?: Prisma.IntFieldUpdateOperationsInput | number
+  totalStock?: Prisma.IntFieldUpdateOperationsInput | number
   createTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -399,6 +421,7 @@ export type IbuySeckillGoodsUncheckedUpdateManyInput = {
   skuPrice?: Prisma.IntFieldUpdateOperationsInput | number
   seckillPrice?: Prisma.IntFieldUpdateOperationsInput | number
   stockCount?: Prisma.IntFieldUpdateOperationsInput | number
+  totalStock?: Prisma.IntFieldUpdateOperationsInput | number
   createTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -416,6 +439,7 @@ export type IbuySeckillGoodsCountOrderByAggregateInput = {
   skuPrice?: Prisma.SortOrder
   seckillPrice?: Prisma.SortOrder
   stockCount?: Prisma.SortOrder
+  totalStock?: Prisma.SortOrder
   createTime?: Prisma.SortOrder
 }
 
@@ -423,6 +447,7 @@ export type IbuySeckillGoodsAvgOrderByAggregateInput = {
   skuPrice?: Prisma.SortOrder
   seckillPrice?: Prisma.SortOrder
   stockCount?: Prisma.SortOrder
+  totalStock?: Prisma.SortOrder
 }
 
 export type IbuySeckillGoodsMaxOrderByAggregateInput = {
@@ -434,6 +459,7 @@ export type IbuySeckillGoodsMaxOrderByAggregateInput = {
   skuPrice?: Prisma.SortOrder
   seckillPrice?: Prisma.SortOrder
   stockCount?: Prisma.SortOrder
+  totalStock?: Prisma.SortOrder
   createTime?: Prisma.SortOrder
 }
 
@@ -446,6 +472,7 @@ export type IbuySeckillGoodsMinOrderByAggregateInput = {
   skuPrice?: Prisma.SortOrder
   seckillPrice?: Prisma.SortOrder
   stockCount?: Prisma.SortOrder
+  totalStock?: Prisma.SortOrder
   createTime?: Prisma.SortOrder
 }
 
@@ -453,6 +480,7 @@ export type IbuySeckillGoodsSumOrderByAggregateInput = {
   skuPrice?: Prisma.SortOrder
   seckillPrice?: Prisma.SortOrder
   stockCount?: Prisma.SortOrder
+  totalStock?: Prisma.SortOrder
 }
 
 
@@ -466,6 +494,7 @@ export type IbuySeckillGoodsSelect<ExtArgs extends runtime.Types.Extensions.Inte
   skuPrice?: boolean
   seckillPrice?: boolean
   stockCount?: boolean
+  totalStock?: boolean
   createTime?: boolean
 }, ExtArgs["result"]["ibuySeckillGoods"]>
 
@@ -478,6 +507,7 @@ export type IbuySeckillGoodsSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   skuPrice?: boolean
   seckillPrice?: boolean
   stockCount?: boolean
+  totalStock?: boolean
   createTime?: boolean
 }, ExtArgs["result"]["ibuySeckillGoods"]>
 
@@ -490,6 +520,7 @@ export type IbuySeckillGoodsSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   skuPrice?: boolean
   seckillPrice?: boolean
   stockCount?: boolean
+  totalStock?: boolean
   createTime?: boolean
 }, ExtArgs["result"]["ibuySeckillGoods"]>
 
@@ -502,10 +533,11 @@ export type IbuySeckillGoodsSelectScalar = {
   skuPrice?: boolean
   seckillPrice?: boolean
   stockCount?: boolean
+  totalStock?: boolean
   createTime?: boolean
 }
 
-export type IbuySeckillGoodsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "activityId" | "skuId" | "skuName" | "skuImage" | "skuPrice" | "seckillPrice" | "stockCount" | "createTime", ExtArgs["result"]["ibuySeckillGoods"]>
+export type IbuySeckillGoodsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "activityId" | "skuId" | "skuName" | "skuImage" | "skuPrice" | "seckillPrice" | "stockCount" | "totalStock" | "createTime", ExtArgs["result"]["ibuySeckillGoods"]>
 
 export type $IbuySeckillGoodsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "IbuySeckillGoods"
@@ -519,6 +551,7 @@ export type $IbuySeckillGoodsPayload<ExtArgs extends runtime.Types.Extensions.In
     skuPrice: number
     seckillPrice: number
     stockCount: number
+    totalStock: number
     createTime: Date
   }, ExtArgs["result"]["ibuySeckillGoods"]>
   composites: {}
@@ -951,6 +984,7 @@ export interface IbuySeckillGoodsFieldRefs {
   readonly skuPrice: Prisma.FieldRef<"IbuySeckillGoods", 'Int'>
   readonly seckillPrice: Prisma.FieldRef<"IbuySeckillGoods", 'Int'>
   readonly stockCount: Prisma.FieldRef<"IbuySeckillGoods", 'Int'>
+  readonly totalStock: Prisma.FieldRef<"IbuySeckillGoods", 'Int'>
   readonly createTime: Prisma.FieldRef<"IbuySeckillGoods", 'DateTime'>
 }
     

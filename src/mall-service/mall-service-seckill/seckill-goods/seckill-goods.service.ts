@@ -54,6 +54,7 @@ export class SeckillGoodsService {
       data: {
         id,
         ...data,
+        totalStock: data.stockCount,
       },
     });
     return goods;

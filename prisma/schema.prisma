@@ -246,6 +246,7 @@ model IbuySeckillGoods {
   skuPrice     Int      @map("sku_price")     // 原价（分）
   seckillPrice Int      @map("seckill_price") // 秒杀价（分）
   stockCount   Int      @map("stock_count")   // 秒杀库存
+  totalStock   Int      @map("total_stock")   // 初始库存
   createTime   DateTime @default(now()) @map("create_time")
 
   @@unique([activityId, skuId])

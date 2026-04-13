@@ -1805,6 +1805,7 @@ export const IbuySeckillGoodsScalarFieldEnum = {
   skuPrice: 'skuPrice',
   seckillPrice: 'seckillPrice',
   stockCount: 'stockCount',
+  totalStock: 'totalStock',
   createTime: 'createTime'
 } as const
 
