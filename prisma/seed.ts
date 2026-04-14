@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { PrismaClient } from './generated/prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { parseCopySection, readBackupFile } from './parse-backup';
@@ -49,6 +50,9 @@ async function main() {
 
   // ===== CLEAR ALL TABLES (reverse dependency order) =====
   console.log('Clearing tables...');
+  await prisma.ibuySeckillOrder.deleteMany();
+  await prisma.ibuySeckillGoods.deleteMany();
+  await prisma.ibuySeckillActivity.deleteMany();
   await prisma.ibuyOrderItem.deleteMany();
   await prisma.ibuyOrder.deleteMany();
   await prisma.ibuyAdminRole.deleteMany();
@@ -798,6 +802,176 @@ async function main() {
     await prisma.ibuyMenu.create({ data: menu as any });
   }
   console.log(`  → ${menus.length} menus`);
+
+  // ===== SEED SECKILL ACTIVITIES =====
+  console.log('Seeding seckill activities...');
+  const now = new Date();
+
+  // 活动1：当前进行中（已上架）
+  const activity1Start = new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000); // 2天前开始
+  const activity1End = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000); // 7天后结束
+
+  // 活动2：即将到来（已审核）
+  const activity2Start = new Date(now.getTime() + 15 * 24 * 60 * 60 * 1000); // 15天后开始
+  const activity2End = new Date(now.getTime() + 22 * 24 * 60 * 60 * 1000); // 22天后结束
+
+  // 活动3：已结束（已下架）
+  const activity3Start = new Date(now.getTime() - 10 * 24 * 60 * 60 * 1000); // 10天前开始
+  const activity3End = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000); // 3天前结束
+
+  const seckillActivities = [
+    {
+      id: 'SECKILL-ACT-001',
+      name: '春季数码秒杀节',
+      startTime: activity1Start,
+      endTime: activity1End,
+      intro: '春季数码产品限时秒杀，全场低至5折起！',
+      status: 3, // 已上架
+      createTime: new Date(activity1Start.getTime() - 5 * 24 * 60 * 60 * 1000),
+      updateTime: activity1Start,
+    },
+    {
+      id: 'SECKILL-ACT-002',
+      name: '五一家电狂欢',
+      startTime: activity2Start,
+      endTime: activity2End,
+      intro: '五一劳动节家电特惠，爆款商品限量抢购！',
+      status: 1, // 已审核
+      createTime: new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000),
+      updateTime: now,
+    },
+    {
+      id: 'SECKILL-ACT-003',
+      name: '夏日清凉特惠',
+      startTime: activity3Start,
+      endTime: activity3End,
+      intro: '夏日清凉好物秒杀，错过再等一年！',
+      status: 4, // 已下架
+      createTime: new Date(activity3Start.getTime() - 7 * 24 * 60 * 60 * 1000),
+      updateTime: activity3End,
+    },
+  ];
+
+  await prisma.ibuySeckillActivity.createMany({ data: seckillActivities });
+  console.log(`  → ${seckillActivities.length} seckill activities`);
+
+  // ===== SEED SECKILL GOODS =====
+  console.log('Seeding seckill goods...');
+
+  // 从数据库中取一些 SKU 用于关联秒杀商品
+  const skus = await prisma.ibuySku.findMany({
+    take: 8,
+    orderBy: { price: 'desc' },
+  });
+
+  if (skus.length >= 8) {
+    const seckillGoods = [
+      // 活动1（进行中）的秒杀商品 - 3个
+      {
+        id: 'SECKILL-GOODS-001',
+        activityId: 'SECKILL-ACT-001',
+        skuId: skus[0].id,
+        skuName: skus[0].name,
+        skuImage: skus[0].image,
+        skuPrice: skus[0].price,
+        seckillPrice: Math.floor(skus[0].price * 0.5), // 5折
+        stockCount: 100,
+        totalStock: 100,
+        createTime: activity1Start,
+      },
+      {
+        id: 'SECKILL-GOODS-002',
+        activityId: 'SECKILL-ACT-001',
+        skuId: skus[1].id,
+        skuName: skus[1].name,
+        skuImage: skus[1].image,
+        skuPrice: skus[1].price,
+        seckillPrice: Math.floor(skus[1].price * 0.6), // 6折
+        stockCount: 150,
+        totalStock: 150,
+        createTime: activity1Start,
+      },
+      {
+        id: 'SECKILL-GOODS-003',
+        activityId: 'SECKILL-ACT-001',
+        skuId: skus[2].id,
+        skuName: skus[2].name,
+        skuImage: skus[2].image,
+        skuPrice: skus[2].price,
+        seckillPrice: Math.floor(skus[2].price * 0.7), // 7折
+        stockCount: 200,
+        totalStock: 200,
+        createTime: activity1Start,
+      },
+      // 活动2（即将开始）的秒杀商品 - 3个
+      {
+        id: 'SECKILL-GOODS-004',
+        activityId: 'SECKILL-ACT-002',
+        skuId: skus[3].id,
+        skuName: skus[3].name,
+        skuImage: skus[3].image,
+        skuPrice: skus[3].price,
+        seckillPrice: Math.floor(skus[3].price * 0.55), // 5.5折
+        stockCount: 80,
+        totalStock: 80,
+        createTime: now,
+      },
+      {
+        id: 'SECKILL-GOODS-005',
+        activityId: 'SECKILL-ACT-002',
+        skuId: skus[4].id,
+        skuName: skus[4].name,
+        skuImage: skus[4].image,
+        skuPrice: skus[4].price,
+        seckillPrice: Math.floor(skus[4].price * 0.65), // 6.5折
+        stockCount: 120,
+        totalStock: 120,
+        createTime: now,
+      },
+      {
+        id: 'SECKILL-GOODS-006',
+        activityId: 'SECKILL-ACT-002',
+        skuId: skus[5].id,
+        skuName: skus[5].name,
+        skuImage: skus[5].image,
+        skuPrice: skus[5].price,
+        seckillPrice: Math.floor(skus[5].price * 0.75), // 7.5折
+        stockCount: 50,
+        totalStock: 50,
+        createTime: now,
+      },
+      // 活动3（已结束）的秒杀商品 - 2个（库存已被部分消耗）
+      {
+        id: 'SECKILL-GOODS-007',
+        activityId: 'SECKILL-ACT-003',
+        skuId: skus[6].id,
+        skuName: skus[6].name,
+        skuImage: skus[6].image,
+        skuPrice: skus[6].price,
+        seckillPrice: Math.floor(skus[6].price * 0.5), // 5折
+        stockCount: 12, // 剩余12件
+        totalStock: 100,
+        createTime: activity3Start,
+      },
+      {
+        id: 'SECKILL-GOODS-008',
+        activityId: 'SECKILL-ACT-003',
+        skuId: skus[7].id,
+        skuName: skus[7].name,
+        skuImage: skus[7].image,
+        skuPrice: skus[7].price,
+        seckillPrice: Math.floor(skus[7].price * 0.6), // 6折
+        stockCount: 0, // 已售罄
+        totalStock: 80,
+        createTime: activity3Start,
+      },
+    ];
+
+    await prisma.ibuySeckillGoods.createMany({ data: seckillGoods });
+    console.log(`  → ${seckillGoods.length} seckill goods`);
+  } else {
+    console.log('  ⚠ Not enough SKUs to seed seckill goods (need at least 8)');
+  }
 
   console.log('\nSeed complete!');
 }

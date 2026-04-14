@@ -22,5 +22,10 @@ RUN yarn build
 # 暴露应用的端口
 EXPOSE 8000
 
-# 启动时先执行数据库迁移，再启动应用
-CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main.js"]
+# ⚠️ 不再在启动时自动执行 migrate
+# 迁移应通过以下方式单独执行：
+#   1. docker compose run --rm migrate（推荐）
+#   2. pnpm db:deploy（本地/CI 环境）
+#
+# 旧方式（不推荐）：CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main.js"]
+CMD ["node", "dist/main.js"]

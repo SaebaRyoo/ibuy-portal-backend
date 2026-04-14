@@ -1,4 +1,4 @@
-version: "2.5"
+version: '2.5'
 
 services:
   # Elasticsearch setup service for generating certificates
@@ -6,7 +6,7 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
     volumes:
       - certs:/usr/share/elasticsearch/config/certs
-    user: "0"
+    user: '0'
     command: >
       bash -c '
         if [ x${ELASTIC_PASSWORD} == x ]; then
@@ -39,7 +39,7 @@ services:
         echo "All done!";
       '
     healthcheck:
-      test: ["CMD-SHELL", "[ -f config/certs/es01/es01.crt ]"]
+      test: ['CMD-SHELL', '[ -f config/certs/es01/es01.crt ]']
       interval: 1s
       timeout: 5s
       retries: 120
@@ -54,7 +54,7 @@ services:
     volumes:
       - certs:/usr/share/elasticsearch/config/certs
       - esdata01:/usr/share/elasticsearch/data
-#      - /usr/local/docker-volumes/es01/config:/usr/share/elasticsearch/config
+    #      - /usr/local/docker-volumes/es01/config:/usr/share/elasticsearch/config
     ports:
       - ${ES_PORT}:9200
     environment:
@@ -80,7 +80,7 @@ services:
     healthcheck:
       test:
         [
-          "CMD-SHELL",
+          'CMD-SHELL',
           "curl -s --cacert config/certs/ca/ca.crt https://localhost:9200 | grep -q 'missing authentication credentials'",
         ]
       interval: 10s
@@ -98,7 +98,7 @@ services:
       - certs:/usr/share/kibana/config/certs
       - kibanadata:/usr/share/kibana/data
       # FATAL CLI ERROR Error: ENOENT: no such file or directory, open '/usr/share/kibana/config/kibana.yml'
-#      - /usr/local/docker-volumes/kibana/config:/usr/share/kibana/config
+    #      - /usr/local/docker-volumes/kibana/config:/usr/share/kibana/config
     ports:
       - ${KIBANA_PORT}:5601
     environment:
@@ -111,7 +111,7 @@ services:
     healthcheck:
       test:
         [
-          "CMD-SHELL",
+          'CMD-SHELL',
           "curl -s -I http://localhost:5601 | grep -q 'HTTP/1.1 302 Found'",
         ]
       interval: 10s
@@ -123,7 +123,7 @@ services:
     image: postgres:17-alpine
     container_name: ibuy-service-postgres
     ports:
-      - "${POSTGRES_PORT}:5432"
+      - '${POSTGRES_PORT}:5432'
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -131,7 +131,7 @@ services:
     volumes:
       - /usr/local/docker-volumes/postgre:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER}']
       interval: 10s
       timeout: 5s
       retries: 5
@@ -141,7 +141,7 @@ services:
     image: redis:7.2-alpine
     container_name: ibuy-service-redis
     ports:
-      - "${REDIS_PORT}:6379"
+      - '${REDIS_PORT}:6379'
     environment:
       - REDIS_PASSWORD=${REDIS_PASSWORD}
     command: redis-server --requirepass "${REDIS_PASSWORD}" --appendonly yes
@@ -149,7 +149,7 @@ services:
       - /usr/local/docker-volumes/redis:/data
     restart: always
     healthcheck:
-      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      test: ['CMD', 'redis-cli', '-a', '${REDIS_PASSWORD}', 'ping']
       interval: 10s
       timeout: 5s
       retries: 5
@@ -159,8 +159,8 @@ services:
     image: minio/minio
     container_name: ibuy-service-minio
     ports:
-      - "${MINIO_PORT}:9000"
-      - "9090:9090"
+      - '${MINIO_PORT}:9000'
+      - '9090:9090'
     environment:
       - MINIO_ROOT_USER=${MINIO_ROOT_USER}
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
@@ -170,7 +170,11 @@ services:
       - /usr/local/docker-volumes/minio/config:/root/.minio
     restart: always
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://127.0.0.1:9000/minio/health/live || exit 1"]
+      test:
+        [
+          'CMD-SHELL',
+          'curl -f http://127.0.0.1:9000/minio/health/live || exit 1',
+        ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -180,8 +184,8 @@ services:
     image: rabbitmq:4.0
     container_name: ibuy-service-rabbitmq
     ports:
-      - "${RMQ_PORT}:5672"
-      - "15672:15672"
+      - '${RMQ_PORT}:5672'
+      - '15672:15672'
     environment:
       - RABBITMQ_DEFAULT_USER=${RMQ_USERNAME}
       - RABBITMQ_DEFAULT_PASS=${RMQ_PASSWORD}
@@ -197,10 +201,33 @@ services:
       - /usr/local/docker-volumes/rabbitmq:/var/lib/rabbitmq
     restart: always
     healthcheck:
-      test: ["CMD-SHELL", "rabbitmqctl status > /dev/null 2>&1 || exit 1"]
+      test: ['CMD-SHELL', 'rabbitmqctl status > /dev/null 2>&1 || exit 1']
       interval: 10s
       timeout: 5s
       retries: 10
+
+  # 数据库迁移服务（一次性执行，完成后自动退出）
+  # 用法: docker compose run --rm migrate
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ibuy-service-migrate
+    environment:
+      - NODE_ENV=production
+      - POSTGRES_HOST=ibuy-service-postgres
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DATABASE}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    # 覆盖默认命令，只执行迁移
+    command: ['npx', 'prisma', 'migrate', 'deploy']
+    # 不设置 restart，执行完就退出
+    profiles:
+      - migration
 
   # NestJS service
   nestjs:
@@ -209,7 +236,7 @@ services:
       dockerfile: Dockerfile
     container_name: ibuy-service-nestjs
     ports:
-      - "8000:8000"
+      - '8000:8000'
     volumes:
       - /usr/local/docker-volumes/app/logs:/app/logs
     environment:
@@ -244,13 +271,13 @@ services:
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
     # 注意depends_on是服务名，而不是容器名
     depends_on:
-#      - postgres
-#      - redis
-#      - minio
-#      - rabbitmq
-#      - es01
+      #      - postgres
+      #      - redis
+      #      - minio
+      #      - rabbitmq
+      #      - es01
       rabbitmq:
-        condition: service_healthy  # 确保在 rabbitmq 健康后启动
+        condition: service_healthy # 确保在 rabbitmq 健康后启动
       postgres:
         condition: service_healthy
       redis:
