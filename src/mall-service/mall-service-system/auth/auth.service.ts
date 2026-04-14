@@ -6,7 +6,7 @@ import {
 import { MemberService } from '../member/member.service';
 import { JwtService, TokenExpiredError } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
-import Result from '../../../common/utils/Result';
+import { ResponseMessage } from '../../../common/utils/ResponseMessage';
 import Redis from 'ioredis';
 import { InjectRedis } from '@nestjs-modules/ioredis';
 import { ConfigService } from '@nestjs/config';
@@ -73,13 +73,8 @@ export class AuthService {
     });
   }
 
-  async signIn(
-    loginName: string,
-    pass: string,
-    res: Response,
-  ): Promise<Result<{ access_token: string }>> {
-    const result = await this.usersService.findOne(loginName);
-    const user = result.data;
+  async signIn(loginName: string, pass: string, res: Response) {
+    const user = await this.usersService.findOne(loginName);
 
     const isMatch = await bcrypt.compare(pass, user?.password);
 
@@ -123,7 +118,7 @@ export class AuthService {
         memberLevel: user.memberLevel,
       },
     };
-    return new Result(data, '登录成功');
+    return new ResponseMessage(data, '登录成功');
   }
 
   async refreshToken(refreshToken: string, res: Response) {
@@ -140,7 +135,7 @@ export class AuthService {
         throw new UnauthorizedException('Refresh token不在白名单中');
       }
 
-      const { data: user } = await this.usersService.findOneById(userId);
+      const user = await this.usersService.findOneById(userId);
       if (!user || user.status !== '1') {
         throw new UnauthorizedException('用户状态异常');
       }
@@ -171,7 +166,7 @@ export class AuthService {
       // 更新refresh token cookie
       this.setCookies(res, new_refresh_token);
 
-      return new Result({ access_token }, 'Token刷新成功');
+      return new ResponseMessage({ access_token }, 'Token刷新成功');
     } catch (e) {
       throw new UnauthorizedException(
         e instanceof TokenExpiredError ? 'token已过期' : e,
@@ -190,12 +185,11 @@ export class AuthService {
     const token = req.headers.authorization?.split(' ')[1]; // 从请求头中获取 token
     const decoded = this.jwtService.verify(token); // 验证并解码 token
     const userId = decoded.user_id; // 从解码后的 token 中获取用户 ID
-    const result = await this.usersService.findOneById(userId); // 根据用户 ID 查询用户信息
-    const user = result.data;
+    const user = await this.usersService.findOneById(userId); // 根据用户 ID 查询用户信息
     if (!user) {
       throw new NotFoundException('User not found');
     }
-    return new Result({
+    return {
       loginName: user.loginName,
       nickName: user.nickName,
       avatar: user.headPic,
@@ -209,7 +203,7 @@ export class AuthService {
       birthday: user.birthday,
       points: user.points,
       memberLevel: user.memberLevel,
-    });
+    };
   }
 
   async logout(userId: number) {

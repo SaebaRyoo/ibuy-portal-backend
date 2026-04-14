@@ -8,13 +8,13 @@ import { InjectRedis } from '@nestjs-modules/ioredis';
 import Redis from 'ioredis';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { RabbitMQConstants } from '../../../common/constants/RabbitMQConstants';
-import Result from '../../../common/utils/Result';
 import { AlipayService } from '../../alipay/alipay.service';
 import { AuthService } from '../../mall-service-system/auth/auth.service';
 import { SpuService } from 'src/mall-service/mall-service-goods/spu/spu.service';
 import { DirectOrderSkuDto } from './dto/direct-order-sku.dto';
 import { DirectOrderInfoDto } from './dto/direct-order-info.dto';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { BusinessException } from '../../../common/filters/business.exception.filter';
 
 @Injectable()
 export class OrderService {
@@ -42,7 +42,7 @@ export class OrderService {
   async findList(
     pageParma: any,
     req: any,
-  ): Promise<Result<{ data: any[]; total: number }>> {
+  ): Promise<{ items: any[]; total: number }> {
     const decoded = await this.authService.getDecodedToken(req);
     const _username = decoded.loginName;
 
@@ -54,11 +54,11 @@ export class OrderService {
     const skip = pageParma.pageSize * (pageParma.current - 1);
     const take = pageParma.pageSize;
 
-    const [data, total] = await Promise.all([
+    const [items, total] = await Promise.all([
       this.prisma.ibuyOrder.findMany({ where, skip, take }),
       this.prisma.ibuyOrder.count({ where }),
     ]);
-    return new Result({ data, total });
+    return { items, total };
   }
 
   async findById(id: string) {
@@ -83,21 +83,19 @@ export class OrderService {
     skuInfo: DirectOrderSkuDto,
     orderInfo: DirectOrderInfoDto,
     req: any,
-  ): Promise<Result<any>> {
+  ): Promise<any> {
     const decoded = await this.authService.getDecodedToken(req);
     const username = decoded.loginName;
 
-    const skuResult = await this.skuService.findById(skuInfo.skuId);
-    const sku = skuResult.data;
+    const sku = await this.skuService.findById(skuInfo.skuId);
 
     if (!sku) {
-      return new Result(null, '商品不存在');
+      throw new BusinessException('商品不存在');
     }
 
     try {
       const order = await this.prisma.$transaction(async (tx) => {
-        const spuResult = await this.spuService.findById(sku.spuId);
-        const spu = spuResult.data;
+        const spu = await this.spuService.findById(sku.spuId);
 
         const idWorker = new IDWorker(1n, 1n);
 
@@ -156,23 +154,23 @@ export class OrderService {
         return savedOrder;
       });
 
-      return new Result(order);
+      return order;
     } catch (err) {
       this.logger.error('直接下单失败', err);
-      return new Result(null, err);
+      throw new BusinessException(err);
     }
   }
 
   /**
    * 购物车下单
    */
-  async addOrder(order: any, req): Promise<Result<any>> {
+  async addOrder(order: any, req): Promise<any> {
     const decoded = await this.authService.getDecodedToken(req);
     const username = decoded.loginName;
     this.logger.log('info', `username: ${username}`);
 
-    const orderItemsResult = await this.cartService.list(username);
-    const orderItems = orderItemsResult.data.data;
+    const cartResult = await this.cartService.list(username);
+    const orderItems = cartResult.items;
 
     // 统计计算
     let totalMoney = 0;
@@ -235,9 +233,9 @@ export class OrderService {
         return created;
       });
 
-      return new Result(savedOrder);
+      return savedOrder;
     } catch (err) {
-      return new Result(null, err);
+      throw new BusinessException(err);
     }
   }
 
@@ -263,14 +261,12 @@ export class OrderService {
    * 关闭订单，库存回滚
    */
   async closeOrder(orderId: string) {
-    const result = await this.orderItemsService.findItemsByOrderId(orderId);
-    const orderItems = result.data;
+    const orderItems = await this.orderItemsService.findItemsByOrderId(orderId);
     for (const orderItem of orderItems) {
       const skuId = orderItem.skuId;
       const num = orderItem.num;
 
-      const skuResult = await this.skuService.findById(skuId);
-      const goods = skuResult.data;
+      const goods = await this.skuService.findById(skuId);
       goods.num = goods.num + num;
 
       await this.skuService.updateSku(skuId, goods);

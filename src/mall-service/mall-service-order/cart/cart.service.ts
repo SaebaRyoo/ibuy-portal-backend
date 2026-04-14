@@ -3,8 +3,22 @@ import { SkuService } from '../../mall-service-goods/sku/sku.service';
 import { SpuService } from '../../mall-service-goods/spu/spu.service';
 import { InjectRedis } from '@nestjs-modules/ioredis';
 import Redis from 'ioredis';
-import Result from '../../../common/utils/Result';
 import { AuthService } from '../../mall-service-system/auth/auth.service';
+import { ResponseMessage } from '../../../common/utils/ResponseMessage';
+
+export interface CartItem {
+  categoryId1: number;
+  categoryId2: number;
+  categoryId3: number;
+  spuId: string;
+  skuId: string;
+  name: string;
+  price: number;
+  num: number;
+  money: number;
+  payMoney: number;
+  image: string;
+}
 
 @Injectable()
 export class CartService {
@@ -15,73 +29,87 @@ export class CartService {
     @InjectRedis() private readonly redisService: Redis,
   ) {}
 
+  private async resolveUsername(username: string, req?: any): Promise<string> {
+    if (req) {
+      const decoded = await this.authService.getDecodedToken(req);
+      return decoded.loginName || username;
+    }
+    return username || '';
+  }
+
+  private cartKey(username: string): string {
+    return `Cart_${username}`;
+  }
+
+  private buildCartItem(sku: any, spu: any, num: number): CartItem {
+    const money = num * sku.price;
+    return {
+      categoryId1: spu.category1Id,
+      categoryId2: spu.category2Id,
+      categoryId3: spu.category3Id,
+      spuId: spu.id,
+      skuId: sku.id,
+      name: sku.name,
+      price: sku.price,
+      num,
+      money,
+      payMoney: money,
+      image: sku.image,
+    };
+  }
+
+  private async removeCartItem(username: string, skuId: string): Promise<void> {
+    await this.redisService.hdel(this.cartKey(username), skuId);
+  }
+
+  private async saveCartItem(
+    username: string,
+    skuId: string,
+    item: CartItem,
+  ): Promise<void> {
+    await this.redisService.hset(
+      this.cartKey(username),
+      skuId,
+      JSON.stringify(item),
+    );
+  }
+
   // 添加商品到购物车
-  async add(id: string, num: number, username: string, req): Promise<any> {
-    const decoded = await this.authService.getDecodedToken(req);
-    const _username = decoded.loginName || username; // 获取登录用户的用户名
-    const redisClient = this.redisService;
+  async add(id: string, num: number, username: string, req: any): Promise<any> {
+    const resolvedUsername = await this.resolveUsername(username, req);
 
     if (num <= 0) {
-      // 删除掉原来的商品
-      await redisClient.hdel(`Cart_${_username}`, id);
-      return new Result(null);
+      await this.removeCartItem(resolvedUsername, id);
+      return;
     }
 
-    // 1. 根据商品的 SKU 的 ID 获取 sku 的数据
-    const result = await this.skuService.findById(id);
-    const sku = result.data;
-
-    if (sku) {
-      // 2. 根据 sku 的数据对象 获取该 SKU 对应的 SPU 的数据
-      const result = await this.spuService.findById(sku.spuId);
-      const spu = result.data;
-
-      // 3. 将数据存储到购物车对象中 (OrderItem)
-      const orderItem: any = {};
-      orderItem.categoryId1 = spu.category1Id;
-      orderItem.categoryId2 = spu.category2Id;
-      orderItem.categoryId3 = spu.category3Id;
-      orderItem.spuId = spu.id;
-      orderItem.skuId = id;
-      orderItem.name = sku.name; // 商品的名称 sku的名称
-      orderItem.price = sku.price; // sku的单价
-      orderItem.num = num; // 购买的数量
-      orderItem.money = orderItem.num * orderItem.price; // 单价*数量
-      orderItem.payMoney = orderItem.num * orderItem.price; // 实付金额
-      orderItem.image = sku.image; // 商品的图片地址
-
-      // 4. 数据添加到 Redis 中 key:用户名 field:sku 的 ID value: 购物车数据 (OrderItem)
-      await redisClient.hset(
-        `Cart_${_username}`,
-        id,
-        JSON.stringify(orderItem),
-      );
-      return new Result(null, '购物车添加成功');
+    const sku = await this.skuService.findById(id);
+    if (!sku) {
+      return;
     }
-    return new Result(null);
+
+    const spu = await this.spuService.findById(sku.spuId);
+    const cartItem = this.buildCartItem(sku, spu, num);
+
+    await this.saveCartItem(resolvedUsername, id, cartItem);
+    return new ResponseMessage(null, '购物车添加成功');
   }
 
   // 获取购物车列表
   async list(username: string, req?: any) {
-    let decoded = null;
-    let _username = username || '';
-    if (req) {
-      decoded = await this.authService.getDecodedToken(req);
-      _username = decoded.loginName; // 获取登录用户的用户名
-    }
-    const values = await this.redisService.hvals(`Cart_${_username}`);
-    const data = values.map((value) => JSON.parse(value));
+    const resolvedUsername = await this.resolveUsername(username, req);
+    const values = await this.redisService.hvals(
+      this.cartKey(resolvedUsername),
+    );
+    const items: CartItem[] = values.map((value) => JSON.parse(value));
 
-    // 计算总价格
     let totalPrice = 0;
-    // 计算总数量
     let totalItems = 0;
-    // 计算总折扣
     const totalDiscount = 0;
-    for (const item of data) {
+    for (const item of items) {
       totalPrice += item.money * item.num;
-      totalItems += parseInt(item.num);
+      totalItems += item.num;
     }
-    return new Result({ data, totalPrice, totalItems, totalDiscount });
+    return { items, totalPrice, totalItems, totalDiscount };
   }
 }

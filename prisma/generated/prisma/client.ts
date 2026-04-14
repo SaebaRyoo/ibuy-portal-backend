@@ -99,3 +99,68 @@ export type IbuyMember = Prisma.IbuyMemberModel
  * 
  */
 export type IbuyAddress = Prisma.IbuyAddressModel
+/**
+ * Model IbuySeckillActivity
+ * 
+ */
+export type IbuySeckillActivity = Prisma.IbuySeckillActivityModel
+/**
+ * Model IbuySeckillGoods
+ * 
+ */
+export type IbuySeckillGoods = Prisma.IbuySeckillGoodsModel
+/**
+ * Model IbuySeckillOrder
+ * 
+ */
+export type IbuySeckillOrder = Prisma.IbuySeckillOrderModel
+/**
+ * Model IbuyAdmin
+ * 
+ */
+export type IbuyAdmin = Prisma.IbuyAdminModel
+/**
+ * Model IbuyRole
+ * 
+ */
+export type IbuyRole = Prisma.IbuyRoleModel
+/**
+ * Model IbuyAdminRole
+ * 
+ */
+export type IbuyAdminRole = Prisma.IbuyAdminRoleModel
+/**
+ * Model IbuyPermission
+ * 
+ */
+export type IbuyPermission = Prisma.IbuyPermissionModel
+/**
+ * Model IbuyRolePermission
+ * 
+ */
+export type IbuyRolePermission = Prisma.IbuyRolePermissionModel
+/**
+ * Model IbuyMenu
+ * 
+ */
+export type IbuyMenu = Prisma.IbuyMenuModel
+/**
+ * Model IbuyAlbum
+ * 
+ */
+export type IbuyAlbum = Prisma.IbuyAlbumModel
+/**
+ * Model IbuyProvince
+ * 
+ */
+export type IbuyProvince = Prisma.IbuyProvinceModel
+/**
+ * Model IbuyCity
+ * 
+ */
+export type IbuyCity = Prisma.IbuyCityModel
+/**
+ * Model IbuyArea
+ * 
+ */
+export type IbuyArea = Prisma.IbuyAreaModel

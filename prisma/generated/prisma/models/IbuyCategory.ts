@@ -28,40 +28,50 @@ export type AggregateIbuyCategory = {
 
 export type IbuyCategoryAvgAggregateOutputType = {
   id: number | null
+  goodsNum: number | null
   parentId: number | null
+  templateId: number | null
   seq: number | null
 }
 
 export type IbuyCategorySumAggregateOutputType = {
   id: number | null
+  goodsNum: number | null
   parentId: number | null
+  templateId: number | null
   seq: number | null
 }
 
 export type IbuyCategoryMinAggregateOutputType = {
   id: number | null
   name: string | null
-  parentId: number | null
+  goodsNum: number | null
   isShow: string | null
   isMenu: string | null
+  parentId: number | null
+  templateId: number | null
   seq: number | null
 }
 
 export type IbuyCategoryMaxAggregateOutputType = {
   id: number | null
   name: string | null
-  parentId: number | null
+  goodsNum: number | null
   isShow: string | null
   isMenu: string | null
+  parentId: number | null
+  templateId: number | null
   seq: number | null
 }
 
 export type IbuyCategoryCountAggregateOutputType = {
   id: number
   name: number
-  parentId: number
+  goodsNum: number
   isShow: number
   isMenu: number
+  parentId: number
+  templateId: number
   seq: number
   _all: number
 }
@@ -69,40 +79,50 @@ export type IbuyCategoryCountAggregateOutputType = {
 
 export type IbuyCategoryAvgAggregateInputType = {
   id?: true
+  goodsNum?: true
   parentId?: true
+  templateId?: true
   seq?: true
 }
 
 export type IbuyCategorySumAggregateInputType = {
   id?: true
+  goodsNum?: true
   parentId?: true
+  templateId?: true
   seq?: true
 }
 
 export type IbuyCategoryMinAggregateInputType = {
   id?: true
   name?: true
-  parentId?: true
+  goodsNum?: true
   isShow?: true
   isMenu?: true
+  parentId?: true
+  templateId?: true
   seq?: true
 }
 
 export type IbuyCategoryMaxAggregateInputType = {
   id?: true
   name?: true
-  parentId?: true
+  goodsNum?: true
   isShow?: true
   isMenu?: true
+  parentId?: true
+  templateId?: true
   seq?: true
 }
 
 export type IbuyCategoryCountAggregateInputType = {
   id?: true
   name?: true
-  parentId?: true
+  goodsNum?: true
   isShow?: true
   isMenu?: true
+  parentId?: true
+  templateId?: true
   seq?: true
   _all?: true
 }
@@ -196,9 +216,11 @@ export type IbuyCategoryGroupByArgs<ExtArgs extends runtime.Types.Extensions.Int
 export type IbuyCategoryGroupByOutputType = {
   id: number
   name: string
-  parentId: number | null
+  goodsNum: number | null
   isShow: string | null
   isMenu: string | null
+  parentId: number | null
+  templateId: number | null
   seq: number | null
   _count: IbuyCategoryCountAggregateOutputType | null
   _avg: IbuyCategoryAvgAggregateOutputType | null
@@ -228,18 +250,22 @@ export type IbuyCategoryWhereInput = {
   NOT?: Prisma.IbuyCategoryWhereInput | Prisma.IbuyCategoryWhereInput[]
   id?: Prisma.IntFilter<"IbuyCategory"> | number
   name?: Prisma.StringFilter<"IbuyCategory"> | string
-  parentId?: Prisma.IntNullableFilter<"IbuyCategory"> | number | null
+  goodsNum?: Prisma.IntNullableFilter<"IbuyCategory"> | number | null
   isShow?: Prisma.StringNullableFilter<"IbuyCategory"> | string | null
   isMenu?: Prisma.StringNullableFilter<"IbuyCategory"> | string | null
+  parentId?: Prisma.IntNullableFilter<"IbuyCategory"> | number | null
+  templateId?: Prisma.IntNullableFilter<"IbuyCategory"> | number | null
   seq?: Prisma.IntNullableFilter<"IbuyCategory"> | number | null
 }
 
 export type IbuyCategoryOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  parentId?: Prisma.SortOrderInput | Prisma.SortOrder
+  goodsNum?: Prisma.SortOrderInput | Prisma.SortOrder
   isShow?: Prisma.SortOrderInput | Prisma.SortOrder
   isMenu?: Prisma.SortOrderInput | Prisma.SortOrder
+  parentId?: Prisma.SortOrderInput | Prisma.SortOrder
+  templateId?: Prisma.SortOrderInput | Prisma.SortOrder
   seq?: Prisma.SortOrderInput | Prisma.SortOrder
 }
 
@@ -249,18 +275,22 @@ export type IbuyCategoryWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.IbuyCategoryWhereInput[]
   NOT?: Prisma.IbuyCategoryWhereInput | Prisma.IbuyCategoryWhereInput[]
   name?: Prisma.StringFilter<"IbuyCategory"> | string
-  parentId?: Prisma.IntNullableFilter<"IbuyCategory"> | number | null
+  goodsNum?: Prisma.IntNullableFilter<"IbuyCategory"> | number | null
   isShow?: Prisma.StringNullableFilter<"IbuyCategory"> | string | null
   isMenu?: Prisma.StringNullableFilter<"IbuyCategory"> | string | null
+  parentId?: Prisma.IntNullableFilter<"IbuyCategory"> | number | null
+  templateId?: Prisma.IntNullableFilter<"IbuyCategory"> | number | null
   seq?: Prisma.IntNullableFilter<"IbuyCategory"> | number | null
 }, "id">
 
 export type IbuyCategoryOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  parentId?: Prisma.SortOrderInput | Prisma.SortOrder
+  goodsNum?: Prisma.SortOrderInput | Prisma.SortOrder
   isShow?: Prisma.SortOrderInput | Prisma.SortOrder
   isMenu?: Prisma.SortOrderInput | Prisma.SortOrder
+  parentId?: Prisma.SortOrderInput | Prisma.SortOrder
+  templateId?: Prisma.SortOrderInput | Prisma.SortOrder
   seq?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.IbuyCategoryCountOrderByAggregateInput
   _avg?: Prisma.IbuyCategoryAvgOrderByAggregateInput
@@ -275,108 +305,134 @@ export type IbuyCategoryScalarWhereWithAggregatesInput = {
   NOT?: Prisma.IbuyCategoryScalarWhereWithAggregatesInput | Prisma.IbuyCategoryScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"IbuyCategory"> | number
   name?: Prisma.StringWithAggregatesFilter<"IbuyCategory"> | string
-  parentId?: Prisma.IntNullableWithAggregatesFilter<"IbuyCategory"> | number | null
+  goodsNum?: Prisma.IntNullableWithAggregatesFilter<"IbuyCategory"> | number | null
   isShow?: Prisma.StringNullableWithAggregatesFilter<"IbuyCategory"> | string | null
   isMenu?: Prisma.StringNullableWithAggregatesFilter<"IbuyCategory"> | string | null
+  parentId?: Prisma.IntNullableWithAggregatesFilter<"IbuyCategory"> | number | null
+  templateId?: Prisma.IntNullableWithAggregatesFilter<"IbuyCategory"> | number | null
   seq?: Prisma.IntNullableWithAggregatesFilter<"IbuyCategory"> | number | null
 }
 
 export type IbuyCategoryCreateInput = {
   name: string
-  parentId?: number | null
+  goodsNum?: number | null
   isShow?: string | null
   isMenu?: string | null
+  parentId?: number | null
+  templateId?: number | null
   seq?: number | null
 }
 
 export type IbuyCategoryUncheckedCreateInput = {
   id?: number
   name: string
-  parentId?: number | null
+  goodsNum?: number | null
   isShow?: string | null
   isMenu?: string | null
+  parentId?: number | null
+  templateId?: number | null
   seq?: number | null
 }
 
 export type IbuyCategoryUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  parentId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  goodsNum?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   isShow?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isMenu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  parentId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  templateId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   seq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type IbuyCategoryUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  parentId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  goodsNum?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   isShow?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isMenu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  parentId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  templateId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   seq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type IbuyCategoryCreateManyInput = {
   id?: number
   name: string
-  parentId?: number | null
+  goodsNum?: number | null
   isShow?: string | null
   isMenu?: string | null
+  parentId?: number | null
+  templateId?: number | null
   seq?: number | null
 }
 
 export type IbuyCategoryUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  parentId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  goodsNum?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   isShow?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isMenu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  parentId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  templateId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   seq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type IbuyCategoryUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  parentId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  goodsNum?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   isShow?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isMenu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  parentId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  templateId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   seq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type IbuyCategoryCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  parentId?: Prisma.SortOrder
+  goodsNum?: Prisma.SortOrder
   isShow?: Prisma.SortOrder
   isMenu?: Prisma.SortOrder
+  parentId?: Prisma.SortOrder
+  templateId?: Prisma.SortOrder
   seq?: Prisma.SortOrder
 }
 
 export type IbuyCategoryAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  goodsNum?: Prisma.SortOrder
   parentId?: Prisma.SortOrder
+  templateId?: Prisma.SortOrder
   seq?: Prisma.SortOrder
 }
 
 export type IbuyCategoryMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  parentId?: Prisma.SortOrder
+  goodsNum?: Prisma.SortOrder
   isShow?: Prisma.SortOrder
   isMenu?: Prisma.SortOrder
+  parentId?: Prisma.SortOrder
+  templateId?: Prisma.SortOrder
   seq?: Prisma.SortOrder
 }
 
 export type IbuyCategoryMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  parentId?: Prisma.SortOrder
+  goodsNum?: Prisma.SortOrder
   isShow?: Prisma.SortOrder
   isMenu?: Prisma.SortOrder
+  parentId?: Prisma.SortOrder
+  templateId?: Prisma.SortOrder
   seq?: Prisma.SortOrder
 }
 
 export type IbuyCategorySumOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  goodsNum?: Prisma.SortOrder
   parentId?: Prisma.SortOrder
+  templateId?: Prisma.SortOrder
   seq?: Prisma.SortOrder
 }
 
@@ -385,40 +441,48 @@ export type IbuyCategorySumOrderByAggregateInput = {
 export type IbuyCategorySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
-  parentId?: boolean
+  goodsNum?: boolean
   isShow?: boolean
   isMenu?: boolean
+  parentId?: boolean
+  templateId?: boolean
   seq?: boolean
 }, ExtArgs["result"]["ibuyCategory"]>
 
 export type IbuyCategorySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
-  parentId?: boolean
+  goodsNum?: boolean
   isShow?: boolean
   isMenu?: boolean
+  parentId?: boolean
+  templateId?: boolean
   seq?: boolean
 }, ExtArgs["result"]["ibuyCategory"]>
 
 export type IbuyCategorySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
-  parentId?: boolean
+  goodsNum?: boolean
   isShow?: boolean
   isMenu?: boolean
+  parentId?: boolean
+  templateId?: boolean
   seq?: boolean
 }, ExtArgs["result"]["ibuyCategory"]>
 
 export type IbuyCategorySelectScalar = {
   id?: boolean
   name?: boolean
-  parentId?: boolean
+  goodsNum?: boolean
   isShow?: boolean
   isMenu?: boolean
+  parentId?: boolean
+  templateId?: boolean
   seq?: boolean
 }
 
-export type IbuyCategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "parentId" | "isShow" | "isMenu" | "seq", ExtArgs["result"]["ibuyCategory"]>
+export type IbuyCategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "goodsNum" | "isShow" | "isMenu" | "parentId" | "templateId" | "seq", ExtArgs["result"]["ibuyCategory"]>
 
 export type $IbuyCategoryPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "IbuyCategory"
@@ -426,9 +490,11 @@ export type $IbuyCategoryPayload<ExtArgs extends runtime.Types.Extensions.Intern
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     name: string
-    parentId: number | null
+    goodsNum: number | null
     isShow: string | null
     isMenu: string | null
+    parentId: number | null
+    templateId: number | null
     seq: number | null
   }, ExtArgs["result"]["ibuyCategory"]>
   composites: {}
@@ -855,9 +921,11 @@ export interface Prisma__IbuyCategoryClient<T, Null = never, ExtArgs extends run
 export interface IbuyCategoryFieldRefs {
   readonly id: Prisma.FieldRef<"IbuyCategory", 'Int'>
   readonly name: Prisma.FieldRef<"IbuyCategory", 'String'>
-  readonly parentId: Prisma.FieldRef<"IbuyCategory", 'Int'>
+  readonly goodsNum: Prisma.FieldRef<"IbuyCategory", 'Int'>
   readonly isShow: Prisma.FieldRef<"IbuyCategory", 'String'>
   readonly isMenu: Prisma.FieldRef<"IbuyCategory", 'String'>
+  readonly parentId: Prisma.FieldRef<"IbuyCategory", 'Int'>
+  readonly templateId: Prisma.FieldRef<"IbuyCategory", 'Int'>
   readonly seq: Prisma.FieldRef<"IbuyCategory", 'Int'>
 }
     

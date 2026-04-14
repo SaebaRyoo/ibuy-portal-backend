@@ -29,12 +29,14 @@ model IbuyCategoryBrand {
 
 // ─── 分类 ───
 model IbuyCategory {
-  id       Int     @id @default(autoincrement())
-  name     String
-  parentId Int?    @map("parent_id")
-  isShow   String? @map("is_show")
-  isMenu   String? @map("is_menu")
-  seq      Int?
+  id         Int     @id @default(autoincrement())
+  name       String
+  goodsNum   Int?    @map("goods_num")
+  isShow     String? @map("is_show")
+  isMenu     String? @map("is_menu")
+  parentId   Int?    @map("parent_id")
+  templateId Int?    @map("template_id")
+  seq        Int?
 
   @@map("ibuy_category")
 }
@@ -220,4 +222,176 @@ model IbuyAddress {
   alias     String?
 
   @@map("ibuy_address")
+}
+
+// ─── 秒杀活动 ───
+model IbuySeckillActivity {
+  id         String   @id
+  name       String
+  startTime  DateTime @map("start_time")
+  endTime    DateTime @map("end_time")
+  intro      String?
+  status     Int      @default(0) // 0=未审核 1=已审核 2=已驳回 3=已上架 4=已下架
+  createTime DateTime @default(now()) @map("create_time")
+  updateTime DateTime @updatedAt @map("update_time")
+
+  @@map("ibuy_seckill_activity")
+}
+
+// ─── 秒杀商品 ───
+model IbuySeckillGoods {
+  id           String   @id
+  activityId   String   @map("activity_id")
+  skuId        String   @map("sku_id")
+  skuName      String   @map("sku_name")
+  skuImage     String?  @map("sku_image")
+  skuPrice     Int      @map("sku_price")     // 原价（分）
+  seckillPrice Int      @map("seckill_price") // 秒杀价（分）
+  stockCount   Int      @map("stock_count")   // 秒杀库存
+  totalStock   Int      @map("total_stock")   // 初始库存
+  createTime   DateTime @default(now()) @map("create_time")
+
+  @@unique([activityId, skuId])
+  @@map("ibuy_seckill_goods")
+}
+
+// ─── 秒杀订单 ───
+model IbuySeckillOrder {
+  id              String    @id
+  activityId      String    @map("activity_id")
+  seckillGoodsId  String    @map("seckill_goods_id")
+  skuId           String    @map("sku_id")
+  username        String
+  seckillPrice    Int       @map("seckill_price") // 秒杀价（分）
+  money           Int                              // 实付金额（分）
+  orderStatus     String    @default("0") @map("order_status")  // 0=待支付 1=已支付 2=已关闭
+  payStatus       String    @default("0") @map("pay_status")    // 0=未支付 1=已支付
+  payTime         DateTime? @map("pay_time")
+  transactionId   String?   @map("transaction_id")
+  receiverAddress String?   @map("receiver_address")
+  createTime      DateTime  @default(now()) @map("create_time")
+  updateTime      DateTime  @updatedAt @map("update_time")
+
+  @@map("ibuy_seckill_order")
+}
+
+// ─── 管理员 ───
+model IbuyAdmin {
+  id           Int    @id @default(autoincrement())
+  loginName    String? @unique @map("login_name")
+  password     String?
+  status       String?
+  tokenVersion Int    @default(0) @map("tokenVersion")
+
+  @@map("ibuy_admin")
+}
+
+// ─── 角色 ───
+model IbuyRole {
+  id          Int      @id @default(autoincrement())
+  name        String?  @unique
+  code        String?  @unique @db.VarChar(50)
+  description String?  @db.VarChar(200)
+  status      String   @default("1") @db.VarChar(10)
+  isSystem    Int      @default(0) @map("is_system") @db.SmallInt
+  sort        Int      @default(0)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("ibuy_role")
+}
+
+// ─── 管理员-角色关联 ───
+model IbuyAdminRole {
+  adminId Int @map("admin_id")
+  roleId  Int @map("role_id")
+
+  @@id([adminId, roleId])
+  @@map("ibuy_admin_role")
+}
+
+// ─── 权限 ───
+model IbuyPermission {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(50)
+  code        String   @unique @db.VarChar(100)
+  resource    String   @db.VarChar(50)
+  action      String   @db.VarChar(20)
+  type        String   @default("api") @db.VarChar(20)
+  description String?  @db.VarChar(200)
+  status      String   @default("1") @db.VarChar(10)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("ibuy_permission")
+}
+
+// ─── 角色-权限关联 ───
+model IbuyRolePermission {
+  roleId       Int      @map("role_id")
+  permissionId Int      @map("permission_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@id([roleId, permissionId])
+  @@index([roleId, permissionId])
+  @@map("ibuy_role_permission")
+}
+
+// ─── 菜单 ───
+model IbuyMenu {
+  id             Int      @id @default(autoincrement())
+  name           String
+  title          String?  @db.VarChar(50)
+  type           String   @default("menu") @db.VarChar(10)
+  path           String?  @db.VarChar(100)
+  component      String?  @db.VarChar(100)
+  icon           String?
+  url            String?
+  permissionCode String?  @map("permission_code") @db.VarChar(100)
+  parentId       String?  @map("parent_id")
+  isHidden       Int      @default(0) @map("is_hidden") @db.SmallInt
+  isCache        Int      @default(1) @map("is_cache") @db.SmallInt
+  sort           Int      @default(0)
+  status         String   @default("1") @db.VarChar(10)
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@map("ibuy_menu")
+}
+
+// ─── 相册 ───
+model IbuyAlbum {
+  id         Int     @id @default(autoincrement())
+  name       String
+  image      String?
+  imageItems String? @map("image_items")
+  desc       String?
+
+  @@map("ibuy_album")
+}
+
+// ─── 省份 ───
+model IbuyProvince {
+  provinceId String @id @map("province_id")
+  province   String
+
+  @@map("ibuy_provinces")
+}
+
+// ─── 城市 ───
+model IbuyCity {
+  cityId     String @id @map("city_id")
+  city       String
+  provinceId String @map("province_id")
+
+  @@map("ibuy_cities")
+}
+
+// ─── 区域 ───
+model IbuyArea {
+  areaId String @id @map("area_id")
+  area   String
+  cityId String @map("city_id")
+
+  @@map("ibuy_areas")
 }

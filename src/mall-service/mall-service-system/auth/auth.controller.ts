@@ -14,7 +14,7 @@ import { AuthService } from './auth.service';
 import { Public } from 'src/common/decorators/metadata/public.decorator';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Response } from 'express';
-import Result from 'src/common/utils/Result';
+import { ResponseMessage } from 'src/common/utils/ResponseMessage';
 
 @Controller('auth')
 export class AuthController {
@@ -52,6 +52,6 @@ export class AuthController {
     await this.authService.logout(userId);
     // 只清除 refresh_token cookie
     res.clearCookie('refresh_token');
-    return new Result(null, '退出登录成功');
+    return new ResponseMessage(null, '退出登录成功');
   }
 }

@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/common/prisma/prisma.service';
-import Result from '../../../common/utils/Result';
 
 @Injectable()
 export class ParaService {
@@ -9,33 +8,29 @@ export class ParaService {
   async findList(pageParma: any) {
     const skip = pageParma.pageSize * (pageParma.current - 1);
     const take = pageParma.pageSize;
-    const [data, total] = await Promise.all([
+    const [items, total] = await Promise.all([
       this.prisma.ibuyPara.findMany({ skip, take }),
       this.prisma.ibuyPara.count(),
     ]);
-    return new Result({ data, total });
+    return { items, total };
   }
 
   async findById(id: number) {
-    const data = await this.prisma.ibuyPara.findUnique({ where: { id } });
-    return new Result(data);
+    return this.prisma.ibuyPara.findUnique({ where: { id } });
   }
 
   async create(para: any) {
-    const data = await this.prisma.ibuyPara.create({ data: para });
-    return new Result(data);
+    return this.prisma.ibuyPara.create({ data: para });
   }
 
   async updateById(id: number, para: any) {
-    const data = await this.prisma.ibuyPara.update({
+    return this.prisma.ibuyPara.update({
       where: { id },
       data: para,
     });
-    return new Result(data);
   }
 
   async remove(id: number) {
     await this.prisma.ibuyPara.delete({ where: { id } });
-    return new Result(null);
   }
 }

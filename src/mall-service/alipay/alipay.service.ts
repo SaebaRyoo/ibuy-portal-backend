@@ -5,7 +5,7 @@ import { OrderService } from '../mall-service-order/order/order.service';
 import { OrderItemsService } from '../mall-service-order/order-items/order-items.service';
 import { ConfigService } from '@nestjs/config';
 import { RabbitMQConstants } from '../../common/constants/RabbitMQConstants';
-import Result from '../../common/utils/Result';
+import { ResponseMessage } from '../../common/utils/ResponseMessage';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 
 @Injectable()
@@ -46,8 +46,7 @@ export class AlipayService {
    */
   async goAlipay(orderId: string, queueName: string) {
     const order = await this.orderService.findById(orderId);
-    const result = await this.orderItemService.findItemsByOrderId(orderId);
-    const orderItems = result.data;
+    const orderItems = await this.orderItemService.findItemsByOrderId(orderId);
     const subject =
       orderItems.length > 1
         ? orderItems[0]?.name + '等商品'
@@ -102,7 +101,7 @@ export class AlipayService {
       },
     );
 
-    return new Result({ alipayUrl });
+    return { alipayUrl };
   }
 
   /**
@@ -173,6 +172,16 @@ export class AlipayService {
         {},
       );
     }
+
+    /* 秒杀订单支付队列 */
+    if (queueName === 'SEC_KILL_ORDER_PAY') {
+      await this.amqpConnection.publish(
+        RabbitMQConstants.EXCHANGE_SEC_KILL_ORDER_PAY,
+        RabbitMQConstants.QUEUE_SEC_KILL_ORDER_PAY,
+        Buffer.from(JSON.stringify(data)),
+        {},
+      );
+    }
   }
 
   async tradeQuery(orderId: string) {
@@ -205,7 +214,7 @@ export class AlipayService {
       //   买家账号
       data.buyerLogonId = response.buyerLogonId;
     }
-    return new Result(data, '支付成功');
+    return new ResponseMessage(data, '支付成功');
   }
 
   async tradeClose(trade_no: string) {
@@ -223,6 +232,6 @@ export class AlipayService {
       msg = '订单关闭失败';
     }
 
-    return new Result(null, msg);
+    return new ResponseMessage(null, msg);
   }
 }

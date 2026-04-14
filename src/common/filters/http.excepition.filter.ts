@@ -29,9 +29,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
       const error = exception.getResponse();
       response.status(HttpStatus.OK).send({
         data: null,
-        status: error['code'],
+        code: error['code'],
         extra: {
           path: request.url,
+          timestamp: new Date().toISOString(),
         },
         message: error['message'],
         success: false,
@@ -42,7 +43,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     // console.log(exception);
     response.status(status).send({
       data: null,
-      status: status,
+      code: status,
       extra: {
         timestamp: new Date().toISOString(),
         path: request.url,

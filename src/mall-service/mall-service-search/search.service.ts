@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { SkuService } from '../mall-service-goods/sku/sku.service';
 import { SearchResponse } from '@elastic/elasticsearch/lib/api/types';
-import Result from '../../common/utils/Result';
 
 @Injectable()
 export class SearchService {
@@ -188,7 +187,7 @@ export class SearchService {
     }
 
     // return resultMap;
-    return new Result({ data: Object.fromEntries(resultMap) });
+    return Object.fromEntries(resultMap);
   }
 
   private pageConvert(searchMap: Record<string, string>): number {
