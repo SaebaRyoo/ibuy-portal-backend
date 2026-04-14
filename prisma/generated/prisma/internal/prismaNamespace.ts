@@ -398,7 +398,17 @@ export const ModelName = {
   IbuyAddress: 'IbuyAddress',
   IbuySeckillActivity: 'IbuySeckillActivity',
   IbuySeckillGoods: 'IbuySeckillGoods',
-  IbuySeckillOrder: 'IbuySeckillOrder'
+  IbuySeckillOrder: 'IbuySeckillOrder',
+  IbuyAdmin: 'IbuyAdmin',
+  IbuyRole: 'IbuyRole',
+  IbuyAdminRole: 'IbuyAdminRole',
+  IbuyPermission: 'IbuyPermission',
+  IbuyRolePermission: 'IbuyRolePermission',
+  IbuyMenu: 'IbuyMenu',
+  IbuyAlbum: 'IbuyAlbum',
+  IbuyProvince: 'IbuyProvince',
+  IbuyCity: 'IbuyCity',
+  IbuyArea: 'IbuyArea'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -414,7 +424,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "ibuyBrand" | "ibuyCategoryBrand" | "ibuyCategory" | "ibuyTemplate" | "ibuySpec" | "ibuyPara" | "ibuySpu" | "ibuySku" | "ibuyOrder" | "ibuyOrderItem" | "ibuyMember" | "ibuyAddress" | "ibuySeckillActivity" | "ibuySeckillGoods" | "ibuySeckillOrder"
+    modelProps: "ibuyBrand" | "ibuyCategoryBrand" | "ibuyCategory" | "ibuyTemplate" | "ibuySpec" | "ibuyPara" | "ibuySpu" | "ibuySku" | "ibuyOrder" | "ibuyOrderItem" | "ibuyMember" | "ibuyAddress" | "ibuySeckillActivity" | "ibuySeckillGoods" | "ibuySeckillOrder" | "ibuyAdmin" | "ibuyRole" | "ibuyAdminRole" | "ibuyPermission" | "ibuyRolePermission" | "ibuyMenu" | "ibuyAlbum" | "ibuyProvince" | "ibuyCity" | "ibuyArea"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1528,6 +1538,746 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    IbuyAdmin: {
+      payload: Prisma.$IbuyAdminPayload<ExtArgs>
+      fields: Prisma.IbuyAdminFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.IbuyAdminFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAdminPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.IbuyAdminFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAdminPayload>
+        }
+        findFirst: {
+          args: Prisma.IbuyAdminFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAdminPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.IbuyAdminFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAdminPayload>
+        }
+        findMany: {
+          args: Prisma.IbuyAdminFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAdminPayload>[]
+        }
+        create: {
+          args: Prisma.IbuyAdminCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAdminPayload>
+        }
+        createMany: {
+          args: Prisma.IbuyAdminCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.IbuyAdminCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAdminPayload>[]
+        }
+        delete: {
+          args: Prisma.IbuyAdminDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAdminPayload>
+        }
+        update: {
+          args: Prisma.IbuyAdminUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAdminPayload>
+        }
+        deleteMany: {
+          args: Prisma.IbuyAdminDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.IbuyAdminUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.IbuyAdminUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAdminPayload>[]
+        }
+        upsert: {
+          args: Prisma.IbuyAdminUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAdminPayload>
+        }
+        aggregate: {
+          args: Prisma.IbuyAdminAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateIbuyAdmin>
+        }
+        groupBy: {
+          args: Prisma.IbuyAdminGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IbuyAdminGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.IbuyAdminCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IbuyAdminCountAggregateOutputType> | number
+        }
+      }
+    }
+    IbuyRole: {
+      payload: Prisma.$IbuyRolePayload<ExtArgs>
+      fields: Prisma.IbuyRoleFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.IbuyRoleFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyRolePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.IbuyRoleFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyRolePayload>
+        }
+        findFirst: {
+          args: Prisma.IbuyRoleFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyRolePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.IbuyRoleFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyRolePayload>
+        }
+        findMany: {
+          args: Prisma.IbuyRoleFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyRolePayload>[]
+        }
+        create: {
+          args: Prisma.IbuyRoleCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyRolePayload>
+        }
+        createMany: {
+          args: Prisma.IbuyRoleCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.IbuyRoleCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyRolePayload>[]
+        }
+        delete: {
+          args: Prisma.IbuyRoleDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyRolePayload>
+        }
+        update: {
+          args: Prisma.IbuyRoleUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyRolePayload>
+        }
+        deleteMany: {
+          args: Prisma.IbuyRoleDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.IbuyRoleUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.IbuyRoleUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyRolePayload>[]
+        }
+        upsert: {
+          args: Prisma.IbuyRoleUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyRolePayload>
+        }
+        aggregate: {
+          args: Prisma.IbuyRoleAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateIbuyRole>
+        }
+        groupBy: {
+          args: Prisma.IbuyRoleGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IbuyRoleGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.IbuyRoleCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IbuyRoleCountAggregateOutputType> | number
+        }
+      }
+    }
+    IbuyAdminRole: {
+      payload: Prisma.$IbuyAdminRolePayload<ExtArgs>
+      fields: Prisma.IbuyAdminRoleFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.IbuyAdminRoleFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAdminRolePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.IbuyAdminRoleFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAdminRolePayload>
+        }
+        findFirst: {
+          args: Prisma.IbuyAdminRoleFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAdminRolePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.IbuyAdminRoleFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAdminRolePayload>
+        }
+        findMany: {
+          args: Prisma.IbuyAdminRoleFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAdminRolePayload>[]
+        }
+        create: {
+          args: Prisma.IbuyAdminRoleCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAdminRolePayload>
+        }
+        createMany: {
+          args: Prisma.IbuyAdminRoleCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.IbuyAdminRoleCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAdminRolePayload>[]
+        }
+        delete: {
+          args: Prisma.IbuyAdminRoleDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAdminRolePayload>
+        }
+        update: {
+          args: Prisma.IbuyAdminRoleUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAdminRolePayload>
+        }
+        deleteMany: {
+          args: Prisma.IbuyAdminRoleDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.IbuyAdminRoleUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.IbuyAdminRoleUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAdminRolePayload>[]
+        }
+        upsert: {
+          args: Prisma.IbuyAdminRoleUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAdminRolePayload>
+        }
+        aggregate: {
+          args: Prisma.IbuyAdminRoleAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateIbuyAdminRole>
+        }
+        groupBy: {
+          args: Prisma.IbuyAdminRoleGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IbuyAdminRoleGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.IbuyAdminRoleCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IbuyAdminRoleCountAggregateOutputType> | number
+        }
+      }
+    }
+    IbuyPermission: {
+      payload: Prisma.$IbuyPermissionPayload<ExtArgs>
+      fields: Prisma.IbuyPermissionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.IbuyPermissionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyPermissionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.IbuyPermissionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyPermissionPayload>
+        }
+        findFirst: {
+          args: Prisma.IbuyPermissionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyPermissionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.IbuyPermissionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyPermissionPayload>
+        }
+        findMany: {
+          args: Prisma.IbuyPermissionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyPermissionPayload>[]
+        }
+        create: {
+          args: Prisma.IbuyPermissionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyPermissionPayload>
+        }
+        createMany: {
+          args: Prisma.IbuyPermissionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.IbuyPermissionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyPermissionPayload>[]
+        }
+        delete: {
+          args: Prisma.IbuyPermissionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyPermissionPayload>
+        }
+        update: {
+          args: Prisma.IbuyPermissionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyPermissionPayload>
+        }
+        deleteMany: {
+          args: Prisma.IbuyPermissionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.IbuyPermissionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.IbuyPermissionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyPermissionPayload>[]
+        }
+        upsert: {
+          args: Prisma.IbuyPermissionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyPermissionPayload>
+        }
+        aggregate: {
+          args: Prisma.IbuyPermissionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateIbuyPermission>
+        }
+        groupBy: {
+          args: Prisma.IbuyPermissionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IbuyPermissionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.IbuyPermissionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IbuyPermissionCountAggregateOutputType> | number
+        }
+      }
+    }
+    IbuyRolePermission: {
+      payload: Prisma.$IbuyRolePermissionPayload<ExtArgs>
+      fields: Prisma.IbuyRolePermissionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.IbuyRolePermissionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyRolePermissionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.IbuyRolePermissionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyRolePermissionPayload>
+        }
+        findFirst: {
+          args: Prisma.IbuyRolePermissionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyRolePermissionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.IbuyRolePermissionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyRolePermissionPayload>
+        }
+        findMany: {
+          args: Prisma.IbuyRolePermissionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyRolePermissionPayload>[]
+        }
+        create: {
+          args: Prisma.IbuyRolePermissionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyRolePermissionPayload>
+        }
+        createMany: {
+          args: Prisma.IbuyRolePermissionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.IbuyRolePermissionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyRolePermissionPayload>[]
+        }
+        delete: {
+          args: Prisma.IbuyRolePermissionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyRolePermissionPayload>
+        }
+        update: {
+          args: Prisma.IbuyRolePermissionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyRolePermissionPayload>
+        }
+        deleteMany: {
+          args: Prisma.IbuyRolePermissionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.IbuyRolePermissionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.IbuyRolePermissionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyRolePermissionPayload>[]
+        }
+        upsert: {
+          args: Prisma.IbuyRolePermissionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyRolePermissionPayload>
+        }
+        aggregate: {
+          args: Prisma.IbuyRolePermissionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateIbuyRolePermission>
+        }
+        groupBy: {
+          args: Prisma.IbuyRolePermissionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IbuyRolePermissionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.IbuyRolePermissionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IbuyRolePermissionCountAggregateOutputType> | number
+        }
+      }
+    }
+    IbuyMenu: {
+      payload: Prisma.$IbuyMenuPayload<ExtArgs>
+      fields: Prisma.IbuyMenuFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.IbuyMenuFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyMenuPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.IbuyMenuFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyMenuPayload>
+        }
+        findFirst: {
+          args: Prisma.IbuyMenuFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyMenuPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.IbuyMenuFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyMenuPayload>
+        }
+        findMany: {
+          args: Prisma.IbuyMenuFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyMenuPayload>[]
+        }
+        create: {
+          args: Prisma.IbuyMenuCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyMenuPayload>
+        }
+        createMany: {
+          args: Prisma.IbuyMenuCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.IbuyMenuCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyMenuPayload>[]
+        }
+        delete: {
+          args: Prisma.IbuyMenuDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyMenuPayload>
+        }
+        update: {
+          args: Prisma.IbuyMenuUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyMenuPayload>
+        }
+        deleteMany: {
+          args: Prisma.IbuyMenuDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.IbuyMenuUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.IbuyMenuUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyMenuPayload>[]
+        }
+        upsert: {
+          args: Prisma.IbuyMenuUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyMenuPayload>
+        }
+        aggregate: {
+          args: Prisma.IbuyMenuAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateIbuyMenu>
+        }
+        groupBy: {
+          args: Prisma.IbuyMenuGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IbuyMenuGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.IbuyMenuCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IbuyMenuCountAggregateOutputType> | number
+        }
+      }
+    }
+    IbuyAlbum: {
+      payload: Prisma.$IbuyAlbumPayload<ExtArgs>
+      fields: Prisma.IbuyAlbumFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.IbuyAlbumFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAlbumPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.IbuyAlbumFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAlbumPayload>
+        }
+        findFirst: {
+          args: Prisma.IbuyAlbumFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAlbumPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.IbuyAlbumFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAlbumPayload>
+        }
+        findMany: {
+          args: Prisma.IbuyAlbumFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAlbumPayload>[]
+        }
+        create: {
+          args: Prisma.IbuyAlbumCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAlbumPayload>
+        }
+        createMany: {
+          args: Prisma.IbuyAlbumCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.IbuyAlbumCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAlbumPayload>[]
+        }
+        delete: {
+          args: Prisma.IbuyAlbumDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAlbumPayload>
+        }
+        update: {
+          args: Prisma.IbuyAlbumUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAlbumPayload>
+        }
+        deleteMany: {
+          args: Prisma.IbuyAlbumDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.IbuyAlbumUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.IbuyAlbumUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAlbumPayload>[]
+        }
+        upsert: {
+          args: Prisma.IbuyAlbumUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAlbumPayload>
+        }
+        aggregate: {
+          args: Prisma.IbuyAlbumAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateIbuyAlbum>
+        }
+        groupBy: {
+          args: Prisma.IbuyAlbumGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IbuyAlbumGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.IbuyAlbumCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IbuyAlbumCountAggregateOutputType> | number
+        }
+      }
+    }
+    IbuyProvince: {
+      payload: Prisma.$IbuyProvincePayload<ExtArgs>
+      fields: Prisma.IbuyProvinceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.IbuyProvinceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyProvincePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.IbuyProvinceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyProvincePayload>
+        }
+        findFirst: {
+          args: Prisma.IbuyProvinceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyProvincePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.IbuyProvinceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyProvincePayload>
+        }
+        findMany: {
+          args: Prisma.IbuyProvinceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyProvincePayload>[]
+        }
+        create: {
+          args: Prisma.IbuyProvinceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyProvincePayload>
+        }
+        createMany: {
+          args: Prisma.IbuyProvinceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.IbuyProvinceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyProvincePayload>[]
+        }
+        delete: {
+          args: Prisma.IbuyProvinceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyProvincePayload>
+        }
+        update: {
+          args: Prisma.IbuyProvinceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyProvincePayload>
+        }
+        deleteMany: {
+          args: Prisma.IbuyProvinceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.IbuyProvinceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.IbuyProvinceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyProvincePayload>[]
+        }
+        upsert: {
+          args: Prisma.IbuyProvinceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyProvincePayload>
+        }
+        aggregate: {
+          args: Prisma.IbuyProvinceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateIbuyProvince>
+        }
+        groupBy: {
+          args: Prisma.IbuyProvinceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IbuyProvinceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.IbuyProvinceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IbuyProvinceCountAggregateOutputType> | number
+        }
+      }
+    }
+    IbuyCity: {
+      payload: Prisma.$IbuyCityPayload<ExtArgs>
+      fields: Prisma.IbuyCityFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.IbuyCityFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyCityPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.IbuyCityFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyCityPayload>
+        }
+        findFirst: {
+          args: Prisma.IbuyCityFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyCityPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.IbuyCityFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyCityPayload>
+        }
+        findMany: {
+          args: Prisma.IbuyCityFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyCityPayload>[]
+        }
+        create: {
+          args: Prisma.IbuyCityCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyCityPayload>
+        }
+        createMany: {
+          args: Prisma.IbuyCityCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.IbuyCityCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyCityPayload>[]
+        }
+        delete: {
+          args: Prisma.IbuyCityDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyCityPayload>
+        }
+        update: {
+          args: Prisma.IbuyCityUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyCityPayload>
+        }
+        deleteMany: {
+          args: Prisma.IbuyCityDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.IbuyCityUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.IbuyCityUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyCityPayload>[]
+        }
+        upsert: {
+          args: Prisma.IbuyCityUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyCityPayload>
+        }
+        aggregate: {
+          args: Prisma.IbuyCityAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateIbuyCity>
+        }
+        groupBy: {
+          args: Prisma.IbuyCityGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IbuyCityGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.IbuyCityCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IbuyCityCountAggregateOutputType> | number
+        }
+      }
+    }
+    IbuyArea: {
+      payload: Prisma.$IbuyAreaPayload<ExtArgs>
+      fields: Prisma.IbuyAreaFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.IbuyAreaFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAreaPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.IbuyAreaFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAreaPayload>
+        }
+        findFirst: {
+          args: Prisma.IbuyAreaFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAreaPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.IbuyAreaFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAreaPayload>
+        }
+        findMany: {
+          args: Prisma.IbuyAreaFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAreaPayload>[]
+        }
+        create: {
+          args: Prisma.IbuyAreaCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAreaPayload>
+        }
+        createMany: {
+          args: Prisma.IbuyAreaCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.IbuyAreaCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAreaPayload>[]
+        }
+        delete: {
+          args: Prisma.IbuyAreaDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAreaPayload>
+        }
+        update: {
+          args: Prisma.IbuyAreaUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAreaPayload>
+        }
+        deleteMany: {
+          args: Prisma.IbuyAreaDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.IbuyAreaUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.IbuyAreaUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAreaPayload>[]
+        }
+        upsert: {
+          args: Prisma.IbuyAreaUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IbuyAreaPayload>
+        }
+        aggregate: {
+          args: Prisma.IbuyAreaAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateIbuyArea>
+        }
+        groupBy: {
+          args: Prisma.IbuyAreaGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IbuyAreaGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.IbuyAreaCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IbuyAreaCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1590,9 +2340,11 @@ export type IbuyCategoryBrandScalarFieldEnum = (typeof IbuyCategoryBrandScalarFi
 export const IbuyCategoryScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  parentId: 'parentId',
+  goodsNum: 'goodsNum',
   isShow: 'isShow',
   isMenu: 'isMenu',
+  parentId: 'parentId',
+  templateId: 'templateId',
   seq: 'seq'
 } as const
 
@@ -1832,6 +2584,124 @@ export const IbuySeckillOrderScalarFieldEnum = {
 export type IbuySeckillOrderScalarFieldEnum = (typeof IbuySeckillOrderScalarFieldEnum)[keyof typeof IbuySeckillOrderScalarFieldEnum]
 
 
+export const IbuyAdminScalarFieldEnum = {
+  id: 'id',
+  loginName: 'loginName',
+  password: 'password',
+  status: 'status',
+  tokenVersion: 'tokenVersion'
+} as const
+
+export type IbuyAdminScalarFieldEnum = (typeof IbuyAdminScalarFieldEnum)[keyof typeof IbuyAdminScalarFieldEnum]
+
+
+export const IbuyRoleScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  code: 'code',
+  description: 'description',
+  status: 'status',
+  isSystem: 'isSystem',
+  sort: 'sort',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type IbuyRoleScalarFieldEnum = (typeof IbuyRoleScalarFieldEnum)[keyof typeof IbuyRoleScalarFieldEnum]
+
+
+export const IbuyAdminRoleScalarFieldEnum = {
+  adminId: 'adminId',
+  roleId: 'roleId'
+} as const
+
+export type IbuyAdminRoleScalarFieldEnum = (typeof IbuyAdminRoleScalarFieldEnum)[keyof typeof IbuyAdminRoleScalarFieldEnum]
+
+
+export const IbuyPermissionScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  code: 'code',
+  resource: 'resource',
+  action: 'action',
+  type: 'type',
+  description: 'description',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type IbuyPermissionScalarFieldEnum = (typeof IbuyPermissionScalarFieldEnum)[keyof typeof IbuyPermissionScalarFieldEnum]
+
+
+export const IbuyRolePermissionScalarFieldEnum = {
+  roleId: 'roleId',
+  permissionId: 'permissionId',
+  createdAt: 'createdAt'
+} as const
+
+export type IbuyRolePermissionScalarFieldEnum = (typeof IbuyRolePermissionScalarFieldEnum)[keyof typeof IbuyRolePermissionScalarFieldEnum]
+
+
+export const IbuyMenuScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  title: 'title',
+  type: 'type',
+  path: 'path',
+  component: 'component',
+  icon: 'icon',
+  url: 'url',
+  permissionCode: 'permissionCode',
+  parentId: 'parentId',
+  isHidden: 'isHidden',
+  isCache: 'isCache',
+  sort: 'sort',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type IbuyMenuScalarFieldEnum = (typeof IbuyMenuScalarFieldEnum)[keyof typeof IbuyMenuScalarFieldEnum]
+
+
+export const IbuyAlbumScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  image: 'image',
+  imageItems: 'imageItems',
+  desc: 'desc'
+} as const
+
+export type IbuyAlbumScalarFieldEnum = (typeof IbuyAlbumScalarFieldEnum)[keyof typeof IbuyAlbumScalarFieldEnum]
+
+
+export const IbuyProvinceScalarFieldEnum = {
+  provinceId: 'provinceId',
+  province: 'province'
+} as const
+
+export type IbuyProvinceScalarFieldEnum = (typeof IbuyProvinceScalarFieldEnum)[keyof typeof IbuyProvinceScalarFieldEnum]
+
+
+export const IbuyCityScalarFieldEnum = {
+  cityId: 'cityId',
+  city: 'city',
+  provinceId: 'provinceId'
+} as const
+
+export type IbuyCityScalarFieldEnum = (typeof IbuyCityScalarFieldEnum)[keyof typeof IbuyCityScalarFieldEnum]
+
+
+export const IbuyAreaScalarFieldEnum = {
+  areaId: 'areaId',
+  area: 'area',
+  cityId: 'cityId'
+} as const
+
+export type IbuyAreaScalarFieldEnum = (typeof IbuyAreaScalarFieldEnum)[keyof typeof IbuyAreaScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2065,6 +2935,16 @@ export type GlobalOmitConfig = {
   ibuySeckillActivity?: Prisma.IbuySeckillActivityOmit
   ibuySeckillGoods?: Prisma.IbuySeckillGoodsOmit
   ibuySeckillOrder?: Prisma.IbuySeckillOrderOmit
+  ibuyAdmin?: Prisma.IbuyAdminOmit
+  ibuyRole?: Prisma.IbuyRoleOmit
+  ibuyAdminRole?: Prisma.IbuyAdminRoleOmit
+  ibuyPermission?: Prisma.IbuyPermissionOmit
+  ibuyRolePermission?: Prisma.IbuyRolePermissionOmit
+  ibuyMenu?: Prisma.IbuyMenuOmit
+  ibuyAlbum?: Prisma.IbuyAlbumOmit
+  ibuyProvince?: Prisma.IbuyProvinceOmit
+  ibuyCity?: Prisma.IbuyCityOmit
+  ibuyArea?: Prisma.IbuyAreaOmit
 }
 
 /* Types for Logging */

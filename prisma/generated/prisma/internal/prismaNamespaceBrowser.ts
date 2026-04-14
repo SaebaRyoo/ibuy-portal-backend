@@ -65,7 +65,17 @@ export const ModelName = {
   IbuyAddress: 'IbuyAddress',
   IbuySeckillActivity: 'IbuySeckillActivity',
   IbuySeckillGoods: 'IbuySeckillGoods',
-  IbuySeckillOrder: 'IbuySeckillOrder'
+  IbuySeckillOrder: 'IbuySeckillOrder',
+  IbuyAdmin: 'IbuyAdmin',
+  IbuyRole: 'IbuyRole',
+  IbuyAdminRole: 'IbuyAdminRole',
+  IbuyPermission: 'IbuyPermission',
+  IbuyRolePermission: 'IbuyRolePermission',
+  IbuyMenu: 'IbuyMenu',
+  IbuyAlbum: 'IbuyAlbum',
+  IbuyProvince: 'IbuyProvince',
+  IbuyCity: 'IbuyCity',
+  IbuyArea: 'IbuyArea'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -107,9 +117,11 @@ export type IbuyCategoryBrandScalarFieldEnum = (typeof IbuyCategoryBrandScalarFi
 export const IbuyCategoryScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  parentId: 'parentId',
+  goodsNum: 'goodsNum',
   isShow: 'isShow',
   isMenu: 'isMenu',
+  parentId: 'parentId',
+  templateId: 'templateId',
   seq: 'seq'
 } as const
 
@@ -347,6 +359,124 @@ export const IbuySeckillOrderScalarFieldEnum = {
 } as const
 
 export type IbuySeckillOrderScalarFieldEnum = (typeof IbuySeckillOrderScalarFieldEnum)[keyof typeof IbuySeckillOrderScalarFieldEnum]
+
+
+export const IbuyAdminScalarFieldEnum = {
+  id: 'id',
+  loginName: 'loginName',
+  password: 'password',
+  status: 'status',
+  tokenVersion: 'tokenVersion'
+} as const
+
+export type IbuyAdminScalarFieldEnum = (typeof IbuyAdminScalarFieldEnum)[keyof typeof IbuyAdminScalarFieldEnum]
+
+
+export const IbuyRoleScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  code: 'code',
+  description: 'description',
+  status: 'status',
+  isSystem: 'isSystem',
+  sort: 'sort',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type IbuyRoleScalarFieldEnum = (typeof IbuyRoleScalarFieldEnum)[keyof typeof IbuyRoleScalarFieldEnum]
+
+
+export const IbuyAdminRoleScalarFieldEnum = {
+  adminId: 'adminId',
+  roleId: 'roleId'
+} as const
+
+export type IbuyAdminRoleScalarFieldEnum = (typeof IbuyAdminRoleScalarFieldEnum)[keyof typeof IbuyAdminRoleScalarFieldEnum]
+
+
+export const IbuyPermissionScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  code: 'code',
+  resource: 'resource',
+  action: 'action',
+  type: 'type',
+  description: 'description',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type IbuyPermissionScalarFieldEnum = (typeof IbuyPermissionScalarFieldEnum)[keyof typeof IbuyPermissionScalarFieldEnum]
+
+
+export const IbuyRolePermissionScalarFieldEnum = {
+  roleId: 'roleId',
+  permissionId: 'permissionId',
+  createdAt: 'createdAt'
+} as const
+
+export type IbuyRolePermissionScalarFieldEnum = (typeof IbuyRolePermissionScalarFieldEnum)[keyof typeof IbuyRolePermissionScalarFieldEnum]
+
+
+export const IbuyMenuScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  title: 'title',
+  type: 'type',
+  path: 'path',
+  component: 'component',
+  icon: 'icon',
+  url: 'url',
+  permissionCode: 'permissionCode',
+  parentId: 'parentId',
+  isHidden: 'isHidden',
+  isCache: 'isCache',
+  sort: 'sort',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type IbuyMenuScalarFieldEnum = (typeof IbuyMenuScalarFieldEnum)[keyof typeof IbuyMenuScalarFieldEnum]
+
+
+export const IbuyAlbumScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  image: 'image',
+  imageItems: 'imageItems',
+  desc: 'desc'
+} as const
+
+export type IbuyAlbumScalarFieldEnum = (typeof IbuyAlbumScalarFieldEnum)[keyof typeof IbuyAlbumScalarFieldEnum]
+
+
+export const IbuyProvinceScalarFieldEnum = {
+  provinceId: 'provinceId',
+  province: 'province'
+} as const
+
+export type IbuyProvinceScalarFieldEnum = (typeof IbuyProvinceScalarFieldEnum)[keyof typeof IbuyProvinceScalarFieldEnum]
+
+
+export const IbuyCityScalarFieldEnum = {
+  cityId: 'cityId',
+  city: 'city',
+  provinceId: 'provinceId'
+} as const
+
+export type IbuyCityScalarFieldEnum = (typeof IbuyCityScalarFieldEnum)[keyof typeof IbuyCityScalarFieldEnum]
+
+
+export const IbuyAreaScalarFieldEnum = {
+  areaId: 'areaId',
+  area: 'area',
+  cityId: 'cityId'
+} as const
+
+export type IbuyAreaScalarFieldEnum = (typeof IbuyAreaScalarFieldEnum)[keyof typeof IbuyAreaScalarFieldEnum]
 
 
 export const SortOrder = {
