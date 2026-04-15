@@ -26,13 +26,20 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.SERVER_PRIVATE_KEY }}
           # 本地源目录
           SOURCE: '.'
+          # 添加 --delete 让 rsync 删除服务器上已不存在于仓库中的旧文件
+          ARGS: '-rlgoDzvc -i --delete'
+          # 排除服务器端特有的文件，防止被 --delete 误删
+          EXCLUDE: |
+            .env
+            logs/
+            node_modules/
+            dist/
+            backups/
           # 部署前执行的脚本
           SCRIPT_BEFORE: |
             # 如果工作目录不存在则创建
             mkdir -p ~/work/ibuy-portal-backend
-            # 删除构建目录
-            rm -rf ~/work/ibuy-portal-backend/dist
-          # 目标目录（将github上已经提交的内容全部上传到服务器对应为止）
+          # 目标目录（将github上已经提交的内容全部上传到服务器对应位置）
           TARGET: '~/work/ibuy-portal-backend'
           # 部署后执行的脚本
           SCRIPT_AFTER: |
