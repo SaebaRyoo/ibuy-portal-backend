@@ -29,12 +29,7 @@ jobs:
           # 添加 --delete 让 rsync 删除服务器上已不存在于仓库中的旧文件
           ARGS: '-rlgoDzvc -i --delete'
           # 排除服务器端特有的文件，防止被 --delete 误删
-          EXCLUDE: |
-            .env
-            logs/
-            node_modules/
-            dist/
-            backups/
+          EXCLUDE: '.env, logs/, node_modules/, dist/, backups/'
           # 部署前执行的脚本
           SCRIPT_BEFORE: |
             # 如果工作目录不存在则创建
