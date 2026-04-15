@@ -1,11 +1,13 @@
 # 使用官方 Node.js 运行时作为基础镜像
-FROM node:20.18.0-alpine AS builder
+FROM node:22.12.0-alpine AS builder
 
 # 设置工作目录为 /app
 WORKDIR /app
 
 # 复制 package.json 和 yarn.lock 文件
 COPY package*.json yarn.lock ./
+
+RUN yarn config set registry https://registry.npmmirror.com
 
 # 安装依赖（使用 yarn 代替 npm）
 RUN yarn install
